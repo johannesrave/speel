@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}audioplayer{% endblock title %}</title>
+  {% load static %}
+  <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
+  {% block css %}
+    <link rel="stylesheet" href="{% static 'player/style.css' %}">
+  {% endblock %}
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+</head>
+
+<body>
+<div class="min-vh-100 container-fluid d-flex justify-content-center">
+  <div class="row align-self-center">
+    <div>
+      {% block heading %}{% endblock %}
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</div>
+</body>
+
+</html>

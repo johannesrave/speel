@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block heading %}
+  <h1 class="text-center">audioplayer</h1>
+{% endblock %}
+{% block content %}
+  <div class="d-flex flex-column">
+    {{ song_to_play.url }}
+
+    <audio id="player" src="{{ song_to_play.file.url }}" type="audio/{{audios.Audio_File.type}}" controls></audio>
+    {% for song in songs %}
+      <form action="" method="get"><span>{{ song.title }}</span><button type="submit" name="song_id" value="{{ song.id }}">Abspielen</button></form>
+    {% endfor %}
+  </div>
+{% endblock content %}
