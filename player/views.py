@@ -1,9 +1,11 @@
 from django.shortcuts import render
+from django.views import View
 from player.models import Song
 
 
-def index(request):
-    if request.method == 'GET':
+# noinspection PyMethodMayBeStatic
+class Index(View):
+    def get(self, request):
         song_id = request.GET.get('song_id')
 
         if song_id:
