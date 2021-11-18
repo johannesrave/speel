@@ -16,14 +16,20 @@
 </head>
 
 <body>
-<div class="min-vh-100 container-fluid d-flex justify-content-center">
+<div class="min-vh-100 container-fluid d-flex flex-column justify-content-center">
   <div class="row align-self-center">
     <div>
       {% block heading %}{% endblock %}
       {% block content %}{% endblock %}
     </div>
   </div>
+  <div class="d-flex justify-content-between mt-auto p-2">
+    <p>You came from this page: <code>{{ request.META.HTTP_REFERER }}</code></p>
+    <form action="/logout/" method="post">
+        {% csrf_token %}
+      <button name="logout" value="true">Log Out</button>
+    </form>
+  </div>
 </div>
 </body>
-
 </html>

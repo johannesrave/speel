@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block heading %}
+  <h1 class="text-center">login</h1>
+{% endblock %}
+{% block content %}
+  <form action="/login/" method="post">
+  {% csrf_token %}
+    <div class="d-flex flex-column">
+      <h2>already registered</h2>
+      <label for="username">Username</label><input id="username" type="text" name="username">
+      <label for="password">Password</label><input id="password" type="password" name="password">
+      <button>Log In</button>
+    </div>
+  </form>
+{% endblock content %}
