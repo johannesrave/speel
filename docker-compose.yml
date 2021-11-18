@@ -1,16 +1,25 @@
 version: '3.9'
+
 services:
+  django:
+    build: .
+    command:
+      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    env_file: .env
+    environment:
+      DATABASE_HOST: postgres
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
   postgres:
     image: postgres:13
-    container_name: audioplayer_db
     restart: always
-    environment:
-      - POSTGRES_USER=${DATABASE_USER}
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-      - POSTGRES_DB=${DATABASE_NAME}
+    env_file: .env
     volumes:
       - postgres:/var/lib/postgresql/data
     ports:
-      - '${DATABASE_PORT}:5432'
+      - '${DATABASE_PORT}:${DATABASE_PORT}'
+    command: -p ${DATABASE_PORT}
 volumes:
   postgres:
