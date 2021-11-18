@@ -1,6 +1,11 @@
-from django.shortcuts import render
+from pprint import pprint
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
 from django.views import View
-from player.models import Song
+from player.models import Song, Playlist
 
 
 class Index(LoginRequiredMixin, View):
@@ -8,17 +13,28 @@ class Index(LoginRequiredMixin, View):
     redirect_field_name = 'redirect_to'
 
     def get(self, request):
-        song_id = request.GET.get('song_id')
-
-        if song_id:
-            song_to_play = Song.objects.get(id=song_id)
-        else:
-            song_to_play = ''
+        song_id = request.GET.get('song_id', False)
+        playlist_id = request.GET.get('playlist_id', False)
 
         context = {
-            'songs': Song.objects.all(),
-            'song_to_play': song_to_play
+            'playlists': [p for p in Playlist.objects.all()],
         }
+        if playlist_id:
+            try:
+                playlist = Playlist.objects.get(id=playlist_id)
+                context["playlist"] = playlist
+                context["playlists"].insert(0, playlist)
+                context["songs"] = playlist.songs.all()
+            except Playlist.DoesNotExist:
+                return redirect('player')
+
+            if song_id:
+                try:
+                    context["song_to_play"] = Song.objects.get(id=song_id)
+                except Song.DoesNotExist:
+                    return redirect('player')
+
+        pprint(context)
         return render(request, 'index.html', context)
 
 
