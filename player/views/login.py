@@ -14,7 +14,7 @@ class Login(View):
 
         user = authenticate(request, username=username, password=password)
         if not user:
-            return HttpResponse.status_code(403)
+            return HttpResponse.status_code("403")
 
         login(request, user)
         return redirect(request.POST.get('redirect_to', 'player'))
