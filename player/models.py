@@ -11,9 +11,9 @@ class UUIDModel(models.Model):
 
 
 class Song(UUIDModel):
-    title = models.CharField(max_length=128)
-    length = models.IntegerField(null=False)
-    artists = models.ManyToManyField('Artist', related_name='songs')
+    title = models.CharField(max_length=128, blank=True, default="Unbekannter Song")
+    length = models.IntegerField(null=False, editable=False)
+    artists = models.ManyToManyField('Artist', related_name='songs', default="Unbekannter Artist")
     genre = models.ForeignKey('Genre', on_delete=models.CASCADE)
     # genre = models.OneToOneField('Genre', on_delete=models.SET(self.genre_default))
     file = models.FileField()
