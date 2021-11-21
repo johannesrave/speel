@@ -19,26 +19,21 @@ class Genre(UUIDModel):
         return f'{self.name}'
 
 
-DEFAULT_GENRE_NAME = 'Ohne Genre'
-
-
-def genre_default():
-    return Genre.objects.get_or_create(name='DEFAULT_GENRE_NAME')[0]
-
-
 class Song(UUIDModel):
     title = models.CharField(max_length=128, blank=True, default="Unbekannter Song")
-    # length = models.IntegerField(null=False, editable=False)
     length = models.IntegerField(editable=False, default=1)
     artists = models.ManyToManyField('Artist', related_name='songs', blank=True, default="Unbekannter Artist")
-    # genre = models.ForeignKey('Genre',  on_delete=models.CASCADE)
-    genre = models.ForeignKey('Genre', on_delete=models.SET(genre_default))
+    genre = models.ForeignKey('Genre', on_delete=models.PROTECT, default='Unbekanntes Genre')
+    album = models.ForeignKey('Album', on_delete=models.PROTECT, default='Unbekanntes Album')
     file = models.FileField()
-
-    # TODO: Wenn man Gerne löscht dürfen keine Songs gelöscht werden
 
     def __str__(self):
         return f'{self.title}'
+
+
+class Album(UUIDModel):
+    title = models.CharField(max_length=128)
+    artist = models.ForeignKey('Artist', on_delete=models.PROTECT)
 
 
 class Playlist(UUIDModel):
