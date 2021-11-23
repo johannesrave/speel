@@ -12,7 +12,7 @@
         <h3>Bitte wähle einen Song!</h3>
       {% endif %}
     </div>
-    <audio id="player" src="{{ song_to_play.file.url }}" type="audio/{{ audios.Audio_File.type }}" controls></audio>
+    <audio id="player" src="{{ song_to_play.audio_file.url }}" type="audio/{{ audios.Audio_File.type }}" controls></audio>
     <form action="" method="get">
     <label for="playlists">Choose a playlist</label>
     <select name="playlist_id" id="playlists">
