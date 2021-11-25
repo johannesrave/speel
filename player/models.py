@@ -31,8 +31,9 @@ class Song(UUIDModel):
 
 class Album(UUIDModel):
     title = models.CharField(max_length=128, blank=False)
-    artist = models.ForeignKey('Artist', on_delete=models.PROTECT)
-    songs = models.ManyToManyField('Song', blank=True, related_name='albums')
+    artists = models.ManyToManyField('Artist', related_name='albums', blank=True, default="Unbekannter Artist")
+    # artist = models.ForeignKey('Artist', on_delete=models.PROTECT, default="Unbekannter Artist")
+    songs = models.ManyToManyField('Song', blank=True, related_name='songs')
 
 
 class Playlist(UUIDModel):
