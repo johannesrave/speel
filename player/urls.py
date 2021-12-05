@@ -8,6 +8,6 @@ urlpatterns = [
     path('login/', login.Login.as_view(), name='login'),
     path('logout/', login.Logout.as_view(), name='logout'),
     path('player/', player.Index.as_view(), name='player'),
-    path('player/<uuid:playlist>/', player.PlaylistView.as_view(), name='playlist'),
-    re_path(r'^.*$', RedirectView.as_view(pattern_name='player', permanent=False), name='redirect_to_home')
+    path('player/<uuid:playlist_id>/', player.PlaylistView.as_view(), name='playlist'),
+    re_path(r'^player/.*$', RedirectView.as_view(pattern_name='player', permanent=False), name='redirect_to_home')
 ]
