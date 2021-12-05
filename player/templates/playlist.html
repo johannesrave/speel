@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="d-flex flex-column">
+    <audio id="player"
+           src="{{ song_to_play.audio_file.url }}"
+           type="audio/{{ audios.Audio_File.type }}"
+           controls></audio>
+    <h3 class="text-center">Tracks:</h3>
+    {% for song in songs %}
+      <div>
+        <a href="/player/{{ playlist.id }}/{{ song.id }}/"
+           class="d-block w-100 text-center h2">
+          {{ song.title }}
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock content %}
