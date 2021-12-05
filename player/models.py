@@ -10,36 +10,40 @@ class UUIDModel(models.Model):
         abstract = True
 
 
-class Genre(UUIDModel):
+class Playlist(UUIDModel):
     name = models.CharField(max_length=128, blank=False)
+    songs = models.ManyToManyField(
+        'Song',
+        related_name='playlists',
+        blank=True,
+    )
 
-    def __str__(self):
-        return f'{self.name}'
+    # TODO: set default image for empty field
+    thumbnail_file = models.ImageField(blank=True, null=True)
+    last_song_played = models.ForeignKey(
+        'Song',
+        blank=True, null=True,
+        on_delete=models.SET_NULL
+    )
 
 
 class Artist(UUIDModel):
-    name = models.CharField(max_length=128, blank=False)
+    name = models.CharField(max_length=128, blank=True, default="Unbekannter Artist")
 
     def __str__(self):
         return f'{self.name}'
 
 
+# TODO kann man den Titel auch aus den Meta Infos ziehen, so wie hoffentlich auch Length?
 class Song(UUIDModel):
     title = models.CharField(max_length=128, blank=True, default="Unbekannter Song")
     length = models.IntegerField(editable=False, null=True)
+    audio_file = models.FileField()
     artists = models.ManyToManyField(
         'Artist',
         related_name='songs',
         blank=True,
-        # default=Artist.objects.get_or_create(name='Unbekannter Artist')[0]
     )
-    genre = models.ForeignKey(
-        'Genre',
-        blank=True, null=True,
-        on_delete=models.PROTECT,
-        # default=Genre.objects.get_or_create(name='Unbekanntes Genre')[0].pkid
-    )
-    audio_file = models.FileField()
 
     def __str__(self):
         return f'{self.title}'
@@ -47,28 +51,11 @@ class Song(UUIDModel):
 
 class Album(UUIDModel):
     title = models.CharField(max_length=128, blank=False)
-    artists = models.ManyToManyField(
-        'Artist',
-        related_name='albums',
-        blank=True,
-        # default=Artist.objects.get_or_create(name='Unbekannter Artist')[0]
-    )
     songs = models.ManyToManyField(
         'Song',
         related_name='albums',
         blank=True,
-        # default=Song.objects.get_or_create(title='Unbekannter Song')[0].pkid
-    )
-
-
-class Playlist(UUIDModel):
-    name = models.CharField(max_length=128, blank=False)
-    songs = models.ManyToManyField(
-        'Song',
-        related_name='playlists',
-        blank=True,
-        # default=Song.objects.get_or_create(title='Unbekannter Song')[0].pkid
     )
 
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.title}'
