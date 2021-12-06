@@ -36,3 +36,8 @@ class PlaylistView(GuardedView):
             except Playlist.DoesNotExist:
                 return redirect('player')
 
+
+class SongView(GuardedView):
+
+    def post(self, request):
+        pass
