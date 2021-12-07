@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+  <form action="{{ action }}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% for name, value in hidden_fields %}
+      <input type="hidden" name="{{ name }}" value="{{ value }}">
+    {% endfor %}
+    <button type="submit">{{ button_label}}</button>
+  </form>
+{% endblock content %}
