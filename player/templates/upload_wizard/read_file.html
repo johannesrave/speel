@@ -1,8 +1,0 @@
-{% extends "layout.html" %}
-{% block content %}
-  <form action="/preview_file/" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="file" name="file">
-    <button type="submit">Datei auslesen</button>
-  </form>
-{% endblock content %}
