@@ -1,10 +1,11 @@
-import os
 from pprint import pprint
 
+from tinytag import TinyTag
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
-from player.models import Song, Playlist, Artist
+from player.models import TemporaryFileForm, SongForm, TemporaryFile, Artist
 
 
 class GuardedView(LoginRequiredMixin, View):
@@ -12,50 +13,91 @@ class GuardedView(LoginRequiredMixin, View):
     redirect_field_name = 'redirect_to'
 
 
-class ReadFile(GuardedView):
+class UploadFile(GuardedView):
 
     def get(self, request):
-        return render(request, 'upload_wizard/read_file.html')
-
-
-class PreviewFile(GuardedView):
+        context = {
+            'action': reverse('upload_song'),
+            'form': TemporaryFileForm(),
+            'button_label': 'Datei hochladen',
+        }
+        return render(request, 'upload/form.html', context)
 
     def post(self, request):
-        file = request.FILES['file']
-        pprint(file)
-        pprint(file.name)
-        context = {
-            'file': file,
-            'file_path': file.temporary_file_path()
-        }
+        temp_file_form = TemporaryFileForm(request.POST, request.FILES)
 
-        return render(request, 'upload_wizard/preview_file.html', context)
+        if temp_file_form.is_valid():
+            temp_file_instance = temp_file_form.save()
+            # pprint(temp_file_instance)
+            params = f"?temp_file_id={temp_file_instance.id}"
+            return redirect(reverse('scan_song') + params)
+
+        else:
+            print('Invalid file uploaded! Redirecting back to song_upload')
+            return redirect('upload_song')
 
 
-class SavedFile(GuardedView):
+class ScanFile(GuardedView):
+
+    def get(self, request):
+        # pprint(request.GET)
+        temp_file_id = request.GET['temp_file_id']
+
+        if not temp_file_id:
+            print(f'No temp file query string found. Redirecting to file upload.')
+            return redirect('song_upload')
+
+        try:
+            file_to_scan = TemporaryFile.objects.get(id=temp_file_id)
+            # pprint(file_to_scan)
+
+            mp3_file = TinyTag.get(file_to_scan.file.path)
+            # pprint(mp3_file)
+
+            artist, _ = Artist.objects.get_or_create(name=(mp3_file.artist or 'Unbekannter Artist'))
+            # pprint(artist)
+
+            context = {
+                'action': reverse('scan_song'),
+                'form': SongForm({
+                    'title': mp3_file.title or 'Unbekannter Titel',
+                    'artists': [artist],
+                    'audio_file': file_to_scan
+                }),
+                'hidden_fields': [('temp_file_id', temp_file_id)],
+                'button_label': 'Song speichern'
+            }
+
+            return render(request, 'upload/form.html', context)
+
+        except TemporaryFile.DoesNotExist:
+            print(f'Temporary file with id {temp_file_id} does not exist. Redirecting to file upload.')
+            return redirect('song_upload')
 
     def post(self, request):
         pprint(request.POST)
-        form = request.POST
+        temp_file_id = request.POST.get('temp_file_id')
+        song_to_save = SongForm(request.POST)
 
-        with open(form["file_path"]) as temp_file:
+        pprint(TemporaryFile.objects.first().id)
+        pprint(temp_file_id)
+        song_to_save.audio_file = TemporaryFile.objects.get(id=temp_file_id).file
 
-            song = Song.objects.create(
-                title=form["title"],
-                length=form["length"],
-                audio_file=temp_file,
-            )
+        if song_to_save.is_valid():
 
-        # os.remove(form["file_path"])
+            saved_song = song_to_save.save()
+            # pprint(saved_song)
 
-        (artist, _) = Artist.objects.get_or_create(name=form["artist"])
+            pprint(f'Song {saved_song.title} has been uploaded! Redirecting back to song_upload')
+            return redirect('upload_song')
 
-        song.artists.add(artist)
+        else:
+            pprint('Invalid form contents! Rerendering to correct entries')
 
-        context = {
-            "song": song
-        }
-
-        pprint(song)
-
-        return render(request, 'upload_wizard/saved_file.html', context)
+            context = {
+                'action': reverse('scan_song'),
+                'form': song_to_save,
+                'temp_file_id': temp_file_id,
+                'button_label': 'Song speichern'
+            }
+            return render(request, 'upload/form.html', context)
