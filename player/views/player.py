@@ -24,17 +24,17 @@ class PlaylistView(GuardedView):
 
     def get(self, request, playlist_id):
 
-        if playlist_id:
-            try:
-                playlist = Playlist.objects.get(id=playlist_id)
-                context = {
-                    "playlist": playlist,
-                    "songs": playlist.songs.all()
-                }
-                pprint(context)
-                return render(request, 'playlist.html', context)
-            except Playlist.DoesNotExist:
-                return redirect('player')
+        try:
+            playlist = Playlist.objects.get(id=playlist_id)
+            context = {
+                "playlist": playlist,
+                "songs": playlist.songs.all()
+            }
+            pprint(context)
+            return render(request, 'playlist.html', context)
+        except Playlist.DoesNotExist:
+            print('Requested nonexistent playlist with id ' + str(playlist_id))
+            return redirect('player')
 
 
 class SongView(GuardedView):
