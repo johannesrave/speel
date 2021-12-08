@@ -26,7 +26,7 @@
   <main>
     {% block content %}{% endblock %}
   </main>
-  <footer class="d-flex flex-row justify-content-between align-items-center p-3">
+  <footer class="d-flex flex-row justify-content-start gap-3 align-items-center p-3">
     <a href="{% url 'upload_song' %}">Song hochladen</a>
     <a href="{% url 'create_playlist' %}">Playlist erstellen</a>
     <form action="{% url 'login' %}" method="post" class="ms-auto">

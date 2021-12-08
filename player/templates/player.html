@@ -7,7 +7,7 @@
            controls></audio>
     {% for song in songs %}
       <div>
-        <a href="/player/{{ playlist.id }}/?song_id={{ song.id }}"
+        <a href="{% url 'playlist_to_play' playlist.id %}?song_id={{ song.id }}"
            class="d-block w-100 text-center h4">
           {{ song.title }}
         </a>

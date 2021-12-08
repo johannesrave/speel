@@ -3,9 +3,9 @@
   <div class="d-flex flex-column align-items-center gap-3">
     <h3>Playlists</h3>
     <div>
-      {% for playlist in playlists %}
+      {% for playlist in playlists  %}
         <div>
-          <a href="/player/{{ playlist.id }}/" class="d-block w-100 text-center h2">{{ playlist.name }}</a>
+          <a href="{% url 'playlist_to_play' playlist.id %}" class="d-block w-100 text-center h2">{{ playlist.name }}</a>
         </div>
       {% endfor %}
     </div>
