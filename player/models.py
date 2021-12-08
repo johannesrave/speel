@@ -83,7 +83,7 @@ class Album(UUIDModel):
 
 
 class TemporaryFile(UUIDModel):
-    file = models.FileField(null=True)
+    file = models.FileField()
 
 
 class TemporaryFileForm(ModelForm):
