@@ -37,7 +37,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'livesync',
+    # 'livesync',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -58,7 +58,7 @@ MIDDLEWARE = [
 ]
 
 MIDDLEWARE_CLASSES = (
-    'livesync.core.middleware.DjangoLiveSyncMiddleware',
+    # 'livesync.core.middleware.DjangoLiveSyncMiddleware',
 )
 
 DJANGO_LIVESYNC = {
@@ -127,10 +127,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'static/'
+STATIC_ROOT = str(BASE_DIR / 'static/')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media/'
+MEDIA_ROOT = str(BASE_DIR / 'media/')
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
