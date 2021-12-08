@@ -24,20 +24,32 @@ class PlaylistView(GuardedView):
 
     def get(self, request, playlist_id):
 
+        song_id = request.GET.get('song_id')
+
         try:
             playlist = Playlist.objects.get(id=playlist_id)
-            context = {
-                "playlist": playlist,
-                "songs": playlist.songs.all()
-            }
-            pprint(context)
-            return render(request, 'playlist.html', context)
+            songs = playlist.songs.all()
         except Playlist.DoesNotExist:
             print('Requested nonexistent playlist with id ' + str(playlist_id))
             return redirect('player')
 
+        if song_id:
+            try:
+                song_to_play = songs.get(id=song_id)
+            except Song.DoesNotExist:
+                print(f'Requested nonexistent song with id {str(song_id)}')
+                print(f'Switching instead to first song in playlist: {songs.first().title}')
+                song_to_play = songs.first().title
+        else:
+            print(f'No song_id given as query param')
+            print(f'Beginning playback at first song in playlist: {songs.first().title}')
+            song_to_play = songs.first().title
 
-class SongView(GuardedView):
+        context = {
+            "playlist": playlist,
+            "songs": songs,
+            "song_to_play": song_to_play
+        }
 
-    def post(self, request):
-        pass
+        return render(request, 'playlist.html', context)
+
