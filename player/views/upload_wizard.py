@@ -28,7 +28,6 @@ class UploadFile(GuardedView):
 
         if temp_file_form.is_valid():
             temp_file_instance = temp_file_form.save()
-            # pprint(temp_file_instance)
             params = f"?temp_file_id={temp_file_instance.id}"
             return redirect(reverse('scan_song') + params)
 
@@ -40,7 +39,6 @@ class UploadFile(GuardedView):
 class ScanFile(GuardedView):
 
     def get(self, request):
-        # pprint(request.GET)
         temp_file_id = request.GET['temp_file_id']
 
         if not temp_file_id:
@@ -49,13 +47,8 @@ class ScanFile(GuardedView):
 
         try:
             file_to_scan = TemporaryFile.objects.get(id=temp_file_id)
-            # pprint(file_to_scan)
-
             mp3_file = TinyTag.get(file_to_scan.file.path)
-            # pprint(mp3_file)
-
             artist, _ = Artist.objects.get_or_create(name=(mp3_file.artist or 'Unbekannter Artist'))
-            # pprint(artist)
 
             context = {
                 'action': reverse('scan_song'),
@@ -75,23 +68,13 @@ class ScanFile(GuardedView):
             return redirect('song_upload')
 
     def post(self, request):
-        pprint(request.POST)
         temp_file_id = request.POST.get('temp_file_id')
         song_to_save = SongForm(request.POST)
 
-        pprint(TemporaryFile.objects.first().id)
-        pprint(temp_file_id)
         song_to_save.audio_file = TemporaryFile.objects.get(id=temp_file_id).file
 
-        if song_to_save.is_valid():
+        if not song_to_save.is_valid():
 
-            saved_song = song_to_save.save()
-            # pprint(saved_song)
-
-            pprint(f'Song {saved_song.title} has been uploaded! Redirecting back to song_upload')
-            return redirect('upload_song')
-
-        else:
             pprint('Invalid form contents! Rerendering to correct entries')
 
             context = {
@@ -101,3 +84,9 @@ class ScanFile(GuardedView):
                 'button_label': 'Song speichern'
             }
             return render(request, 'upload/form.html', context)
+
+        else:
+            saved_song = song_to_save.save()
+
+            pprint(f'Song {saved_song.title} has been uploaded! Redirecting back to song_upload')
+            return redirect('upload_song')
