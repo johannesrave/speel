@@ -27,22 +27,25 @@ class PlaylistView(GuardedView):
 
         try:
             playlist = Playlist.objects.get(id=playlist_id)
-            songs = playlist.songs.all()
         except Playlist.DoesNotExist:
-            print('Requested nonexistent playlist with id ' + str(playlist_id))
+            print(f'Requested nonexistent song with id {str(playlist_id)}')
+            print(f' Redirecting to playlist selection.')
             return redirect('player')
 
-        if song_id:
+        songs = playlist.songs.all()
+
+        if len(songs):
             try:
                 song_to_play = songs.get(id=song_id)
+                print(f'Beginning playback at song in playlist: {song_to_play.title}')
             except Song.DoesNotExist:
                 print(f'Requested nonexistent song with id {str(song_id)}')
-                print(f'Switching instead to first song in playlist: {songs.first().title}')
-                song_to_play = songs.first().title
+                print(f'Beginning playback at first song in playlist: {songs.first().title}')
+                song_to_play = songs.first()
         else:
-            print(f'No song_id given as query param')
-            print(f'Beginning playback at first song in playlist: {songs.first().title}')
-            song_to_play = songs.first().title
+            print(f'Playlist contains no songs.')
+            print(f' Redirecting to playlist selection.')
+            return redirect('player')
 
         context = {
             "playlist": playlist,

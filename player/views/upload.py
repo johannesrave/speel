@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
-from player.models import TemporaryFileForm, SongForm, TemporaryFile, Artist
+from player.models import TemporaryFileForm, SongForm, TemporaryFile, Artist, Song
 
 
 class GuardedView(LoginRequiredMixin, View):
@@ -68,12 +68,15 @@ class ScanFile(GuardedView):
         temp_file_id = request.POST.get('temp_file_id')
         song_to_save = SongForm(request.POST)
 
-        temp_file = TemporaryFile.objects.get(id=temp_file_id)
-        song_to_save.audio_file = temp_file.file
+        try:
+            temp_file = TemporaryFile.objects.get(id=temp_file_id)
+        except TemporaryFile.DoesNotExist:
+            print(f'Requested nonexistent TemporaryFile with id {temp_file_id}')
+            print(f' Redirecting to file upload.')
+            return redirect('upload_song')
 
         if not song_to_save.is_valid():
-
-            pprint('Invalid form contents! Rerendering to correct entries')
+            pprint('SongForm not valid! Rerendering to correct entries')
 
             context = {
                 'action': reverse('scan_song'),
@@ -84,8 +87,9 @@ class ScanFile(GuardedView):
             return render(request, 'upload/form.html', context)
 
         else:
-            saved_song = song_to_save.save()
+            saved_song = song_to_save.save(commit=False)
+            saved_song.audio_file = temp_file.file
+            saved_song.save()
             temp_file.delete()
-
-            pprint(f'Song {saved_song.title} has been uploaded! Redirecting back to song_upload')
+            pprint(f'Song {saved_song.title} has been uploaded! Redirecting back to upload_song')
             return redirect('upload_song')
