@@ -26,14 +26,13 @@ class UploadFile(GuardedView):
     def post(self, request):
         temp_file_form = TemporaryFileForm(request.POST, request.FILES)
 
-        if temp_file_form.is_valid():
-            temp_file_instance = temp_file_form.save()
-            params = f"?temp_file_id={temp_file_instance.id}"
-            return redirect(reverse('scan_song') + params)
-
-        else:
+        if not temp_file_form.is_valid():
             print('Invalid file uploaded! Redirecting back to song_upload')
             return redirect('upload_song')
+
+        temp_file_instance = temp_file_form.save()
+        params = f"?temp_file_id={temp_file_instance.id}"
+        return redirect(reverse('scan_song') + params)
 
 
 class ScanFile(GuardedView):
@@ -47,31 +46,30 @@ class ScanFile(GuardedView):
 
         try:
             file_to_scan = TemporaryFile.objects.get(id=temp_file_id)
-            mp3_file = TinyTag.get(file_to_scan.file.path)
-            artist, _ = Artist.objects.get_or_create(name=(mp3_file.artist or 'Unbekannter Artist'))
-
-            context = {
-                'action': reverse('scan_song'),
-                'form': SongForm({
-                    'title': mp3_file.title or 'Unbekannter Titel',
-                    'artists': [artist],
-                    'audio_file': file_to_scan
-                }),
-                'hidden_fields': [('temp_file_id', temp_file_id)],
-                'button_label': 'Song speichern'
-            }
-
-            return render(request, 'upload/form.html', context)
-
         except TemporaryFile.DoesNotExist:
             print(f'Temporary file with id {temp_file_id} does not exist. Redirecting to file upload.')
             return redirect('song_upload')
+
+        mp3_file = TinyTag.get(file_to_scan.file.path)
+        artist, _ = Artist.objects.get_or_create(name=(mp3_file.artist or 'Unbekannter Artist'))
+
+        context = {
+            'action': reverse('scan_song'),
+            'form': SongForm({
+                'title': mp3_file.title or 'Unbekannter Titel',
+                'artists': [artist],
+            }),
+            'hidden_fields': [('temp_file_id', temp_file_id)],
+            'button_label': 'Song speichern'
+        }
+        return render(request, 'upload/form.html', context)
 
     def post(self, request):
         temp_file_id = request.POST.get('temp_file_id')
         song_to_save = SongForm(request.POST)
 
-        song_to_save.audio_file = TemporaryFile.objects.get(id=temp_file_id).file
+        temp_file = TemporaryFile.objects.get(id=temp_file_id)
+        song_to_save.audio_file = temp_file.file
 
         if not song_to_save.is_valid():
 
@@ -87,6 +85,7 @@ class ScanFile(GuardedView):
 
         else:
             saved_song = song_to_save.save()
+            temp_file.delete()
 
             pprint(f'Song {saved_song.title} has been uploaded! Redirecting back to song_upload')
             return redirect('upload_song')

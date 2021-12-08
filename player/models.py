@@ -2,31 +2,12 @@ import uuid
 from django.db import models
 from django.forms import ModelForm
 
-
 class UUIDModel(models.Model):
     pkid = models.BigAutoField(primary_key=True, editable=False)
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     class Meta:
         abstract = True
-
-
-class Playlist(UUIDModel):
-    name = models.CharField(max_length=128, blank=False)
-    songs = models.ManyToManyField(
-        'Song',
-        related_name='playlists',
-        blank=True,
-    )
-
-    # TODO: set default image for empty field
-    thumbnail_file = models.ImageField(blank=True, null=True)
-    last_song_played = models.ForeignKey(
-        'Song',
-        blank=True, null=True,
-        on_delete=models.SET_NULL
-    )
-
 
 class Artist(UUIDModel):
     name = models.CharField(max_length=128, blank=True, default="Unbekannter Artist")
@@ -54,6 +35,34 @@ class SongForm(ModelForm):
     class Meta:
         model = Song
         fields = ['title', 'artists']
+
+
+class Playlist(UUIDModel):
+    name = models.CharField(max_length=128, blank=False)
+    # user = models.ForeignKey(
+    #     settings.AUTH_USER_MODEL,
+    #     on_delete=models.CASCADE,
+    #     default=1
+    # )
+    songs = models.ManyToManyField(
+        to=Song,
+        related_name='playlists',
+        blank=True,
+    )
+
+    # TODO: set default image for empty field
+    thumbnail_file = models.ImageField(blank=True, null=True)
+    last_song_played = models.ForeignKey(
+        to=Song,
+        blank=True, null=True,
+        on_delete=models.SET_NULL
+    )
+
+
+class PlaylistForm(ModelForm):
+    class Meta:
+        model = Playlist
+        fields = ['name', 'songs', 'thumbnail_file']
 
 
 class Album(UUIDModel):
