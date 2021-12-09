@@ -1,32 +1,13 @@
 {% extends "layout.html" %}
-{% block heading %}
-  <h1 class="text-center">audioplayer</h1>
-{% endblock %}
 {% block content %}
-  <div class="d-flex flex-column">
-
-    <div class="text-center">
-      {% if song_to_play %}
-        <h3>"{{ song_to_play.title }}"</h3>
-      {% else %}
-        <h3>Bitte wähle einen Song!</h3>
-      {% endif %}
-    </div>
-    <audio id="player" src="{{ song_to_play.file.url }}" type="audio/{{ audios.Audio_File.type }}" controls></audio>
-    <form action="" method="get">
-    <label for="playlists">Choose a playlist</label>
-    <select name="playlist_id" id="playlists">
-      {% for playlist in playlists %}
-        <option value="{{ playlist.id }}">{{ playlist.name }}</option>
+  <div class="d-flex flex-column align-items-center gap-3">
+    <h3>Playlists</h3>
+    <div>
+      {% for playlist in playlists  %}
+        <div>
+          <a href="{% url 'playlist_to_play' playlist.id %}" class="d-block w-100 text-center h2">{{ playlist.name }}</a>
+        </div>
       {% endfor %}
-    </select>
-    <button type="submit" class="ml-auto p-2">Playlist wählen</button>
-    {% for song in songs %}
-      <div class="d-flex align-items-center">
-        <span>{{ song.title }}</span>
-        <button type="submit" name="song_id" value="{{ song.id }}" class="ml-auto p-2">Abspielen</button>
-      </div>
-    {% endfor %}
-    </form>
+    </div>
   </div>
 {% endblock content %}

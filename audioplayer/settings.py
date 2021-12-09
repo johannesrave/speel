@@ -37,12 +37,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # 'livesync',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sass_processor',
     'player'
 ]
 
@@ -55,6 +57,15 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+MIDDLEWARE_CLASSES = (
+    # 'livesync.core.middleware.DjangoLiveSyncMiddleware',
+)
+
+DJANGO_LIVESYNC = {
+    'PORT': 8000,
+    'HOST': '127.0.0.1'
+}
 
 ROOT_URLCONF = 'audioplayer.urls'
 
@@ -90,6 +101,8 @@ DATABASES = {
     }
 }
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -117,10 +130,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'static/'
+STATIC_ROOT = str(BASE_DIR / 'static/')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media/'
+MEDIA_ROOT = str(BASE_DIR / 'media/')
+
+SASS_PROCESSOR_ROOT = STATIC_ROOT
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -130,7 +145,12 @@ TEMPLATE_LOADERS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'sass_processor.finders.CssFinder',
 )
 
+SASS_PROCESSOR_INCLUDE_DIRS = [
+    # BASE_DIR / 'node_modules',
+]
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+SASS_PRECISION = 8
+
