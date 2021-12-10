@@ -1,4 +1,7 @@
+from pprint import pprint
+
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core import serializers
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
@@ -53,9 +56,15 @@ class PlaylistView(GuardedView):
             print(f' Redirecting to playlist selection.')
             return redirect('player')
 
+        # pprint(serializers.serialize("json", songs))
+        song_list = list(songs.values())
+        pprint(song_list)
+
         context = {
             "playlist": playlist,
             "songs": songs,
+            # "songs_json": serializers.serialize("json", songs),
+            "song_list": song_list,
             "song_to_play": song_to_play
         }
 

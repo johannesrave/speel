@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
+{% load static %}
 {% block content %}
   <div class="d-flex flex-column align-items-center">
+  {% include "howler.html" %}
+  <noscript>
     <p class="h3">{{ playlist.name }}</p>
     <ol>
       {% for song in songs %}
@@ -12,10 +15,11 @@
         </li>
       {% endfor %}
     </ol>
-    <audio id="player" class="m-3 w-50"
+    <audio id="html_player" class="m-3 w-50"
            src="{{ song_to_play.audio_file.url }}"
            type="audio/{{ audios.Audio_File.type }}"
            controls></audio>
     <p class="h3">{{ song_to_play.title }}</p>
+  </noscript>
   </div>
 {% endblock content %}
