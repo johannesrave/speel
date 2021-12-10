@@ -2,14 +2,16 @@
 {% block content %}
   <div class="d-flex flex-column align-items-center">
     <p class="h3">{{ playlist.name }}</p>
-    {% for song in songs %}
-      <div>
-        <a href="{% url 'playlist_to_play' playlist.id %}?song_id={{ song.id }}"
-           class="d-block w-100 text-center h4">
-          {{ song.title }}
-        </a>
-      </div>
-    {% endfor %}
+    <ol>
+      {% for song in songs %}
+        <li>
+          <a href="{% url 'playlist_to_play' playlist.id %}?song_id={{ song.id }}"
+             class="d-block w-100 text-center h4">
+            {{ song.title }}
+          </a>
+        </li>
+      {% endfor %}
+    </ol>
     <audio id="player" class="m-3 w-50"
            src="{{ song_to_play.audio_file.url }}"
            type="audio/{{ audios.Audio_File.type }}"
