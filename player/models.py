@@ -21,7 +21,7 @@ class Artist(UUIDModel):
 # TODO kann man den Titel auch aus den Meta Infos ziehen, so wie hoffentlich auch Length?
 class Song(UUIDModel):
     title = models.CharField(max_length=128, blank=True, default="Unbekannter Song")
-    length = models.IntegerField(editable=False, null=True)
+    duration = models.IntegerField(editable=False, null=True)
     audio_file = models.FileField()
     artists = models.ManyToManyField(
         'Artist',

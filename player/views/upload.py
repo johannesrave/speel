@@ -51,12 +51,14 @@ class ScanFile(GuardedView):
             return redirect('song_upload')
 
         mp3_file = TinyTag.get(file_to_scan.file.path)
+        title = mp3_file.title or 'Unbekannter Titel'
+
         artist, _ = Artist.objects.get_or_create(name=(mp3_file.artist or 'Unbekannter Artist'))
 
         context = {
             'action': reverse('scan_song'),
             'form': SongForm({
-                'title': mp3_file.title or 'Unbekannter Titel',
+                'title': title,
                 'artists': [artist],
             }),
             'hidden_fields': [('temp_file_id', temp_file_id)],
@@ -89,6 +91,7 @@ class ScanFile(GuardedView):
         else:
             saved_song = song_to_save.save(commit=False)
             saved_song.audio_file = temp_file.file
+            saved_song.duration = TinyTag.get(temp_file.file.path).duration
             saved_song.save()
             temp_file.delete()
             pprint(f'Song {saved_song.title} has been uploaded! Redirecting back to upload_song')
