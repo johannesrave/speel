@@ -1,3 +1,5 @@
+import {HttpTool} from "./requests.js";
+
 /*!
 * inspired by https://github.com/goldfire/howler.js/tree/master/examples/player
 */
@@ -14,60 +16,60 @@ elms.forEach(function (elm) {
 });
 
 
-class HttpTool {
-    static updateLastSongPlayed(playlistId, songId) {
-        const url = `${window.location.origin}/playlist/${playlistId}/`
-
-        const init = {
-            method: 'PATCH',
-            mode: 'cors',
-            cache: 'no-cache',
-            credentials: 'same-origin',
-            redirect: 'follow',
-            referrer: 'no-referrer',
-            headers: {
-                'X-CSRFToken': cookies.csrftoken
-            },
-            body: {
-                'last_song_played': songId
-            }
-        };
-
-        console.dir(init)
-        return fetch(url, init)
-    }
-
-    static parseCookies() {
-        console.log("Parsing cookies:")
-
-        if (!(document.cookie && document.cookie !== '')) {
-            return {};
-        }
-
-        const keyValueStrings = document.cookie.split(';')
-        const cookies = keyValueStrings.reduce((obj, string) => {
-            const match = string.trim().match(/(\w+)=(.*)/);
-            if (match !== undefined) {
-                console.log(match)
-                const [_, cookieName, value] = match
-                return {...obj, [cookieName]: decodeURIComponent(value)}
-            }
-        }, {});
-        console.log(cookies)
-        return cookies
-
-        /*
-        document.cookie.split(';').forEach(function (cookie) {
-            const match = cookie.trim().match(/(\w+)=(.*)/);
-            if (match !== undefined) {
-                cookies[match[1]] = decodeURIComponent(match[2]);
-            }
-        });
-
-        // return cookies;
-        */
-    }
-}
+// class HttpTool {
+//     static updateLastSongPlayed(playlistId, songId) {
+//         const url = `${window.location.origin}/playlist/${playlistId}/`
+//
+//         const init = {
+//             method: 'PATCH',
+//             mode: 'cors',
+//             cache: 'no-cache',
+//             credentials: 'same-origin',
+//             redirect: 'follow',
+//             referrer: 'no-referrer',
+//             headers: {
+//                 'X-CSRFToken': cookies.csrftoken
+//             },
+//             body: {
+//                 'last_song_played': songId
+//             }
+//         };
+//
+//         console.dir(init)
+//         return fetch(url, init)
+//     }
+//
+//     static parseCookies() {
+//         console.log("Parsing cookies:")
+//
+//         if (!(document.cookie && document.cookie !== '')) {
+//             return {};
+//         }
+//
+//         const keyValueStrings = document.cookie.split(';')
+//         const cookies = keyValueStrings.reduce((obj, string) => {
+//             const match = string.trim().match(/(\w+)=(.*)/);
+//             if (match !== undefined) {
+//                 console.log(match)
+//                 const [_, cookieName, value] = match
+//                 return {...obj, [cookieName]: decodeURIComponent(value)}
+//             }
+//         }, {});
+//         console.log(cookies)
+//         return cookies
+//
+//         /*
+//         document.cookie.split(';').forEach(function (cookie) {
+//             const match = cookie.trim().match(/(\w+)=(.*)/);
+//             if (match !== undefined) {
+//                 cookies[match[1]] = decodeURIComponent(match[2]);
+//             }
+//         });
+//
+//         // return cookies;
+//         */
+//     }
+// }
 
 const cookies = HttpTool.parseCookies();
 
@@ -131,7 +133,7 @@ class Player {
                     pauseBtn.style.display = 'block';
 
                     // Send currently playing song to server
-                    HttpTool.updateLastSongPlayed(playlistId, index)
+                    HttpTool.updateLastSongPlayed(playlistId, index, cookies)
                         .then(r => console.log(r))
                         .catch(e => console.error(e))
                 },

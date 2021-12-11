@@ -2,6 +2,7 @@ from pprint import pprint
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core import serializers
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
@@ -69,6 +70,10 @@ class PlaylistView(GuardedView):
         }
 
         return render(request, 'player.html', context)
+
+    def patch(self, request, playlist_id):
+        pprint(request)
+        return HttpResponse()
 
 
 class PlaylistCreateView(GuardedView):

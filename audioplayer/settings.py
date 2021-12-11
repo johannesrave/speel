@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from pprint import pprint
+
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -154,3 +156,7 @@ SASS_PROCESSOR_INCLUDE_DIRS = [
 
 SASS_PRECISION = 8
 
+if DEBUG:
+    import mimetypes
+    mimetypes.add_type("text/javascript", ".js", True)
+    pprint(mimetypes.types_map)

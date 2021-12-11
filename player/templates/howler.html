@@ -31,7 +31,7 @@
   </div>
 
   <div id="volume" class="fadeout">
-    <div id="barFull" class="bar"></div>
+    <div id="barFull" class=" bar"></div>
     <div id="barEmpty" class="bar"></div>
     <div id="sliderBtn"></div>
   </div>
@@ -41,5 +41,5 @@
           crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   {{ playlist.id|json_script:"playlist_id" }}
   {{ song_list|json_script:"song_list" }}
-  <script src="{% static 'player/js/player.js' %}"></script>
+  <script src="{% static 'player/js/player.js' %}" type="module"></script>
 </div>
