@@ -11,10 +11,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os.path
 import os
-from pathlib import Path
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from pprint import pprint
+from pathlib import Path
 
 from dotenv import load_dotenv
 
@@ -159,4 +157,3 @@ SASS_PRECISION = 8
 if DEBUG:
     import mimetypes
     mimetypes.add_type("text/javascript", ".js", True)
-    pprint(mimetypes.types_map)
