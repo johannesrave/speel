@@ -4,14 +4,14 @@ from urllib.parse import parse_qs, parse_qsl
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Model
-from django.http import HttpResponse, HttpRequest, HttpResponseBadRequest
+from django.http import HttpResponse, HttpRequest, HttpResponseBadRequest, JsonResponse
 from django.utils.decorators import method_decorator
 
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
 
-class GuardedView(View):
+class GuardedView(View, LoginRequiredMixin):
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
 
@@ -20,8 +20,9 @@ class ListView(GuardedView):
     http_method_names = ['get', 'post', 'delete', 'head', 'options']
 
     def get(self, request, model: Model):
-        pprint(model.objects.all())
-        return HttpResponse()
+        model_list = model.objects.all().values()
+        # pprint(list(model_list))
+        return JsonResponse(list(model_list), safe=False)
 
     def post(self, request: HttpRequest, model: Model):
         print(f'Hit POST endpoint for {model}')

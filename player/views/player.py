@@ -1,8 +1,9 @@
 from pprint import pprint
 
+import requests
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
@@ -17,8 +18,13 @@ class GuardedView(LoginRequiredMixin, View):
 class Player(GuardedView):
 
     def get(self, request):
+
+        # pprint(request.__dict__)
+        playlist_list_url = request.build_absolute_uri(location=reverse('playlist_list'))
+        response = requests.get(playlist_list_url)
+        playlist_list = response.json()
         context = {
-            'playlists': Playlist.objects.all(),
+            'playlists': playlist_list,
         }
         return render(request, 'index.html', context)
 
