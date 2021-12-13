@@ -8,6 +8,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  SECRET_KEY: uoei77q8co7de!-ox5a#29r0yhscx03p+mztpt5v8)i-1ol-ge
 
 jobs:
   build-and-push-image:

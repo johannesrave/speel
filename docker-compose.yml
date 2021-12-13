@@ -6,6 +6,8 @@ services:
     command:
       sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:${DJANGO_PORT}"
     env_file: .env
+    environment:
+      SECRET_KEY:
     ports:
       - "${DJANGO_PORT}:${DJANGO_PORT}"
     depends_on:
