@@ -41,8 +41,15 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
         context: .
 
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
     - uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ github.repository }}
-        publish-profile: ${{ secrets.azureWebAppPublishProfile }}
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        app-name: 'speel'
+        images:  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}'
+    
+    - name: Azure logout
+      run: |
+        az logout
