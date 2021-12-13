@@ -27,7 +27,6 @@ jobs:
       packages: write
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
