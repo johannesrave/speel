@@ -4,30 +4,24 @@ services:
   django:
     build: .
     command:
-      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
-#    env_file: .env
-    environment:
-      DATABASE_HOST: postgres
-      DATABASE_NAME: audioplayer_db
-      DATABASE_USER: db_user
-      DATABASE_PASSWORD: db_password
-      DATABASE_PORT: 5434
-      SECRET_KEY: django-insecure-oqb@vxu(w1a8$y@twsd@@*-jv(-0&_a09pj998t-@zu34)@$u&
+      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:${DJANGO_PORT}"
+    env_file: .env
     ports:
-      - "8008:8000"
+      - "${DJANGO_PORT}:${DJANGO_PORT}"
     depends_on:
       - postgres
   postgres:
     image: postgres:13
     restart: always
-    environment:
-      - POSTGRES_USER=${DATABASE_USER}
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-      - POSTGRES_DB=${DATABASE_NAME}
-    volumes:
-      - postgres:/var/lib/postgresql/data
+    env_file: .env
+#    environment:
+#      - POSTGRES_USER=${POSTGRES_USER}
+#      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+#      - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - '${DATABASE_PORT}:${DATABASE_PORT}'
     command: -p ${DATABASE_PORT}
+    volumes:
+      - data:/var/lib/postgresql/data
 volumes:
-  postgres:
+  data:
