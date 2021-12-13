@@ -4,7 +4,7 @@ on:
   push:
     branches: ['deploy']
   workflow_dispatch:
-  
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
@@ -15,6 +15,8 @@ jobs:
     permissions:
       contents: read
       packages: write
+    env:
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
     steps:
       - name: Checkout repository
@@ -34,8 +36,6 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Build and push Docker image
-        env:
-          SECRET_KEY: uoei77q8co7de!-ox5a#29r0yhscx03p+mztpt5v8)i-1ol-ge
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
