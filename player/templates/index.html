@@ -5,7 +5,7 @@
     <div>
       {% for playlist in playlists  %}
         <div>
-          <a href="{% url 'playlist_to_play' playlist.id %}" class="d-block w-100 text-center h2">{{ playlist.name }}</a>
+          <a href="{% url 'play_playlist' playlist.id %}" class="d-block w-100 text-center h2">{{ playlist.name }}</a>
         </div>
       {% endfor %}
     </div>

@@ -2,8 +2,7 @@ from pprint import pprint
 
 import requests
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core import serializers
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
@@ -15,21 +14,23 @@ class GuardedView(LoginRequiredMixin, View):
     redirect_field_name = 'redirect_to'
 
 
-class Player(GuardedView):
+class LibraryView(GuardedView):
 
     def get(self, request):
 
-        # pprint(request.__dict__)
+        # get list of playlists from api as json
         playlist_list_url = request.build_absolute_uri(location=reverse('playlist_list'))
         response = requests.get(playlist_list_url)
         playlist_list = response.json()
+
+        # use the json to render the template
         context = {
             'playlists': playlist_list,
         }
         return render(request, 'index.html', context)
 
 
-class PlaylistView(GuardedView):
+class PlayerView(GuardedView):
 
     def get(self, request, playlist_id):
 
@@ -40,7 +41,7 @@ class PlaylistView(GuardedView):
         except Playlist.DoesNotExist:
             print(f'Requested nonexistent song with id {str(playlist_id)}')
             print(f' Redirecting to playlist selection.')
-            return redirect('player')
+            return redirect('library')
 
         songs = playlist.songs.all()
 
@@ -61,7 +62,7 @@ class PlaylistView(GuardedView):
         else:
             print(f'Playlist contains no songs.')
             print(f' Redirecting to playlist selection.')
-            return redirect('player')
+            return redirect('library')
 
         # pprint(serializers.serialize("json", songs))
         song_list = list(songs.values())
@@ -76,11 +77,6 @@ class PlaylistView(GuardedView):
         }
 
         return render(request, 'player.html', context)
-
-    def patch(self, request, playlist_id):
-        pprint(request)
-        return HttpResponse()
-
 
 class PlaylistCreateView(GuardedView):
 
@@ -104,4 +100,4 @@ class PlaylistCreateView(GuardedView):
             return render(request, 'upload/form.html', context)
 
         playlist = playlist_form.save()
-        return redirect('playlist_to_play', playlist_id=playlist.id)
+        return redirect('play_playlist', playlist_id=playlist.id)

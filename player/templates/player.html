@@ -8,7 +8,7 @@
     <ol>
       {% for song in songs %}
         <li>
-          <a href="{% url 'playlist_to_play' playlist.id %}?song_id={{ song.id }}"
+          <a href="{% url 'play_playlist' playlist.id %}?song_id={{ song.id }}"
              class="d-block w-100 text-center h4">
             {{ song.title }}
           </a>
