@@ -8,6 +8,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
 jobs:
   show_environment:
@@ -18,23 +19,6 @@ jobs:
       - name: "Show environment variables"
         run: |
           env
-
-  python_test:
-    name: "Reproduce behavior from https://stackoverflow.com/q/65382013/147356"
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: "Checkout repository"
-        uses: actions/checkout@v2
-
-      - name: "Set up python"
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-
-      - name: "Run python script"
-        run: |
-          python actiontest.py
 
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -61,12 +45,10 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      - name: Test Secret Key
-        run: echo "Secret Key $SECRET_KEY"
-
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          context: github
