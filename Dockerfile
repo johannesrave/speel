@@ -14,9 +14,9 @@ RUN apt-get update && apt-get install
 
 COPY . .
 #RUN ["chmod", "+x", "start_django.sh"]
-RUN ["python", "manage.py", "makemigrations", "player"]
-RUN ["python", "manage.py", "migrate"]
-CMD ["python", "manage.py", "runserver", "8000"]
+#RUN ["python", "manage.py", "makemigrations", "player"]
+#RUN ["python", "manage.py", "migrate"]
+#CMD ["python", "manage.py", "runserver", "8000"]
 
 #EXPOSE 8000
 
