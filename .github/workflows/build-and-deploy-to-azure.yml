@@ -49,7 +49,7 @@ jobs:
     - uses: azure/webapps-deploy@v2
       with:
         app-name: 'speel'
-        images:  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:deploy'
+        images:  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:deploy
         
     - run: |
         az webapp list --query "[?state=='Running']"
