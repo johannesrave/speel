@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   django:
-    build: .
+    image: ghcr.io/johannesrave/audioplayer:deploy
     command:
       sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     environment:
@@ -13,7 +13,7 @@ services:
       DATABASE_PORT: 5434
       SECRET_KEY: django-insecure-oqb@vxu(w1a8$y@twsd@@*-jv(-0&_a09pj998t-@zu34)@$u&
     ports:
-      - "8008:8000"
+      - "80:8000"
     depends_on:
       - postgres
   postgres:
