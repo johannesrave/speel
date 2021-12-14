@@ -1,4 +1,4 @@
-name: Run Docker image in Azure Web Apps
+name: Run Docker Compose in Azure Web Apps
 
 on:
   workflow_dispatch:
