@@ -1,7 +1,10 @@
 version: '3.9'
 
 services:
-
+  django:
+    image: ghcr.io/johannesrave/audioplayer:deploy
+    depends_on:
+      - postgres
   postgres:
     image: postgres:13
     restart: always
