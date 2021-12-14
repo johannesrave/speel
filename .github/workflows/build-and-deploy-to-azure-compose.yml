@@ -2,6 +2,9 @@ name: "Run Docker Compose in Azure Web Apps"
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - deploy
 
 env:
   REGISTRY: ghcr.io
