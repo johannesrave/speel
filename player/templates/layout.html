@@ -29,12 +29,14 @@
     {% block content %}{% endblock %}
   </main>
   <footer class="d-flex flex-row justify-content-start gap-3 align-items-center p-3">
-    <a href="{% url 'upload_song' %}">Song hochladen</a>
-    <a href="{% url 'create_playlist' %}">Playlist erstellen</a>
-    <form action="{% url 'login' %}" method="post" class="ms-auto">
-      {% csrf_token %}
-      <button name="logout" value="true">Abmelden</button>
-    </form>
+      {% block footer %}
+          <a href="{% url 'upload_song' %}">Song hochladen</a>
+          <a href="{% url 'create_playlist' %}">Playlist erstellen</a>
+          <form action="{% url 'login' %}" method="post" class="ms-auto">
+              {% csrf_token %}
+              <button name="logout" value="true">Abmelden</button>
+          </form>
+      {% endblock %}
   </footer>
 </div>
 </body>
