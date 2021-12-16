@@ -5,7 +5,13 @@
     <div>
       {% for playlist in playlists  %}
         <div>
-          <a href="{% url 'playlist_to_play' playlist.id %}" class="d-block w-100 text-center h2">{{ playlist.name }}</a>
+          <a href="{% url 'playlist_to_play' playlist.id %}" class="d-block w-100 text-center h2">
+              {% if playlist.thumbnail_file %}
+                  <img src="{{ playlist.thumbnail_file.url }}">
+              {% else %}
+                  {{  playlist.name }}
+              {% endif %}
+          </a>
         </div>
       {% endfor %}
     </div>

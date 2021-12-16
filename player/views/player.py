@@ -73,7 +73,7 @@ class PlaylistCreateView(GuardedView):
         return render(request, 'upload/form.html', context)
 
     def post(self, request):
-        playlist_form = PlaylistForm(request.POST)
+        playlist_form = PlaylistForm(request.POST, request.FILES)
 
         if not playlist_form.is_valid():
             context = {
