@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.forms import ModelForm
+from thumbnails.fields import ImageField
 
 
 class UUIDModel(models.Model):
@@ -51,10 +52,12 @@ class Playlist(UUIDModel):
         blank=True,
     )
 
-    # TODO: set default image for empty field
-    thumbnail_file = models.ImageField(
+    thumbnail_file = ImageField(
         upload_to='thumbnails',
-        blank=True, null=True)
+        resize_source_to='large',
+        blank=True,
+        null=True
+    )
     last_song_played = models.ForeignKey(
         to=Song,
         blank=True, null=True,
