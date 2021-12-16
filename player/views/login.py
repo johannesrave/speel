@@ -1,5 +1,5 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.views import View
 
@@ -18,8 +18,9 @@ class Login(View):
         password = request.POST.get("password")
 
         user = authenticate(request, username=username, password=password)
-        if not user:
-            return HttpResponseForbidden()
+        if not user or not user.is_active:
+            messages.error(request, 'username or password not correct')
+            return redirect('login')
 
         login(request, user)
         return redirect(request.POST.get('redirect_to', 'player'))
