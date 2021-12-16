@@ -52,7 +52,9 @@ class Playlist(UUIDModel):
     )
 
     # TODO: set default image for empty field
-    thumbnail_file = models.ImageField(blank=True, null=True)
+    thumbnail_file = models.ImageField(
+        upload_to='thumbnails',
+        blank=True, null=True)
     last_song_played = models.ForeignKey(
         to=Song,
         blank=True, null=True,

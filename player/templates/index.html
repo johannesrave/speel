@@ -7,7 +7,7 @@
         <div>
           <a href="{% url 'playlist_to_play' playlist.id %}" class="d-block w-100 text-center h2">
               {% if playlist.thumbnail_file %}
-                  <img src="{{ playlist.thumbnail_file.url }}">
+                  <img src="{{ playlist.thumbnail_file.url }}" alt="{{ playlist.name }}">
               {% else %}
                   {{  playlist.name }}
               {% endif %}
