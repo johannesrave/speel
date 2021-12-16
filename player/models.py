@@ -83,7 +83,7 @@ class Album(UUIDModel):
 
 
 class TemporaryFile(UUIDModel):
-    file = models.FileField()
+    file = models.FileField(upload_to='audio')
 
 
 class TemporaryFileForm(ModelForm):
