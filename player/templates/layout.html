@@ -24,6 +24,12 @@
     {% block heading %}
       <a href="{% url 'player' %}" class="d-block w-100 text-center h1 m-auto">audioplayer</a>
     {% endblock %}
+      {% for message in messages %}
+          <div class="alert alert-danger alert-dismissible fade show">
+              <strong>Error!</strong> {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+      {% endfor %}
   </header>
   <main>
     {% block content %}{% endblock %}

@@ -1,5 +1,6 @@
 from pprint import pprint
 
+from django.contrib import messages
 from tinytag import TinyTag
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
@@ -27,7 +28,7 @@ class UploadFile(GuardedView):
         temp_file_form = TemporaryFileForm(request.POST, request.FILES)
 
         if not temp_file_form.is_valid():
-            print('Invalid file uploaded! Redirecting back to song_upload')
+            messages.error(request, 'Invalid File Format')
             return redirect('upload_song')
 
         temp_file_instance = temp_file_form.save()
