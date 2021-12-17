@@ -1,6 +1,7 @@
 import uuid
 
 from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.forms import ModelForm
 from tinytag import TinyTag
@@ -86,7 +87,8 @@ class Album(UUIDModel):
 
 
 class TemporaryFile(UUIDModel):
-    file = models.FileField(upload_to='audio')
+    file = models.FileField(upload_to='audio',
+                            validators=[FileExtensionValidator(allowed_extensions=['mp3', 'wav'])])
 
 
 class TemporaryFileForm(ModelForm):
@@ -96,9 +98,9 @@ class TemporaryFileForm(ModelForm):
 
     def clean_file(self):
         clean_file = self.cleaned_data.get('file')
-        is_valid = TinyTag.is_supported(clean_file.name)
+        is_valid = TinyTag.is_supported(clean_file.name) and clean_file.size < 50000000
         if not is_valid:
-            raise ValidationError('not a valid music file')
+            raise ValidationError('not a valid file')
         return clean_file
 
 

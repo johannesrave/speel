@@ -28,7 +28,7 @@ class UploadFile(GuardedView):
         temp_file_form = TemporaryFileForm(request.POST, request.FILES)
 
         if not temp_file_form.is_valid():
-            messages.error(request, 'Invalid File Format')
+            messages.error(request, 'Invalid File Format or File too big (max 500mb)')
             return redirect('upload_song')
 
         temp_file_instance = temp_file_form.save()

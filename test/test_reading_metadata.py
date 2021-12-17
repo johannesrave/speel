@@ -4,13 +4,12 @@ import unittest
 
 from tinytag import TinyTag
 
-path_to_mp3 = 'musicfox_dancing_street.mp3'
-path_to_wav = 'testFile.wav'
-mp3_file = TinyTag.get(path_to_mp3)
-wav_file = TinyTag.get(path_to_wav)
+mp3_file = TinyTag.get('testfiles/music/musicfox_dancing_street.mp3')
+wav_file = TinyTag.get('testfiles/music/testFile.wav')
+audio_book_file = TinyTag.get('testfiles/audiobooks/Paw Patrol/Track 1.wav')
 
 
-class TestingMutagen(unittest.TestCase):
+class TestReadingMetaData(unittest.TestCase):
 
     def test_reading_length(self):
         actual_length_in_seconds = mp3_file.duration
@@ -31,3 +30,15 @@ class TestingMutagen(unittest.TestCase):
         actual_length = wav_file.duration
         expected_length = 3.108730158730159
         self.assertEqual(expected_length, actual_length)
+
+    def test_reading_image(self):
+        image = audio_book_file.get_image()
+        audio_book_file.disc_total
+        audio_book_file.track_total
+        # filesize sollte vllt nicht größer als 100mb sein also 100000000
+        size = audio_book_file.filesize
+        # audio_book_file.is_supported()
+        duration = audio_book_file.duration
+        audio_book_file.track
+        print(image)
+
