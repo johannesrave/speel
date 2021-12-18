@@ -1,5 +1,6 @@
 from pprint import pprint
 
+from django.contrib import messages
 from tinytag import TinyTag
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
@@ -27,11 +28,12 @@ class UploadFile(GuardedView):
         temp_file_form = TemporaryFileForm(request.POST, request.FILES)
 
         if not temp_file_form.is_valid():
-            print('Invalid file uploaded! Redirecting back to song_upload')
+            messages.error(request, 'Invalid File Format')
             return redirect('upload_song')
 
         temp_file_instance = temp_file_form.save()
-        params = f"?temp_file_id={temp_file_instance.id}"
+        raw_file_name = str(temp_file_form.files.get('file')).split('.')[0].strip()
+        params = f"?temp_file_id={temp_file_instance.id}&raw_file_name={raw_file_name}"
         return redirect(reverse('scan_song') + params)
 
 
@@ -39,6 +41,7 @@ class ScanFile(GuardedView):
 
     def get(self, request):
         temp_file_id = request.GET['temp_file_id']
+        raw_file_name = request.GET['raw_file_name']
 
         if not temp_file_id:
             print(f'No temp file query string found. Redirecting to file upload.')
@@ -51,7 +54,7 @@ class ScanFile(GuardedView):
             return redirect('song_upload')
 
         mp3_file = TinyTag.get(file_to_scan.file.path)
-        title = mp3_file.title or 'Unbekannter Titel'
+        title = mp3_file.title or raw_file_name or 'Unbekannter Titel'
 
         artist, _ = Artist.objects.get_or_create(name=(mp3_file.artist or 'Unbekannter Artist'))
 

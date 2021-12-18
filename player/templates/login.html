@@ -1,12 +1,6 @@
 {% extends "layout.html" %}
 {% block heading %}
   <h1 class="text-center">Anmelden</h1>
-  {% for message in messages %}
-      <div class="alert alert-danger alert-dismissible fade show">
-          <strong>Error!</strong> {{ message }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-  {% endfor %}
 {% endblock %}
 {% block content %}
   <form action="{% url 'login' %}" method="post" class="d-flex flex-column align-items-center">
