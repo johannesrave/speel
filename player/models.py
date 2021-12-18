@@ -56,7 +56,7 @@ class Playlist(UUIDModel):
     )
 
     thumbnail_file = ImageField(
-        upload_to='thumbnails',
+        upload_to='images',
         resize_source_to='large',
         blank=True,
         null=True
