@@ -49,9 +49,7 @@ class PlaylistView(GuardedView):
                     print(f'Beginning playback at first song in playlist: {songs.first().title}')
                     song_to_play = songs.first()
         else:
-            print(f'Playlist contains no songs.')
-            print(f' Redirecting to playlist selection.')
-            return redirect('player')
+            song_to_play = 'contains no songs'
 
         context = {
             "playlist": playlist,
@@ -73,7 +71,7 @@ class PlaylistCreateView(GuardedView):
         return render(request, 'upload/form.html', context)
 
     def post(self, request):
-        playlist_form = PlaylistForm(request.POST)
+        playlist_form = PlaylistForm(request.POST, request.FILES)
 
         if not playlist_form.is_valid():
             context = {

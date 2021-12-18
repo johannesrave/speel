@@ -1,7 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
   <div class="d-flex flex-column align-items-center">
-    <p class="h3">{{ playlist.name }}</p>
+      {% if playlist.thumbnail_file %}
+          <img src="{{ playlist.thumbnail_file.url }}" alt="{{ playlist.name }}">
+      {% else %}
+          <p class="h3">{{ playlist.name }}</p>
+      {% endif %}
     <ol>
       {% for song in songs %}
         <li>

@@ -5,6 +5,7 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.forms import ModelForm
 from tinytag import TinyTag
+from thumbnails.fields import ImageField
 
 
 class UUIDModel(models.Model):
@@ -22,7 +23,6 @@ class Artist(UUIDModel):
         return f'{self.name}'
 
 
-# TODO kann man den Titel auch aus den Meta Infos ziehen, so wie hoffentlich auch Length?
 class Song(UUIDModel):
     title = models.CharField(max_length=128, blank=True, default="Unbekannter Song")
     duration = models.IntegerField(editable=False, null=True)
@@ -56,8 +56,12 @@ class Playlist(UUIDModel):
         blank=True,
     )
 
-    # TODO: set default image for empty field
-    thumbnail_file = models.ImageField(blank=True, null=True)
+    thumbnail_file = ImageField(
+        upload_to='images',
+        resize_source_to='large',
+        blank=True,
+        null=True
+    )
     last_song_played = models.ForeignKey(
         to=Song,
         blank=True, null=True,
