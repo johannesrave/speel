@@ -11,4 +11,4 @@ RUN apt-get update && apt-get install
 
 COPY . .
 RUN ["chmod", "+x", "start_django.sh"]
-CMD ["start_django.sh"]
+ENTRYPOINT ["/start_django.sh"]
