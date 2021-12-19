@@ -1,6 +1,18 @@
 version: '3.9'
 
 services:
+  postgres:
+    image: postgres:13
+    restart: always
+    environment:
+        POSTGRES_DB: audioplayer_db
+        POSTGRES_USER: db_user
+        POSTGRES_PASSWORD: db_password
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - "5434:5434"
+    command: -p 5434
   django:
     image: ghcr.io/johannesrave/audioplayer:deploy
     environment:
@@ -14,17 +26,5 @@ services:
       - "80:8000"
     depends_on:
       - postgres
-  postgres:
-    image: postgres:13
-    restart: always
-    environment:
-        POSTGRES_DB: audioplayer_db
-        POSTGRES_USER: db_user
-        POSTGRES_PASSWORD: db_password
-    volumes:
-      - postgres:/var/lib/postgresql/data
-    ports:
-      - "5434:5434"
-    command: -p 5434
 volumes:
   postgres:
