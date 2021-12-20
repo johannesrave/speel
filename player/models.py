@@ -102,7 +102,7 @@ class TemporaryFileForm(ModelForm):
 
     def clean_file(self):
         clean_file = self.cleaned_data.get('file')
-        is_valid = TinyTag.is_supported(clean_file.name) and clean_file.size < 50000000
+        is_valid = TinyTag.is_supported(clean_file.name) and clean_file.size < 500000000
         if not is_valid:
             raise ValidationError('not a valid file')
         return clean_file

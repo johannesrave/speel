@@ -23,8 +23,8 @@ rcssmin==1.0.6
 redis==4.0.2
 rjsmin==1.1.0
 shortuuid==1.0.8
-six==1.16.0
-sqlparse==0.4.2
+six==1.16.7
+sqlparse==0.4.3
 tinytag==1.6.0
 tornado==6.1
 watchdog==2.1.6
