@@ -32,35 +32,36 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Extract metadata (tags, labels) for Docker
-      id: meta
+      id: metadata
       uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-        tags: |
-          type=sha
+        tags: type=sha
 
     - name: Build and push Docker image
       uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
       with:
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+        tags: ${{ steps.metadata.outputs.tags }}
+        labels: ${{ steps.metadata.outputs.labels }}
         context: .
 
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - uses: azure/webapps-deploy@v2
+    - name: Deploy as Azure multi-container webapp
+      uses: azure/webapps-deploy@v2
       with:
         app-name: 'speel-compose'
         configuration-file: docker-compose.yml
-        images: |
-          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ fromJSON(steps.meta.outputs.json).tags.sha }}
 
-    - run: |
-        az webapp list --query "[?state=='Running']"
-    
+    - name: Wake webapp from idle to trigger docker-compose
+      run: curl https://speel-compose.azurewebsites.net/
+
+    - name: Show running webapps
+      run: az webapp list --query "[?state=='Running']"
+
     - name: Azure logout
-      run: |
-        az logout
+      run: az logout
