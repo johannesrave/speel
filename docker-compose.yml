@@ -3,22 +3,28 @@ version: '3.9'
 services:
   django:
     build: .
-    command:
-      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:${DJANGO_PORT}"
-    env_file: .env
+    image: ghcr.io/johannesrave/audioplayer:deploy
     environment:
-      SECRET_KEY:
+      DATABASE_HOST: postgres
+      DATABASE_NAME: audioplayer_db
+      DATABASE_USER: db_user
+      DATABASE_PASSWORD: db_password
+      DATABASE_PORT: 5434
+      SECRET_KEY: "django-insecure-oqb@vxu(w1a8$y@twsd@@*-jv(-0&_a09pj998t-@zu34)@$u&"
     ports:
-      - "${DJANGO_PORT}:${DJANGO_PORT}"
+      - "8000:8000"
     depends_on:
       - postgres
   postgres:
     image: postgres:13
     restart: always
-    env_file: .env
+    environment:
+      POSTGRES_DB: audioplayer_db
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: db_password
     ports:
-      - '${DATABASE_PORT}:${DATABASE_PORT}'
-    command: -p ${DATABASE_PORT}
+      - "5434:5434"
+    command: -p 5434
     volumes:
       - data:/var/lib/postgresql/data
 volumes:
