@@ -55,7 +55,8 @@ jobs:
       with:
         app-name: 'speel-compose'
         configuration-file: docker-compose.yml
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        images: |
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
     - run: |
         az webapp list --query "[?state=='Running']"

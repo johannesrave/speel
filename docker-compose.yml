@@ -1,9 +1,9 @@
 version: '3.9'
 
 services:
-  django:
+  web:
     build: .
-    image: ghcr.io/johannesrave/audioplayer:deploy
+    image: ghcr.io/johannesrave/audioplayer
     environment:
       DATABASE_HOST: postgres
       DATABASE_NAME: audioplayer_db
@@ -12,7 +12,7 @@ services:
       DATABASE_PORT: 5434
       SECRET_KEY: "django-insecure-oqb@vxu(w1a8$y@twsd@@*-jv(-0&_a09pj998t-@zu34)@$u&"
     ports:
-      - "8000:8000"
+      - "80:8000"
     depends_on:
       - postgres
   postgres:
