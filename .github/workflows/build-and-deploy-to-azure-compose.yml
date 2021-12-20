@@ -32,13 +32,13 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Print image name
-        run: echo $FULL_IMAGE_NAME
+        run: echo ${{ env.FULL_IMAGE_NAME }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           push: true
-          tags: $FULL_IMAGE_NAME
+          tags: ${{ env.FULL_IMAGE_NAME }}
           context: .
 
       - uses: azure/login@v1
@@ -50,7 +50,7 @@ jobs:
         with:
           app-name: 'speel-compose'
           configuration-file: docker-compose.yml
-          images: $FULL_IMAGE_NAME
+          images: ${{ env.FULL_IMAGE_NAME }}
 
       - name: Wake webapp from idle to trigger docker-compose
         run: curl https://speel-compose.azurewebsites.net/
