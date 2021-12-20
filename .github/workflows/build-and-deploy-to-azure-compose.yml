@@ -46,9 +46,7 @@ jobs:
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           push: true
-          tags: |
-            ${{ steps.metadata.outputs.tags }}
-            ${{ github.sha }}
+          tags: ${{ github.sha }}
           labels: ${{ steps.metadata.outputs.labels }}
           context: .
 
