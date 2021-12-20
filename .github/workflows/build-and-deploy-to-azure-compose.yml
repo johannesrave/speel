@@ -17,57 +17,53 @@ jobs:
     permissions:
       contents: read
       packages: write
-    
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-      with:
-        ref: deploy
-      
-    - name: Log in to the Github Packages Container registry
-      uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-    
-    - name: Extract metadata (tags, labels) for Docker
-      id: metadata
-      uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-      with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-        tags: type=sha
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: deploy
 
-    - name: Print extracted metadata
-      env:
-        METADATA: ${{ steps.meta.outputs.json }}
-      run: echo "$METADATA"
+      - name: Log in to the Github Packages Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Extract metadata (tags, labels) for Docker
+        id: metadata
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: type=sha
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-      with:
-        push: true
-        tags: ${{ steps.metadata.outputs.tags }}
-        labels: ${{ steps.metadata.outputs.labels }}
-        context: .
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          push: true
+          tags: |
+            ${{ steps.metadata.outputs.tags }}
+            ${{ github.sha }}
+          labels: ${{ steps.metadata.outputs.labels }}
+          context: .
 
-    - uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Deploy as Azure multi-container webapp
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'speel-compose'
-        configuration-file: docker-compose.yml
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ fromJSON(steps.meta.outputs.json).tags.sha }}
+      - name: Deploy as Azure multi-container webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'speel-compose'
+          configuration-file: docker-compose.yml
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
-    - name: Wake webapp from idle to trigger docker-compose
-      run: curl https://speel-compose.azurewebsites.net/
+      - name: Wake webapp from idle to trigger docker-compose
+        run: curl https://speel-compose.azurewebsites.net/
 
-    - name: Show running webapps
-      run: az webapp list --query "[?state=='Running']"
+      - name: Show running webapps
+        run: az webapp list --query "[?state=='Running']"
 
-    - name: Azure logout
-      run: az logout
+      - name: Azure logout
+        run: az logout
