@@ -4,15 +4,16 @@ services:
   web:
     build: .
     image: ghcr.io/johannesrave/audioplayer
+#    command: tail -F anything
     environment:
       DATABASE_HOST: postgres
       DATABASE_NAME: audioplayer_db
       DATABASE_USER: db_user
       DATABASE_PASSWORD: db_password
       DATABASE_PORT: 5434
-      SECRET_KEY: "django-insecure-oqb@vxu(w1a8$y@twsd@@*-jv(-0&_a09pj998t-@zu34)@$u&"
+      SECRET_KEY: "4f5wb#^n1(a8@x(+d+kn56appq53nz(h(&4@#n02=h#5u#vv0o"
     ports:
-      - "80:8000"
+      - "8000:8000"
     depends_on:
       - postgres
   postgres:

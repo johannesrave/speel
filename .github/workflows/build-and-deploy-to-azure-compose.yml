@@ -53,7 +53,7 @@ jobs:
           images: ${{ env.FULL_IMAGE_NAME }}
 
       - name: Wake webapp from idle to trigger docker-compose
-        run: curl https://speel-compose.azurewebsites.net/
+        run: curl --retry 3 https://speel-compose.azurewebsites.net/
 
       - name: Show running webapps
         run: az webapp list --query "[?state=='Running']"

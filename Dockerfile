@@ -11,4 +11,4 @@ RUN apt-get update && apt-get install
 
 COPY . .
 RUN ["chmod", "+x", "/app/start_django.sh"]
-CMD ["/bin/sh", "-c", "/app/start_django.sh"]
+CMD ["/bin/sh", "-c", "sh /app/start_django.sh"]
