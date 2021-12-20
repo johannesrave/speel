@@ -7,10 +7,10 @@ services:
 #    command: tail -F anything
     environment:
       DATABASE_HOST: postgres
-      DATABASE_NAME: audioplayer_db
-      DATABASE_USER: db_user
-      DATABASE_PASSWORD: db_password
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: db_password
       DATABASE_PORT: 5434
+      POSTGRES_DB: audioplayer_db
       SECRET_KEY: "4f5wb#^n1(a8@x(+d+kn56appq53nz(h(&4@#n02=h#5u#vv0o"
     ports:
       - "8000:8000"
