@@ -10,5 +10,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN apt-get update && apt-get install
 
 COPY . .
-#RUN ["chmod", "+x", "start_django.sh"]
+RUN ["chmod", "+x", "/app/start_django.sh"]
 CMD ["/bin/sh", "-c", "/app/start_django.sh"]
