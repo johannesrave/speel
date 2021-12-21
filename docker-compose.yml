@@ -26,7 +26,5 @@ services:
     ports:
       - "5434:5434"
     command: -p 5434
-#    volumes:
-#      - data:/var/lib/postgresql/data
-#volumes:
-#  data:
+    volumes:
+      - ${WEBAPP_STORAGE_HOME}:/var/lib/postgresql/data
