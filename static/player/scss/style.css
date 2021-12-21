@@ -14,4 +14,14 @@ footer {
   justify-content: space-between;
   grid-auto-flow: column; }
 
+form {
+  display: grid;
+  grid-auto-flow: row;
+  place-items: center;
+  gap: 16px; }
+  form > * {
+    min-width: calc(max(20vw, 64px)); }
+  form .helptext {
+    display: none; }
+
 /*# sourceMappingURL=style.css.map */

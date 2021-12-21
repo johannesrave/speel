@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-  <form action="{{ action }}" method="post" enctype="multipart/form-data"
-        class="d-flex flex-column align-items-center">
+  <form action="{{ action }}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     {% for name, value in hidden_fields %}
