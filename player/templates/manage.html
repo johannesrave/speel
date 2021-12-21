@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block content %}
+  <nav>
+    <ul>
+      <li><a href="{% url 'upload_song' %}">Song hochladen</a></li>
+      <li><a href="{% url 'create_playlist' %}">Playlist erstellen</a></li>
+    </ul>
+  </nav>
+{% endblock content %}

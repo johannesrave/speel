@@ -3,7 +3,8 @@ from pprint import pprint
 from tinytag import TinyTag
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from player.models import TemporaryFileForm, SongForm, TemporaryFile, Artist, Song, PlaylistForm
+from player.models import TemporaryFile, Artist, Song
+from player.forms import SongForm, PlaylistForm, TemporaryFileForm
 from player.views.views import GuardedView
 
 
@@ -115,3 +116,9 @@ class ManagePlaylist(GuardedView):
 
         playlist = playlist_form.save()
         return redirect('play_playlist', playlist_id=playlist.id)
+
+
+class Dashboard(GuardedView):
+    def get(self, request):
+
+        return render(request, 'manage.html')

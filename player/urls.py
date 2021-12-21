@@ -13,6 +13,7 @@ urlpatterns = [
     path('player/<uuid:playlist_id>/', player.Player.as_view(), name='play_playlist'),
 
     # content management pages
+    path('manage/', manage.Dashboard.as_view(), name='manage_content'),
     path('playlist/create', manage.ManagePlaylist.as_view(), name='create_playlist'),
     path('upload/', manage.UploadFile.as_view(), name='upload_song'),
     path('scan/', manage.ScanFile.as_view(), name='scan_song'),

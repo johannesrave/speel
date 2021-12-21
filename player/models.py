@@ -1,6 +1,5 @@
 import uuid
 from django.db import models
-from django.forms import ModelForm
 
 
 class UUIDModel(models.Model):
@@ -33,12 +32,6 @@ class Song(UUIDModel):
         return f'{self.title}'
 
 
-class SongForm(ModelForm):
-    class Meta:
-        model = Song
-        fields = ['title', 'artists']
-
-
 class Playlist(UUIDModel):
     name = models.CharField(max_length=128, blank=False)
     # user = models.ForeignKey(
@@ -64,12 +57,6 @@ class Playlist(UUIDModel):
         return f'{self.name}'
 
 
-class PlaylistForm(ModelForm):
-    class Meta:
-        model = Playlist
-        fields = ['name', 'songs', 'thumbnail_file']
-
-
 class Album(UUIDModel):
     title = models.CharField(max_length=128, blank=False)
     songs = models.ManyToManyField(
@@ -84,12 +71,6 @@ class Album(UUIDModel):
 
 class TemporaryFile(UUIDModel):
     file = models.FileField()
-
-
-class TemporaryFileForm(ModelForm):
-    class Meta:
-        model = TemporaryFile
-        fields = ['file']
 
 
 '''
