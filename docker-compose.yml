@@ -14,7 +14,6 @@ services:
       SECRET_KEY: "4f5wb#^n1(a8@x(+d+kn56appq53nz(h(&4@#n02=h#5u#vv0o"
     ports:
       - "8000:8000"
-#      - "80:8000"
     depends_on:
       - postgres
   postgres:

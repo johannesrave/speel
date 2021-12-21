@@ -9,4 +9,4 @@ python manage.py migrate
 echo "Adding default users from fixture."
 python manage.py loaddata seed.json
 echo "Starting Django server."
-python manage.py runserver 8000
+python manage.py runserver 0.0.0.0:8000
