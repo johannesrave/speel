@@ -10,10 +10,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
-
-class GuardedView(View, LoginRequiredMixin):
-    login_url = '/login/'
-    redirect_field_name = 'redirect_to'
+from player.views.views import GuardedView
 
 
 class ListView(GuardedView):

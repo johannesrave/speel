@@ -5,12 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
-from player.models import TemporaryFileForm, SongForm, TemporaryFile, Artist, Song
-
-
-class GuardedView(LoginRequiredMixin, View):
-    login_url = '/login/'
-    redirect_field_name = 'redirect_to'
+from player.models import TemporaryFileForm, SongForm, TemporaryFile, Artist, Song, PlaylistForm
+from player.views.views import GuardedView
 
 
 class UploadFile(GuardedView):
@@ -21,7 +17,7 @@ class UploadFile(GuardedView):
             'form': TemporaryFileForm(),
             'button_label': 'Datei hochladen',
         }
-        return render(request, 'upload/form.html', context)
+        return render(request, 'generic/form.html', context)
 
     def post(self, request):
         temp_file_form = TemporaryFileForm(request.POST, request.FILES)
@@ -64,7 +60,7 @@ class ScanFile(GuardedView):
             'hidden_fields': [('temp_file_id', temp_file_id)],
             'button_label': 'Song speichern'
         }
-        return render(request, 'upload/form.html', context)
+        return render(request, 'generic/form.html', context)
 
     def post(self, request):
         temp_file_id = request.POST.get('temp_file_id')
@@ -86,7 +82,7 @@ class ScanFile(GuardedView):
                 'temp_file_id': temp_file_id,
                 'button_label': 'Song speichern'
             }
-            return render(request, 'upload/form.html', context)
+            return render(request, 'generic/form.html', context)
 
         else:
             saved_song = song_to_save.save(commit=False)
@@ -96,3 +92,28 @@ class ScanFile(GuardedView):
             temp_file.delete()
             pprint(f'Song {saved_song.title} has been uploaded! Redirecting back to upload_song')
             return redirect('upload_song')
+
+
+class PlaylistCreateView(GuardedView):
+
+    def get(self, request):
+        context = {
+            'action': reverse('create_playlist'),
+            'form': PlaylistForm(),
+            'button_label': 'Playlist erstellen',
+        }
+        return render(request, 'generic/form.html', context)
+
+    def post(self, request):
+        playlist_form = PlaylistForm(request.POST, request.FILES)
+
+        if not playlist_form.is_valid():
+            context = {
+                'action': reverse('create_playlist'),
+                'form': playlist_form,
+                'button_label': 'Playlist erstellen',
+            }
+            return render(request, 'generic/form.html', context)
+
+        playlist = playlist_form.save()
+        return redirect('play_playlist', playlist_id=playlist.id)
