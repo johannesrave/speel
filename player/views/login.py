@@ -18,8 +18,6 @@ class Login(View):
         password = request.POST.get("password")
 
         user = authenticate(request, username=username, password=password)
-        if not user:
-            return HttpResponseForbidden()
 
         login(request, user)
         return redirect(request.POST.get('redirect_to', 'player'))
