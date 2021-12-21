@@ -1,27 +1,11 @@
 from pprint import pprint
 
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
-from django.urls import reverse
-from django.views import View
-from player.models import Song, Playlist, PlaylistForm
+from player.models import Song, Playlist
+from player.views.views import GuardedView
 
 
-class GuardedView(LoginRequiredMixin, View):
-    login_url = '/login/'
-    redirect_field_name = 'redirect_to'
-
-
-class LibraryView(GuardedView):
-
-    def get(self, request):
-        context = {
-            'playlists': Playlist.objects.all(),
-        }
-        return render(request, 'index.html', context)
-
-
-class PlayerView(GuardedView):
+class Player(GuardedView):
 
     def get(self, request, playlist_id):
 
@@ -36,6 +20,8 @@ class PlayerView(GuardedView):
 
         songs = playlist.songs.all()
 
+        # this mixes two concerns: setting the song to play and updating the last song played in the playlist.
+        # TODO: these two concerns should be taken apart to get simpler logic.
         if len(songs):
             try:
                 song_to_play = songs.get(id=song_id)
@@ -67,26 +53,3 @@ class PlayerView(GuardedView):
 
         return render(request, 'player.html', context)
 
-class PlaylistCreateView(GuardedView):
-
-    def get(self, request):
-        context = {
-            'action': reverse('create_playlist'),
-            'form': PlaylistForm(),
-            'button_label': 'Playlist erstellen',
-        }
-        return render(request, 'upload/form.html', context)
-
-    def post(self, request):
-        playlist_form = PlaylistForm(request.POST, request.FILES)
-
-        if not playlist_form.is_valid():
-            context = {
-                'action': reverse('create_playlist'),
-                'form': playlist_form,
-                'button_label': 'Playlist erstellen',
-            }
-            return render(request, 'upload/form.html', context)
-
-        playlist = playlist_form.save()
-        return redirect('play_playlist', playlist_id=playlist.id)

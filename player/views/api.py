@@ -1,19 +1,11 @@
 import json
 from pprint import pprint
-from urllib.parse import parse_qs, parse_qsl
+from urllib.parse import parse_qsl
 
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Model
 from django.http import HttpResponse, HttpRequest, HttpResponseBadRequest, JsonResponse
-from django.utils.decorators import method_decorator
 
-from django.views import View
-from django.views.decorators.csrf import csrf_exempt
-
-
-class GuardedView(View, LoginRequiredMixin):
-    login_url = '/login/'
-    redirect_field_name = 'redirect_to'
+from player.views.views import GuardedView
 
 
 class ListView(GuardedView):
