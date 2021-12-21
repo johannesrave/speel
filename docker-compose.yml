@@ -6,14 +6,15 @@ services:
     image: ghcr.io/johannesrave/audioplayer
 #    command: tail -F anything
     environment:
-      DATABASE_HOST: postgres
+      POSTGRES_DB: audioplayer_db
       POSTGRES_USER: db_user
       POSTGRES_PASSWORD: db_password
       DATABASE_PORT: 5434
-      POSTGRES_DB: audioplayer_db
+      DATABASE_HOST: postgres
       SECRET_KEY: "4f5wb#^n1(a8@x(+d+kn56appq53nz(h(&4@#n02=h#5u#vv0o"
     ports:
-      - "8000:8000"
+#      - "8000:8000"
+      - "80:8000"
     depends_on:
       - postgres
   postgres:
