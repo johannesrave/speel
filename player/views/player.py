@@ -1,8 +1,6 @@
 from pprint import pprint
 
-import requests
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
@@ -17,15 +15,8 @@ class GuardedView(LoginRequiredMixin, View):
 class LibraryView(GuardedView):
 
     def get(self, request):
-
-        # get list of playlists from api as json
-        playlist_list_url = request.build_absolute_uri(location=reverse('playlist_list'))
-        response = requests.get(playlist_list_url)
-        playlist_list = response.json()
-
-        # use the json to render the template
         context = {
-            'playlists': playlist_list,
+            'playlists': Playlist.objects.all(),
         }
         return render(request, 'index.html', context)
 
@@ -64,14 +55,12 @@ class PlayerView(GuardedView):
             print(f' Redirecting to playlist selection.')
             return redirect('library')
 
-        # pprint(serializers.serialize("json", songs))
         song_list = list(songs.values())
         pprint(song_list)
 
         context = {
             "playlist": playlist,
             "songs": songs,
-            # "songs_json": serializers.serialize("json", songs),
             "song_list": song_list,
             "song_to_play": song_to_play
         }
@@ -89,7 +78,7 @@ class PlaylistCreateView(GuardedView):
         return render(request, 'upload/form.html', context)
 
     def post(self, request):
-        playlist_form = PlaylistForm(request.POST)
+        playlist_form = PlaylistForm(request.POST, request.FILES)
 
         if not playlist_form.is_valid():
             context = {

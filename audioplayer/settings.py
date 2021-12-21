@@ -33,7 +33,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'speel-compose.azurewebsites.net'
+    'speel-compose.azurewebsites.net',
+    '127.0.0.1',
+    '0.0.0.0'
 ]
 
 # Application definition
@@ -158,4 +160,5 @@ SASS_PRECISION = 8
 
 if DEBUG:
     import mimetypes
+
     mimetypes.add_type("text/javascript", ".js", True)
