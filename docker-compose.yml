@@ -27,4 +27,4 @@ services:
       - "5434:5434"
     command: -p 5434
     volumes:
-      - ${WEBAPP_STORAGE_HOME}:/var/lib/postgresql/data
+      - ${WEBAPP_STORAGE_HOME}/postgresql/data:/var/lib/postgresql/data
