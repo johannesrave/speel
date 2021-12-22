@@ -11,9 +11,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os.path
 import os
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,12 +27,16 @@ load_dotenv()
 env = os.getenv
 
 # Raises django's ImproperlyConfigured exception if SECRET_KEY not in os.environ
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'speel-compose.azurewebsites.net',
+    '127.0.0.1',
+    '0.0.0.0'
+]
 
 # Application definition
 
@@ -94,9 +98,9 @@ WSGI_APPLICATION = 'audioplayer.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env("DATABASE_NAME"),
-        'USER': env("DATABASE_USER"),
-        'PASSWORD': env("DATABASE_PASSWORD"),
+        'NAME': env("POSTGRES_DB"),
+        'USER': env("POSTGRES_USER"),
+        'PASSWORD': env("POSTGRES_PASSWORD"),
         'HOST': env("DATABASE_HOST"),
         'PORT': env("DATABASE_PORT"),
     }
@@ -211,3 +215,7 @@ SASS_PROCESSOR_INCLUDE_DIRS = [
 
 SASS_PRECISION = 8
 
+if DEBUG:
+    import mimetypes
+
+    mimetypes.add_type("text/javascript", ".js", True)

@@ -1,25 +1,11 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from pprint import pprint
+
 from django.shortcuts import render, redirect
-from django.urls import reverse
-from django.views import View
-from player.models import Song, Playlist, PlaylistForm
-
-
-class GuardedView(LoginRequiredMixin, View):
-    login_url = '/login/'
-    redirect_field_name = 'redirect_to'
+from player.models import Song, Playlist
+from player.views.views import GuardedView
 
 
 class Player(GuardedView):
-
-    def get(self, request):
-        context = {
-            'playlists': Playlist.objects.all(),
-        }
-        return render(request, 'index.html', context)
-
-
-class PlaylistView(GuardedView):
 
     def get(self, request, playlist_id):
 
@@ -30,10 +16,12 @@ class PlaylistView(GuardedView):
         except Playlist.DoesNotExist:
             print(f'Requested nonexistent song with id {str(playlist_id)}')
             print(f' Redirecting to playlist selection.')
-            return redirect('player')
+            return redirect('library')
 
         songs = playlist.songs.all()
 
+        # this mixes two concerns: setting the song to play and updating the last song played in the playlist.
+        # TODO: these two concerns should be taken apart to get simpler logic.
         if len(songs):
             try:
                 song_to_play = songs.get(id=song_id)
@@ -49,37 +37,19 @@ class PlaylistView(GuardedView):
                     print(f'Beginning playback at first song in playlist: {songs.first().title}')
                     song_to_play = songs.first()
         else:
-            song_to_play = 'contains no songs'
+            print(f'Playlist contains no songs.')
+            print(f' Redirecting to playlist selection.')
+            return redirect('library')
+
+        song_list = list(songs.values())
+        pprint(song_list)
 
         context = {
             "playlist": playlist,
             "songs": songs,
+            "song_list": song_list,
             "song_to_play": song_to_play
         }
 
         return render(request, 'player.html', context)
 
-
-class PlaylistCreateView(GuardedView):
-
-    def get(self, request):
-        context = {
-            'action': reverse('create_playlist'),
-            'form': PlaylistForm(),
-            'button_label': 'Playlist erstellen',
-        }
-        return render(request, 'upload/form.html', context)
-
-    def post(self, request):
-        playlist_form = PlaylistForm(request.POST, request.FILES)
-
-        if not playlist_form.is_valid():
-            context = {
-                'action': reverse('create_playlist'),
-                'form': playlist_form,
-                'button_label': 'Playlist erstellen',
-            }
-            return render(request, 'upload/form.html', context)
-
-        playlist = playlist_form.save()
-        return redirect('playlist_to_play', playlist_id=playlist.id)

@@ -1,0 +1,45 @@
+{% load sass_tags %}
+{% load static %}
+<div id="howler">
+  <link href="{% sass_src 'player/scss/howler.scss' %}" rel="stylesheet" type="text/css"/>
+
+  <div id="title">
+    <span id="track"></span>
+    <div><span id="timer">0:00</span> / <span id="duration">0:00</span></div>
+  </div>
+
+  <div id="progress">
+    <div id="bar"></div>
+  </div>
+
+  <div id="controls">
+    <div id="play">
+      <div id="loading-spinner"></div>
+      <button type="button" id="prevBtn"></button>
+      <button type="button" id="playBtn"></button>
+      <button type="button" id="pauseBtn"></button>
+      <button type="button" id="nextBtn"></button>
+    </div>
+    <div id="other">
+      <button type="button" id="playlistBtn"></button>
+      <button type="button" id="volumeBtn"></button>
+    </div>
+  </div>
+
+  <div id="playlist">
+    <div id="list"></div>
+  </div>
+
+  <div id="volume" class="fadeout">
+    <div id="barFull" class=" bar"></div>
+    <div id="barEmpty" class="bar"></div>
+    <div id="sliderBtn"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"
+          integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  {{ playlist.id|json_script:"playlist_id" }}
+  {{ song_list|json_script:"song_list" }}
+  <script src="{% static 'player/js/player.js' %}" type="module"></script>
+</div>

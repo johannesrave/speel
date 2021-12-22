@@ -1,12 +1,6 @@
 import uuid
-
-from django.core.exceptions import ValidationError
-from django.core.validators import FileExtensionValidator
 from django.db import models
-from django.forms import ModelForm
-from tinytag import TinyTag
-from thumbnails.fields import ImageField
-
+# import thumbnails.fields
 
 class UUIDModel(models.Model):
     pkid = models.BigAutoField(primary_key=True, editable=False)
@@ -23,6 +17,7 @@ class Artist(UUIDModel):
         return f'{self.name}'
 
 
+# TODO kann man den Titel auch aus den Meta Infos ziehen, so wie hoffentlich auch Length?
 class Song(UUIDModel):
     title = models.CharField(max_length=128, blank=True, default="Unbekannter Song")
     duration = models.IntegerField(editable=False, null=True)
@@ -35,12 +30,6 @@ class Song(UUIDModel):
 
     def __str__(self):
         return f'{self.title}'
-
-
-class SongForm(ModelForm):
-    class Meta:
-        model = Song
-        fields = ['title', 'artists']
 
 
 class Playlist(UUIDModel):
@@ -56,12 +45,12 @@ class Playlist(UUIDModel):
         blank=True,
     )
 
-    thumbnail_file = ImageField(
-        upload_to='images',
-        resize_source_to='large',
-        blank=True,
-        null=True
-    )
+    # thumbnail_file = thumbnails.fields.ImageField(
+    #     upload_to='images',
+    #     # resize_source_to='large',
+    #     blank=True,
+    #     null=True
+    # )
     last_song_played = models.ForeignKey(
         to=Song,
         blank=True, null=True,
@@ -70,12 +59,6 @@ class Playlist(UUIDModel):
 
     def __str__(self):
         return f'{self.name}'
-
-
-class PlaylistForm(ModelForm):
-    class Meta:
-        model = Playlist
-        fields = ['name', 'songs', 'thumbnail_file']
 
 
 class Album(UUIDModel):
@@ -91,21 +74,7 @@ class Album(UUIDModel):
 
 
 class TemporaryFile(UUIDModel):
-    file = models.FileField(upload_to='audio',
-                            validators=[FileExtensionValidator(allowed_extensions=['mp3', 'wav'])])
-
-
-class TemporaryFileForm(ModelForm):
-    class Meta:
-        model = TemporaryFile
-        fields = ['file']
-
-    def clean_file(self):
-        clean_file = self.cleaned_data.get('file')
-        is_valid = TinyTag.is_supported(clean_file.name) and clean_file.size < 500000000
-        if not is_valid:
-            raise ValidationError('not a valid file')
-        return clean_file
+    file = models.FileField()
 
 
 '''

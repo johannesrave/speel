@@ -1,0 +1,64 @@
+/* MAIN LAYOUT */
+#wrapper {
+  display: grid;
+  width: 100vw;
+  height: 100vh;
+  grid-template-rows: max-content auto max-content;
+  grid-auto-flow: row; }
+  #wrapper header {
+    justify-self: center;
+    padding: 32px 32px 0; }
+  #wrapper main {
+    width: 100%;
+    height: 100%;
+    padding: 0 32px 0; }
+  #wrapper footer {
+    justify-self: stretch;
+    display: grid;
+    justify-content: space-between;
+    grid-auto-flow: column;
+    padding: 0 32px 32px; }
+
+#generic-form {
+  display: grid;
+  grid-auto-flow: row;
+  place-content: center;
+  width: 100%;
+  height: 100%; }
+  #generic-form * {
+    min-width: calc(max(30vw, 20rem)); }
+  #generic-form > p {
+    display: grid;
+    grid-auto-flow: row;
+    gap: 4px; }
+  #generic-form .errorlist {
+    list-style: none;
+    padding: 0;
+    color: #a52834; }
+  #generic-form button {
+    font-size: 2em;
+    height: 4rem;
+    margin-top: 1rem; }
+
+#library-grid {
+  margin: 32px;
+  display: grid;
+  place-items: center;
+  place-content: center;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+  #library-grid .library-item {
+    min-width: 128px;
+    min-height: 128px;
+    width: calc(min(12vw, 150px));
+    height: calc(min(12vw, 150px));
+    background-color: #04414d;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: white;
+    font-size: 2em;
+    text-decoration-line: none;
+    text-align: center; }
+
+/*# sourceMappingURL=style.css.map */

@@ -1,12 +1,20 @@
-from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
+
+from player.forms import LoginForm
 
 
 class Login(View):
     def get(self, request):
-        return render(request, 'login.html')
+        context = {
+            'action': reverse('login'),
+            'form': LoginForm(),
+            'button_label': 'Anmelden',
+        }
+        return render(request, 'login.html', context)
 
     def post(self, request):
         intent_to_logout = request.POST.get('logout', False)
@@ -14,13 +22,18 @@ class Login(View):
             logout(request)
             return redirect('login')
 
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+        login_form = LoginForm(request.POST)
 
-        user = authenticate(request, username=username, password=password)
-        if not user or not user.is_active:
-            messages.error(request, 'username or password not correct')
-            return redirect('login')
+        if not login_form.is_valid():
+            context = {
+                'action': reverse('login'),
+                'form': login_form,
+                'button_label': 'Anmelden',
+            }
+            return render(request, 'login.html', context)
 
+        user = User.objects.get(username=request.POST.get('username'))
         login(request, user)
-        return redirect(request.POST.get('redirect_to', 'player'))
+
+        destination = request.POST.get('redirect_to', 'library')
+        return redirect(destination)
