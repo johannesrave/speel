@@ -1,7 +1,6 @@
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, forms, Form, CharField, PasswordInput
+from django.forms import ModelForm, Form, CharField, PasswordInput
 
 from player.models import Song, Playlist, TemporaryFile
 

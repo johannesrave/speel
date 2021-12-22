@@ -14,7 +14,7 @@ class Login(View):
             'form': LoginForm(),
             'button_label': 'Anmelden',
         }
-        return render(request, 'generic/form.html', context)
+        return render(request, 'login.html', context)
 
     def post(self, request):
         intent_to_logout = request.POST.get('logout', False)
@@ -30,10 +30,10 @@ class Login(View):
                 'form': login_form,
                 'button_label': 'Anmelden',
             }
-            return render(request, 'generic/form.html', context)
+            return render(request, 'login.html', context)
 
         user = User.objects.get(username=request.POST.get('username'))
-
         login(request, user)
 
-        return redirect(request.POST.get('redirect_to', 'library'))
+        destination = request.POST.get('redirect_to', 'library')
+        return redirect(destination)

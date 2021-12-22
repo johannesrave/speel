@@ -1,17 +1,13 @@
 {% extends "layout.html" %}
-{% block heading %}
-  <h1 class="text-center">Anmelden</h1>
-{% endblock %}
 {% block content %}
-  <form action="{% url 'login' %}" method="post" class="d-flex flex-column align-items-center">
-  {% csrf_token %}
-    <div class="d-flex flex-column w-50">
-      <label for="username">Username</label>
-      <input id="username" type="text" name="username">
-      <label for="password">Password</label>
-      <input id="password" type="password" name="password">
-      <button type="submit" class="h5 pt-2 pb-2 mt-3">Anmelden</button>
-    </div>
+  <form action="{{ action }}" method="post" enctype="multipart/form-data"
+        id="generic-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% for name, value in hidden_fields %}
+      <input type="hidden" name="{{ name }}" value="{{ value }}">
+    {% endfor %}
+    <button type="submit" class="h5">{{ button_label }}</button>
   </form>
 {% endblock content %}
 {% block footer %}{% endblock %}
