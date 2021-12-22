@@ -82,4 +82,12 @@
     text-decoration-line: none;
     text-align: center;
   }
+
+    .library-thumbnail {
+    min-width: 100px;
+    min-height: 100px;
+    width: calc(min(12vw, 100px));
+    height: calc(min(12vw, 100px));
+    border-radius: 50%;
+  }
 }

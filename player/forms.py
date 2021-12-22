@@ -29,8 +29,7 @@ class SongForm(ModelForm):
 class PlaylistForm(ModelForm):
     class Meta:
         model = Playlist
-        fields = ['name', 'songs']
-        # fields = ['name', 'songs', 'thumbnail_file']
+        fields = ['name', 'songs', 'thumbnail_file']
 
 
 class TemporaryFileForm(ModelForm):

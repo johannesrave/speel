@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
-# import thumbnails.fields
+from thumbnails.fields import ImageField
+
 
 class UUIDModel(models.Model):
     pkid = models.BigAutoField(primary_key=True, editable=False)
@@ -44,13 +45,12 @@ class Playlist(UUIDModel):
         related_name='playlists',
         blank=True,
     )
-
-    # thumbnail_file = thumbnails.fields.ImageField(
-    #     upload_to='images',
-    #     # resize_source_to='large',
-    #     blank=True,
-    #     null=True
-    # )
+    thumbnail_file = ImageField(
+        upload_to='images',
+        resize_source_to='large',
+        blank=True,
+        null=True
+    )
     last_song_played = models.ForeignKey(
         to=Song,
         blank=True, null=True,

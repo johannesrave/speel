@@ -60,5 +60,11 @@
     font-size: 2em;
     text-decoration-line: none;
     text-align: center; }
+  #library-grid .library-thumbnail {
+    min-width: 100px;
+    min-height: 100px;
+    width: calc(min(12vw, 100px));
+    height: calc(min(12vw, 100px));
+    border-radius: 50%; }
 
 /*# sourceMappingURL=style.css.map */
