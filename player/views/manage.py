@@ -1,10 +1,11 @@
 from pprint import pprint
 
-from tinytag import TinyTag
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from player.models import TemporaryFile, Artist, Song
+from tinytag import TinyTag
+
 from player.forms import SongForm, PlaylistForm, TemporaryFileForm
+from player.models import TemporaryFile, Artist
 from player.views.views import GuardedView
 
 

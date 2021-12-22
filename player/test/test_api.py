@@ -1,11 +1,11 @@
 from pprint import pprint
-from time import sleep
 
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.http import urlencode
 
 from player.models import Playlist
+
 
 class PlaylistListViewTest(TestCase):
     @classmethod

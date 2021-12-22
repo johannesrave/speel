@@ -1,11 +1,10 @@
-from datetime import datetime
 from pprint import pprint
 
 import requests
 from django.contrib.auth.models import User
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.test import TestCase, LiveServerTestCase
+from django.test import LiveServerTestCase
 from django.urls import reverse
+
 
 class PlaylistListViewTest(LiveServerTestCase):
     credentials = None

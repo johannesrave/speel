@@ -1,4 +1,4 @@
-/* LAYOUT */
+/* MAIN LAYOUT */
 
 #wrapper {
   display: grid;
@@ -6,8 +6,6 @@
   height: 100vh;
   grid-template-rows: max-content auto max-content;
   grid-auto-flow: row;
-  //align-content: stretch;
-  //place-items: center;
 
   header {
     justify-self: center;

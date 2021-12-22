@@ -1,13 +1,12 @@
-from django.urls import path, re_path, include
+from django.urls import path, re_path
 from django.views.generic import RedirectView
-from django.contrib.auth import views as auth_views
-import player.views.manage
+
 from player.models import Playlist, Song
 from player.views import player, login, api, library, manage
 
 urlpatterns = [
     path('login/', login.Login.as_view(), name='login'),
-    # path('login/', auth_views.LoginView.as_view(template_name='generic/form.html'), name='login'),
+
     # main pages
     path('library/', library.Library.as_view(), name='library'),
     path('player/<uuid:playlist_id>/', player.Player.as_view(), name='play_playlist'),

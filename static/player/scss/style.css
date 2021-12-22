@@ -1,4 +1,4 @@
-/* LAYOUT */
+/* MAIN LAYOUT */
 #wrapper {
   display: grid;
   width: 100vw;
@@ -39,26 +39,5 @@
     font-size: 2em;
     height: 4rem;
     margin-top: 1rem; }
-
-#library-grid {
-  margin: 32px;
-  display: grid;
-  place-items: center;
-  place-content: center;
-  gap: 16px;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
-  #library-grid .library-item {
-    min-width: 128px;
-    min-height: 128px;
-    width: calc(min(12vw, 150px));
-    height: calc(min(12vw, 150px));
-    background-color: #04414d;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    color: white;
-    font-size: 2em;
-    text-decoration-line: none;
-    text-align: center; }
 
 /*# sourceMappingURL=style.css.map */
