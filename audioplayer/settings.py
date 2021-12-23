@@ -142,7 +142,7 @@ THUMBNAILS = {
         'large': {
             'PROCESSORS': [
                 {'PATH': 'thumbnails.processors.resize', 'width': 300, 'height': 300, 'method': 'fill'},
-                # {'PATH': 'thumbnails.processors.crop', 'width': 300, 'height': 300}
+                {'PATH': 'thumbnails.processors.crop', 'width': 300, 'height': 300}
             ],
         }
     }
