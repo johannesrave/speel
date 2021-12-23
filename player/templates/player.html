@@ -5,20 +5,20 @@
     <noscript>
       <p class="h3">{{ playlist.name }}</p>
       <ol>
-        {% for song in songs %}
+        {% for track in tracks %}
           <li>
-            <a href="{% url 'play_playlist' playlist.id %}?song_id={{ song.id }}"
+            <a href="{% url 'play_playlist' playlist.id %}?track_id={{ track.id }}"
                class="d-block w-100 text-center h4">
-              {{ song.title }}
+              {{ track.title }}
             </a>
           </li>
         {% endfor %}
       </ol>
       <audio id="html_player" class="m-3 w-50"
-             src="{{ song_to_play.audio_file.url }}"
+             src="{{ track_to_play.audio_file.url }}"
              type="audio/{{ audios.Audio_File.type }}"
              controls></audio>
-      <p class="h3">{{ song_to_play.title }}</p>
+      <p class="h3">{{ track_to_play.title }}</p>
     </noscript>
   </div>
 {% endblock content %}
