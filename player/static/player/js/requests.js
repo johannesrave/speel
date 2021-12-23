@@ -1,5 +1,5 @@
 export class HttpTool {
-    static updateLastSongPlayed(playlistId, songId, cookies) {
+    static updateLastSongPlayed(playlistId, trackId, cookies) {
         const url = `${window.location.origin}/api/playlists/${playlistId}/`
 
         const init = {
@@ -14,7 +14,7 @@ export class HttpTool {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                'last_song_played': songId
+                'last_track_played': trackId
             })
         };
 

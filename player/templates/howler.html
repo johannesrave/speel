@@ -43,6 +43,6 @@
           integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
           crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   {{ playlist.id|json_script:"playlist_id" }}
-  {{ song_list|json_script:"song_list" }}
+  {{ track_list|json_script:"track_list" }}
   <script src="{% static 'player/js/player.js' %}" type="module"></script>
 </div>

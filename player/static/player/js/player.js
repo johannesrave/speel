@@ -19,8 +19,8 @@ class Player {
     /**
      * Player class containing the state of our playlist and where we are in it.
      * Includes all methods for playing, skipping, updating the display, etc.
-     * @param {Array} playlist Array of objects with playlist song details ({title, file, howl}).
-     * @param {String} playlistId UUID of the playlist on the server, so it can be updated with last_song_played
+     * @param {Array} playlist Array of objects with playlist track details ({title, file, howl}).
+     * @param {String} playlistId UUID of the playlist on the server, so it can be updated with last_track_played
      */
     constructor(playlist, playlistId) {
 
@@ -33,8 +33,8 @@ class Player {
     }
 
     /**
-     * Play a song in the playlist.
-     * @param {Number} index Index of the song in the playlist (leave empty to play the first or current).
+     * Play a track in the playlist.
+     * @param {Number} index Index of the track in the playlist (leave empty to play the first or current).
      */
     play(index) {
         const self = this;
@@ -57,7 +57,7 @@ class Player {
 
                     pauseButton.style.display = 'block';
 
-                    // Send currently playing song to server
+                    // Send currently playing track to server
                     HttpTool.updateLastSongPlayed(playlistId, index, cookies)
                         .then(r => console.log(r))
                         .catch(e => console.error(e))
@@ -170,17 +170,17 @@ class Player {
 
 
 function getObjectByElementId(elementId) {
-    const songlistJson = document.getElementById(elementId).textContent;
-    return JSON.parse(songlistJson);
+    const tracklistJson = document.getElementById(elementId).textContent;
+    return JSON.parse(tracklistJson);
 }
 
-const songList = getObjectByElementId("song_list");
-console.log(songList)
+const trackList = getObjectByElementId("track_list");
+console.log(trackList)
 
-const songlist = songList.map(song => {
+const tracklist = trackList.map(track => {
     return {
-        'title': song.title,
-        'file': window.location.origin + '/media/' + song.audio_file,
+        'title': track.title,
+        'file': window.location.origin + '/media/' + track.audio_file,
         'howl': null
     }
 })
@@ -188,7 +188,7 @@ const songlist = songList.map(song => {
 const playlistId = getObjectByElementId("playlist_id");
 console.log(playlistId)
 
-const player = new Player(songlist, playlistId)
+const player = new Player(tracklist, playlistId)
 
 // Bind our player controls.
 playButton.addEventListener('click', function () {

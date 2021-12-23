@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, Form, CharField, PasswordInput
 
-from player.models import Song, Playlist, TemporaryFile
+from player.models import Track, Playlist, TemporaryFile
 
 
 class LoginForm(Form):
@@ -20,16 +20,16 @@ class LoginForm(Form):
                 raise ValidationError("Benutzername oder Passwort sind nicht korrekt")
 
 
-class SongForm(ModelForm):
+class TrackForm(ModelForm):
     class Meta:
-        model = Song
+        model = Track
         fields = ['title', 'artists']
 
 
 class PlaylistForm(ModelForm):
     class Meta:
         model = Playlist
-        fields = ['name', 'songs', 'thumbnail_file']
+        fields = ['name', 'tracks', 'thumbnail_file']
 
 
 class TemporaryFileForm(ModelForm):

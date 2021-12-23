@@ -19,13 +19,13 @@ class Artist(UUIDModel):
 
 
 # TODO kann man den Titel auch aus den Meta Infos ziehen, so wie hoffentlich auch Length?
-class Song(UUIDModel):
-    title = models.CharField(max_length=128, blank=True, default="Unbekannter Song")
+class Track(UUIDModel):
+    title = models.CharField(max_length=128, blank=True, default="Unbekannter Track")
     duration = models.IntegerField(editable=False, null=True)
     audio_file = models.FileField()
     artists = models.ManyToManyField(
         'Artist',
-        related_name='songs',
+        related_name='tracks',
         blank=True,
     )
 
@@ -40,8 +40,8 @@ class Playlist(UUIDModel):
     #     on_delete=models.CASCADE,
     #     default=1
     # )
-    songs = models.ManyToManyField(
-        to=Song,
+    tracks = models.ManyToManyField(
+        to='Track',
         related_name='playlists',
         blank=True,
     )
@@ -51,10 +51,13 @@ class Playlist(UUIDModel):
         blank=True,
         null=True
     )
-    last_song_played = models.ForeignKey(
-        to=Song,
+    last_track_played = models.ForeignKey(
+        to='Track',
         blank=True, null=True,
         on_delete=models.SET_NULL
+    )
+    last_timestamp_played = models.IntegerField(
+        blank=True, null=True
     )
 
     def __str__(self):
@@ -63,8 +66,8 @@ class Playlist(UUIDModel):
 
 class Album(UUIDModel):
     title = models.CharField(max_length=128, blank=False)
-    songs = models.ManyToManyField(
-        'Song',
+    tracks = models.ManyToManyField(
+        'Track',
         related_name='albums',
         blank=True,
     )
