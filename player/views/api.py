@@ -47,8 +47,23 @@ class SingleView(GuardedView):
         model.objects.update_or_create(id=model_id, defaults=request.POST["item_data"]).save()
         return HttpResponse()
 
-    def patch(self, request, model: Model, model_id):
-        model.objects.get(id=model_id).update(request.POST["item_data"]).save()
+    def patch(self, request: HttpRequest, model: Model, model_id):
+        print(f'Hit PATCH endpoint for {model}')
+        if request.content_type == 'application/json':
+            body_data = json.loads(request.body)
+        elif request.content_type == 'application/x-www-form-urlencoded':
+            body_data = dict(parse_qsl(request.body.decode('utf-8')))
+        else:
+            return HttpResponseBadRequest()
+        print('BODY:', body_data)
+        model_instance = model.objects.get(id=model_id)
+
+        for attribute in body_data:
+            print(attribute)
+            setattr(model_instance, attribute, body_data[attribute])
+
+        model_instance.save()
+
         return HttpResponse()
 
     def delete(self, request, model: Model, model_id):

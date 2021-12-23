@@ -1,6 +1,6 @@
 export class HttpTool {
     static updateLastSongPlayed(playlistId, songId, cookies) {
-        const url = `${window.location.origin}/playlist/${playlistId}/`
+        const url = `${window.location.origin}/api/playlists/${playlistId}/`
 
         const init = {
             method: 'PATCH',
@@ -10,11 +10,12 @@ export class HttpTool {
             redirect: 'follow',
             referrer: 'no-referrer',
             headers: {
-                'X-CSRFToken': cookies.csrftoken
+                'X-CSRFToken': cookies.csrftoken,
+                'Content-Type': 'application/json'
             },
-            body: {
+            body: JSON.stringify({
                 'last_song_played': songId
-            }
+            })
         };
 
         console.dir(init)

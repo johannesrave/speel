@@ -8,32 +8,35 @@
     <div><span id="timer">0:00</span> / <span id="duration">0:00</span></div>
   </div>
 
-  <div id="progress">
-    <div id="bar"></div>
-  </div>
 
   <div id="controls">
-    <div id="play">
+    <button type="button" id="skip-back-button">
+      <svg viewBox="0 0 32 32">
+        <path d="M27,28a.9975.9975,0,0,1-.501-.1348l-19-11a1,1,0,0,1,0-1.73l19-11A1,1,0,0,1,28,5V27a1,1,0,0,1-1,1Z"></path>
+        <rect x="2" y="4" width="2" height="24"></rect>
+      </svg>
+    </button>
+    <div id="play-pause">
+      <img id="playlist-image" src="{{ playlist.thumbnail_file.thumbnails.large.url }}" alt="{{ playlist.name }}">
       <div id="loading-spinner"></div>
-      <button type="button" id="prevBtn"></button>
-      <button type="button" id="playBtn"></button>
-      <button type="button" id="pauseBtn"></button>
-      <button type="button" id="nextBtn"></button>
+      <button type="button" id="play-button">
+        <svg viewBox="0 0 32 32">
+          <path d="M7,28a1,1,0,0,1-1-1V5a1,1,0,0,1,1.4819-.8763l20,11a1,1,0,0,1,0,1.7525l-20,11A1.0005,1.0005,0,0,1,7,28Z"></path>
+        </svg>
+      </button>
+      <button type="button" id="pause-button">
+        <svg viewBox="0 0 32 32">
+          <path d="M12,6H10A2,2,0,0,0,8,8V24a2,2,0,0,0,2,2h2a2,2,0,0,0,2-2V8a2,2,0,0,0-2-2Z"></path>
+          <path d="M22,6H20a2,2,0,0,0-2,2V24a2,2,0,0,0,2,2h2a2,2,0,0,0,2-2V8a2,2,0,0,0-2-2Z"></path>
+        </svg>
+      </button>
     </div>
-    <div id="other">
-      <button type="button" id="playlistBtn"></button>
-      <button type="button" id="volumeBtn"></button>
-    </div>
-  </div>
-
-  <div id="playlist">
-    <div id="list"></div>
-  </div>
-
-  <div id="volume" class="fadeout">
-    <div id="barFull" class=" bar"></div>
-    <div id="barEmpty" class="bar"></div>
-    <div id="sliderBtn"></div>
+    <button type="button" id="skip-forward-button">
+      <svg viewBox="0 0 32 32">
+        <path d="M5,28a1,1,0,0,1-1-1V5a1,1,0,0,1,1.501-.8652l19,11a1,1,0,0,1,0,1.73l-19,11A.9975.9975,0,0,1,5,28Z"></path>
+        <rect x="28" y="4" width="2" height="24"></rect>
+      </svg>
+    </button>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"

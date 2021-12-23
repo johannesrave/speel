@@ -3,73 +3,15 @@ import {HttpTool} from "./requests.js";
 /*!
 * inspired by https://github.com/goldfire/howler.js/tree/master/examples/player
 */
+
 // Cache references to DOM elements.
-const elms = [
-    'track', 'timer', 'duration',
-    'playBtn', 'pauseBtn',
-    'prevBtn', 'nextBtn',
-    'volumeBtn', 'progress', 'bar',
-    'playlistBtn', 'playlist', 'list',
-    'volume', 'barEmpty', 'barFull', 'sliderBtn'];
-elms.forEach(function (elm) {
-    window[elm] = document.getElementById(elm);
-});
-
-
-// class HttpTool {
-//     static updateLastSongPlayed(playlistId, songId) {
-//         const url = `${window.location.origin}/playlist/${playlistId}/`
-//
-//         const init = {
-//             method: 'PATCH',
-//             mode: 'cors',
-//             cache: 'no-cache',
-//             credentials: 'same-origin',
-//             redirect: 'follow',
-//             referrer: 'no-referrer',
-//             headers: {
-//                 'X-CSRFToken': cookies.csrftoken
-//             },
-//             body: {
-//                 'last_song_played': songId
-//             }
-//         };
-//
-//         console.dir(init)
-//         return fetch(url, init)
-//     }
-//
-//     static parseCookies() {
-//         console.log("Parsing cookies:")
-//
-//         if (!(document.cookie && document.cookie !== '')) {
-//             return {};
-//         }
-//
-//         const keyValueStrings = document.cookie.split(';')
-//         const cookies = keyValueStrings.reduce((obj, string) => {
-//             const match = string.trim().match(/(\w+)=(.*)/);
-//             if (match !== undefined) {
-//                 console.log(match)
-//                 const [_, cookieName, value] = match
-//                 return {...obj, [cookieName]: decodeURIComponent(value)}
-//             }
-//         }, {});
-//         console.log(cookies)
-//         return cookies
-//
-//         /*
-//         document.cookie.split(';').forEach(function (cookie) {
-//             const match = cookie.trim().match(/(\w+)=(.*)/);
-//             if (match !== undefined) {
-//                 cookies[match[1]] = decodeURIComponent(match[2]);
-//             }
-//         });
-//
-//         // return cookies;
-//         */
-//     }
-// }
+const track = document.getElementById('track');
+const timer = document.getElementById('timer');
+const duration = document.getElementById('duration');
+const playButton = document.getElementById('play-button');
+const pauseButton = document.getElementById('pause-button');
+const backButton = document.getElementById('skip-back-button');
+const forwardButton = document.getElementById('skip-forward-button');
 
 const cookies = HttpTool.parseCookies();
 
@@ -88,17 +30,6 @@ class Player {
 
         // Display the title of the first track.
         track.innerHTML = '1. ' + playlist[0].title;
-
-        // Setup the playlist display.
-        playlist.forEach(function (song) {
-            const div = document.createElement('div');
-            div.className = 'list-song';
-            div.innerHTML = song.title;
-            div.onclick = function () {
-                player.skipTo(playlist.indexOf(song));
-            };
-            list.appendChild(div);
-        });
     }
 
     /**
@@ -124,13 +55,7 @@ class Player {
                     // Display the duration.
                     duration.innerHTML = self.formatTime(Math.round(sound.duration()));
 
-                    // Start updating the progress of the track.
-                    requestAnimationFrame(self.step.bind(self));
-
-                    // Start the wave animation if we have already loaded
-                    // wave.container.style.display = 'block';
-                    bar.style.display = 'none';
-                    pauseBtn.style.display = 'block';
+                    pauseButton.style.display = 'block';
 
                     // Send currently playing song to server
                     HttpTool.updateLastSongPlayed(playlistId, index, cookies)
@@ -140,28 +65,16 @@ class Player {
                 onload: function () {
                     // Start the wave animation.
                     // wave.container.style.display = 'block';
-                    bar.style.display = 'none';
                     // loading.style.display = 'none';
                 },
                 onend: function () {
-                    // Stop the wave animation.
-                    // wave.container.style.display = 'none';
-                    bar.style.display = 'block';
                     self.skip('next');
                 },
                 onpause: function () {
-                    // Stop the wave animation.
-                    // wave.container.style.display = 'none';
-                    bar.style.display = 'block';
                 },
                 onstop: function () {
-                    // Stop the wave animation.
-                    // wave.container.style.display = 'none';
-                    bar.style.display = 'block';
                 },
                 onseek: function () {
-                    // Start updating the progress of the track.
-                    requestAnimationFrame(self.step.bind(self));
                 }
             });
         }
@@ -174,12 +87,11 @@ class Player {
 
         // Show the pause button.
         if (sound.state() === 'loaded') {
-            playBtn.style.display = 'none';
-            pauseBtn.style.display = 'block';
+            playButton.style.display = 'none';
+            pauseButton.style.display = 'block';
         } else {
-            // loading.style.display = 'block';
-            playBtn.style.display = 'none';
-            pauseBtn.style.display = 'none';
+            playButton.style.display = 'none';
+            pauseButton.style.display = 'none';
         }
 
         // Keep track of the index we are currently playing.
@@ -199,8 +111,8 @@ class Player {
         sound.pause();
 
         // Show the play button.
-        playBtn.style.display = 'block';
-        pauseBtn.style.display = 'none';
+        playButton.style.display = 'block';
+        pauseButton.style.display = 'none';
     }
 
     /**
@@ -239,89 +151,8 @@ class Player {
             self.playlist[self.index].howl.stop();
         }
 
-        // Reset progress.
-        progress.style.width = '0%';
-
         // Play the new track.
         self.play(index);
-    }
-
-    /**
-     * Set the volume and update the volume slider display.
-     * @param  {Number} val Volume between 0 and 1.
-     */
-    volume(val) {
-        const self = this;
-
-        // Update the global volume (affecting all Howls).
-        Howler.volume(val);
-
-        // Update the display on the slider.
-        const barWidth = (val * 90) / 100;
-        barFull.style.width = (barWidth * 100) + '%';
-        sliderBtn.style.left = (window.innerWidth * barWidth + window.innerWidth * 0.05 - 25) + 'px';
-    }
-
-    /**
-     * Seek to a new position in the currently playing track.
-     * @param  {Number} per Percentage through the song to skip.
-     */
-    seek(per) {
-        const self = this;
-
-        // Get the Howl we want to manipulate.
-        const sound = self.playlist[self.index].howl;
-
-        // Convert the percent into a seek position.
-        if (sound.playing()) {
-            sound.seek(sound.duration() * per);
-        }
-    }
-
-    /**
-     * The step called within requestAnimationFrame to update the playback position.
-     */
-    step() {
-        const self = this;
-
-        // Get the Howl we want to manipulate.
-        const sound = self.playlist[self.index].howl;
-
-        // Determine our current seek position.
-        const seek = sound.seek() || 0;
-        timer.innerHTML = self.formatTime(Math.round(seek));
-        progress.style.width = (((seek / sound.duration()) * 100) || 0) + '%';
-
-        // If the sound is still playing, continue stepping.
-        if (sound.playing()) {
-            requestAnimationFrame(self.step.bind(self));
-        }
-    }
-
-    /**
-     * Toggle the playlist display on/off.
-     */
-    togglePlaylist() {
-        const self = this;
-        const display = (playlist.style.display === 'block') ? 'none' : 'block';
-
-        setTimeout(function () {
-            playlist.style.display = display;
-        }, (display === 'block') ? 0 : 500);
-        playlist.className = (display === 'block') ? 'fadein' : 'fadeout';
-    }
-
-    /**
-     * Toggle the volume display on/off.
-     */
-    toggleVolume() {
-        const self = this;
-        const display = (volume.style.display === 'block') ? 'none' : 'block';
-
-        setTimeout(function () {
-            volume.style.display = display;
-        }, (display === 'block') ? 0 : 500);
-        volume.className = (display === 'block') ? 'fadein' : 'fadeout';
     }
 
     /**
@@ -359,84 +190,16 @@ console.log(playlistId)
 
 const player = new Player(songlist, playlistId)
 
-/*
-
-// Setup our new audio player class and pass it the playlist.
-const player = new Player([
-    {
-        title: 'Rave Digger',
-        file: 'rave_digger',
-        howl: null
-    },
-    {
-        title: '80s Vibe',
-        file: '80s_vibe',
-        howl: null
-    },
-    {
-        title: 'Running Out',
-        file: 'running_out',
-        howl: null
-    }
-]);
-
-*/
 // Bind our player controls.
-playBtn.addEventListener('click', function () {
+playButton.addEventListener('click', function () {
     player.play();
 });
-pauseBtn.addEventListener('click', function () {
+pauseButton.addEventListener('click', function () {
     player.pause();
 });
-prevBtn.addEventListener('click', function () {
+backButton.addEventListener('click', function () {
     player.skip('prev');
 });
-nextBtn.addEventListener('click', function () {
+forwardButton.addEventListener('click', function () {
     player.skip('next');
 });
-// waveform.addEventListener('click', function (event) {
-//     player.seek(event.clientX / window.innerWidth);
-// });
-playlistBtn.addEventListener('click', function () {
-    player.togglePlaylist();
-});
-playlist.addEventListener('click', function () {
-    player.togglePlaylist();
-});
-volumeBtn.addEventListener('click', function () {
-    player.toggleVolume();
-});
-volume.addEventListener('click', function () {
-    player.toggleVolume();
-});
-
-// Setup the event listeners to enable dragging of volume slider.
-barEmpty.addEventListener('click', function (event) {
-    const per = event.layerX / parseFloat(barEmpty.scrollWidth);
-    player.volume(per);
-});
-sliderBtn.addEventListener('mousedown', function () {
-    window.sliderDown = true;
-});
-sliderBtn.addEventListener('touchstart', function () {
-    window.sliderDown = true;
-});
-volume.addEventListener('mouseup', function () {
-    window.sliderDown = false;
-});
-volume.addEventListener('touchend', function () {
-    window.sliderDown = false;
-});
-
-const move = function (event) {
-    if (window.sliderDown) {
-        const x = event.clientX || event.touches[0].clientX;
-        const startX = window.innerWidth * 0.05;
-        const layerX = x - startX;
-        const per = Math.min(1, Math.max(0, layerX / parseFloat(barEmpty.scrollWidth)));
-        player.volume(per);
-    }
-};
-
-volume.addEventListener('mousemove', move);
-volume.addEventListener('touchmove', move);
