@@ -6,4 +6,4 @@ from player.views.views import GuardedView
 class Index(GuardedView):
     def get(self, request):
 
-        return render(request, 'manage.html')
+        return render(request, 'manage/index.html')
