@@ -1,10 +1,9 @@
 import {HttpTool} from "./requests.js";
 
-/*!
-* inspired by https://github.com/goldfire/howler.js/tree/master/examples/player
-*/
+// inspired by https://github.com/goldfire/howler.js/tree/master/examples/player
 
 // Cache references to DOM elements.
+const howler = document.getElementById('howler');
 const track = document.getElementById('track');
 const timer = document.getElementById('timer');
 const duration = document.getElementById('duration');
@@ -13,106 +12,88 @@ const pauseButton = document.getElementById('pause-button');
 const backButton = document.getElementById('skip-back-button');
 const forwardButton = document.getElementById('skip-forward-button');
 
+
+
+const playlist = getObjectByElementId("playlist");
+console.dir(playlist)
+
 const cookies = HttpTool.parseCookies();
+
+
+
+const eventConfig = {"bubbles":true, "cancelable":true};
+
+
+const pauseEvent =      new CustomEvent('pause', eventConfig)
+const skipPrevEvent =   new CustomEvent('skipPrev', eventConfig)
+const skipNextEvent =   new CustomEvent('skipNext', eventConfig)
+const loadEvent =       new CustomEvent('load', eventConfig)
 
 class Player {
     /**
      * Player class containing the state of our playlist and where we are in it.
      * Includes all methods for playing, skipping, updating the display, etc.
      * @param {Array} playlist Array of objects with playlist track details ({title, file, howl}).
-     * @param {String} playlistId UUID of the playlist on the server, so it can be updated with last_track_played
      */
-    constructor(playlist, playlistId) {
+    constructor(playlist) {
 
         this.playlist = playlist;
-        this.playlistId = playlistId;
         this.index = 0;
 
+        this.currentTrackId = playlist.tracks[0].id
         // Display the title of the first track.
-        track.innerHTML = '1. ' + playlist[0].title;
+        // track.innerHTML = '1. ' + playlist[0].title;
     }
 
     /**
      * Play a track in the playlist.
-     * @param {Number} index Index of the track in the playlist (leave empty to play the first or current).
+     * @param trackId
      */
-    play(index) {
-        const self = this;
+    play(trackId) {
+        const _this = this;
+
+        trackId = trackId || _this.currentTrackId
+
+        const detail = {
+            trackId: trackId,
+            playlistId: this.playlist.id
+        }
+        dispatchEvent(new CustomEvent('play', {bubbles: true, detail: detail}))
+
+        const track = _this.playlist.tracks.filter(track => track.id === trackId)[0];
+
+
         let sound;
-
-        index = typeof index === 'number' ? index : self.index;
-        const data = self.playlist[index];
-
         // If we already loaded this track, use the current one.
         // Otherwise, setup and load a new Howl.
-        if (data.howl) {
-            sound = data.howl;
+        if (track.howl) {
+            sound = track.howl;
         } else {
-            sound = data.howl = new Howl({
-                src: [data.file],
-                html5: true, // Force to HTML5 so that the audio can stream in (best for large files).
-                onplay: function () {
-                    // Display the duration.
-                    duration.innerHTML = self.formatTime(Math.round(sound.duration()));
-
-                    pauseButton.style.display = 'block';
-
-                    // Send currently playing track to server
-                    HttpTool.updateLastSongPlayed(playlistId, index, cookies)
-                        .then(r => console.log(r))
-                        .catch(e => console.error(e))
-                },
-                onload: function () {
-                    // Start the wave animation.
-                    // wave.container.style.display = 'block';
-                    // loading.style.display = 'none';
-                },
-                onend: function () {
-                    self.skip('next');
-                },
-                onpause: function () {
-                },
-                onstop: function () {
-                },
-                onseek: function () {
-                }
+            sound = track.howl = new Howl({
+                src: [`${window.location.origin}/media/${track.audio_file}`],
+                html5: true,
+                onload:     function () { dispatchEvent(loadEvent) },
+                onend:      function () {_this.skip('next');},
             });
         }
 
         // Begin playing the sound.
         sound.play();
-
-        // Update the track display.
-        track.innerHTML = (index + 1) + '. ' + data.title;
-
-        // Show the pause button.
-        if (sound.state() === 'loaded') {
-            playButton.style.display = 'none';
-            pauseButton.style.display = 'block';
-        } else {
-            playButton.style.display = 'none';
-            pauseButton.style.display = 'none';
-        }
-
-        // Keep track of the index we are currently playing.
-        self.index = index;
+        _this.currentTrackId = trackId;
     }
 
     /**
      * Pause the currently playing track.
      */
     pause() {
-        const self = this;
+        const _this = this;
 
         // Get the Howl we want to manipulate.
-        const sound = self.playlist[self.index].howl;
+        const track = _this.playlist.tracks.filter(track => track.id === _this.currentTrackId)[0];
 
         // Pause the sound.
-        sound.pause();
-
-        // Show the play button.
-        playButton.style.display = 'block';
-        pauseButton.style.display = 'none';
+        track.howl.pause();
+        dispatchEvent(pauseEvent)
     }
 
     /**
@@ -129,11 +110,13 @@ class Player {
             if (index < 0) {
                 index = self.playlist.length - 1;
             }
+            dispatchEvent(skipPrevEvent)
         } else {
             index = self.index + 1;
             if (index >= self.playlist.length) {
                 index = 0;
             }
+            dispatchEvent(skipNextEvent)
         }
 
         self.skipTo(index);
@@ -170,25 +153,11 @@ class Player {
 
 
 function getObjectByElementId(elementId) {
-    const tracklistJson = document.getElementById(elementId).textContent;
-    return JSON.parse(tracklistJson);
+    const element = document.getElementById(elementId).textContent;
+    return JSON.parse(element);
 }
 
-const trackList = getObjectByElementId("track_list");
-console.log(trackList)
-
-const tracklist = trackList.map(track => {
-    return {
-        'title': track.title,
-        'file': window.location.origin + '/media/' + track.audio_file,
-        'howl': null
-    }
-})
-
-const playlistId = getObjectByElementId("playlist_id");
-console.log(playlistId)
-
-const player = new Player(tracklist, playlistId)
+const player = new Player(playlist)
 
 // Bind our player controls.
 playButton.addEventListener('click', function () {
@@ -203,3 +172,20 @@ backButton.addEventListener('click', function () {
 forwardButton.addEventListener('click', function () {
     player.skip('next');
 });
+
+addEventListener('play', (e) => {
+    console.log('play event fired.')
+    console.dir(e.detail)
+    playButton.style.display = 'none';
+    pauseButton.style.display = 'block';
+
+    HttpTool.updateLastSongPlayed(e.detail.playlistId, e.detail.trackId, cookies)
+        .then(r => console.log(r))
+        .catch(e => console.error(e))
+})
+
+addEventListener('pause', (e) => {
+    console.log('pause event fired.')
+    playButton.style.display = 'block';
+    pauseButton.style.display = 'none';
+})
