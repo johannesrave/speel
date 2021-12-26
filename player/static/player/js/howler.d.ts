@@ -286,4 +286,4 @@ export interface Howler {
     orientation(x: number, y: number, z: number, xUp: number, yUp: number, zUp: number): this | void;
 }
 
-export const Howler: Howler;
+// export const Howler: Howler;

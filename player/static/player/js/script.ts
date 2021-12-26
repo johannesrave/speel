@@ -1,6 +1,5 @@
-// @ts-ignore
-import {HttpTool} from './requests.js';
-import {Howler, Howl} from './index'
+import {HttpTool} from './requests';
+import type {Howl} from './howler'
 
 // inspired by https://github.com/goldfire/howler.js/tree/master/examples/player
 
@@ -50,7 +49,7 @@ interface PlaylistModel {
 
 class Player {
     private playlist: PlaylistModel;
-    private index: number;
+    private currentIndex: number;
     private currentTrackId: string;
     private tracks: TrackModel[];
 
@@ -66,29 +65,30 @@ class Player {
         if (this.tracks.length < 1) {
             throw 'Playlist is empty.'
         }
-        this.index = 0;
-        this.currentTrackId = playlist.tracks[0].id;
+        this.currentIndex = 0;
+        this.currentTrackId = playlist.tracks[this.currentIndex].id;
     }
 
     /**
      * Play a track in the playlist.
-     * @param trackId
+     * @param index
      */
-    play(trackId?: string) {
-        const _this = this;
 
-        trackId = trackId || _this.currentTrackId
+    play(index?: number) {
+        index = index || this.currentIndex
 
-        const track = _this.tracks.find(track => track.id === trackId);
-        if (!track) return;
-
+        const track = this.tracks[this.currentIndex]
         const sound = this.getHowl(track);
 
+        for (const track of this.tracks){
+            track.howl?.stop()
+        }
+
         sound.play();
-        _this.currentTrackId = trackId;
+        this.currentIndex = index;
 
         const detail = {
-            trackId: trackId,
+            trackId: track.id,
             playlistId: this.playlist.id
         }
         dispatchEvent(new CustomEvent('play', {detail: detail}))
@@ -98,11 +98,7 @@ class Player {
      * Pause the currently playing track.
      */
     pause() {
-        const _this = this;
-
-        const track = _this.tracks.find(track => track.id === _this.currentTrackId);
-        if (!track) return;
-
+        const track = this.tracks[this.currentIndex]
         const sound = this.getHowl(track);
         sound.pause();
         dispatchEvent(pauseEvent)
@@ -113,46 +109,34 @@ class Player {
      * @param  {String} direction 'next' or 'prev'.
      */
     skip(direction: 'prev' | 'next') {
-        const _this = this;
 
-        const track = _this.tracks.find(track => track.id === _this.currentTrackId);
-        if (!track) return;
-
-        const currentIndex = _this.tracks.indexOf(track)
-
-        // Get the next track based on the direction of the track.
-        let index = 0;
         if (direction === 'prev') {
-            index = currentIndex - 1;
-            if (index < 0) {
-                index = _this.tracks.length - 1;
+            this.currentIndex--;
+            if (this.currentIndex < 0) {
+                this.currentIndex = this.tracks.length - 1;
             }
             dispatchEvent(skipPrevEvent)
-        } else {
-            index = currentIndex + 1;
-            if (index >= _this.tracks.length) {
-                index = 0;
+        } else if (direction === 'next') {
+            this.currentIndex++;
+            if (this.currentIndex >= this.tracks.length) {
+                this.currentIndex = 0;
             }
             dispatchEvent(skipNextEvent)
         }
 
-        _this.skipTo(_this.tracks[index].id);
+        this.skipTo(this.currentIndex);
     }
 
     /**
      * Skip to a specific track based on its playlist index.
-     * @param  {Number} index Index in the playlist.
+     * @param newIndex
      */
-    skipTo(index: string) {
-        const _this = this;
+    skipTo(newIndex: number) {
+        for (const track of this.tracks){
+            track.howl?.stop()
+        }
 
-        // Stop the current track.
-        // if (_this.playlist[_this.index].howl) {
-        //     _this.playlist[_this.index].howl.stop();
-        // }
-
-        // Play the new track.
-        // _this.play(index);
+        this.play(newIndex);
     }
 
     /**
@@ -169,7 +153,12 @@ class Player {
 
     private getHowl(track: TrackModel) {
         const _this = this;
+
+        // use Howl as type only... can't construct class this way.
+        const howl = {} as Howl;
+
         return track.howl ? track.howl : (
+            // @ts-ignore
             track.howl = new Howl({
                 src: [`${window.location.origin}/media/${track.audio_file}`],
                 html5: true,
@@ -224,3 +213,6 @@ addEventListener('pause', (e) => {
     playButton!.style.display = 'block';
     pauseButton!.style.display = 'none';
 })
+
+
+

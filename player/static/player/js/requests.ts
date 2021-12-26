@@ -1,6 +1,7 @@
 export class HttpTool {
-    static updateLastSongPlayed(playlistId, trackId, cookies) {
-        const url = `${window.location.origin}/api/playlists/${playlistId}/`;
+    static updateLastSongPlayed(playlistId: string, trackId: string, cookies: { csrftoken?: any; }) {
+        const url = `${window.location.origin}/api/playlists/${playlistId}/`
+
         const init = {
             method: 'PATCH',
             mode: 'cors',
@@ -15,26 +16,30 @@ export class HttpTool {
             body: JSON.stringify({
                 'last_track_played': trackId
             })
-        };
-        console.dir(init);
-        return fetch(url, init);
+        } as RequestInit;
+
+        console.dir(init)
+        return fetch(url, init)
     }
+
     static parseCookies() {
-        console.log("Parsing cookies:");
+        console.log("Parsing cookies:")
+
         if (!(document.cookie && document.cookie !== '')) {
             return {};
         }
-        const keyValueStrings = document.cookie.split(';');
+
+        const keyValueStrings = document.cookie.split(';')
         const cookies = keyValueStrings.reduce((obj, string) => {
             const match = string.trim().match(/(\w+)=(.*)/);
             if (match) {
-                console.log(match);
-                const [_, cookieName, value] = match;
-                return Object.assign(Object.assign({}, obj), { [cookieName]: decodeURIComponent(value) });
+                console.log(match)
+                const [_, cookieName, value] = match
+                return {...obj, [cookieName]: decodeURIComponent(value)}
             }
             return '';
         }, {});
-        console.log(cookies);
-        return cookies;
+        console.log(cookies)
+        return cookies
     }
 }
