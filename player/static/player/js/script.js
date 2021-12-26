@@ -1,8 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-// @ts-ignore
-const requests_js_1 = require("./requests.js");
-const index_1 = require("./index");
+import { HttpTool } from './requests';
 // inspired by https://github.com/goldfire/howler.js/tree/master/examples/player
 // Cache references to DOM elements.
 const howler = document.getElementById('howler');
@@ -15,7 +11,7 @@ const backButton = document.getElementById('skip-back-button');
 const forwardButton = document.getElementById('skip-forward-button');
 const playlist = getObjectByElementId("playlist");
 console.dir(playlist);
-const cookies = requests_js_1.HttpTool.parseCookies();
+const cookies = HttpTool.parseCookies();
 const eventConfig = { "cancelable": true };
 const pauseEvent = new CustomEvent('pause', eventConfig);
 const skipPrevEvent = new CustomEvent('skipPrev', eventConfig);
@@ -33,24 +29,25 @@ class Player {
         if (this.tracks.length < 1) {
             throw 'Playlist is empty.';
         }
-        this.index = 0;
-        this.currentTrackId = playlist.tracks[0].id;
+        this.currentIndex = 0;
+        this.currentTrackId = playlist.tracks[this.currentIndex].id;
     }
     /**
      * Play a track in the playlist.
-     * @param trackId
+     * @param index
      */
-    play(trackId) {
-        const _this = this;
-        trackId = trackId || _this.currentTrackId;
-        const track = _this.tracks.find(track => track.id === trackId);
-        if (!track)
-            return;
+    play(index) {
+        var _a;
+        index = index || this.currentIndex;
+        const track = this.tracks[this.currentIndex];
         const sound = this.getHowl(track);
+        for (const track of this.tracks) {
+            (_a = track.howl) === null || _a === void 0 ? void 0 : _a.stop();
+        }
         sound.play();
-        _this.currentTrackId = trackId;
+        this.currentIndex = index;
         const detail = {
-            trackId: trackId,
+            trackId: track.id,
             playlistId: this.playlist.id
         };
         dispatchEvent(new CustomEvent('play', { detail: detail }));
@@ -59,10 +56,7 @@ class Player {
      * Pause the currently playing track.
      */
     pause() {
-        const _this = this;
-        const track = _this.tracks.find(track => track.id === _this.currentTrackId);
-        if (!track)
-            return;
+        const track = this.tracks[this.currentIndex];
         const sound = this.getHowl(track);
         sound.pause();
         dispatchEvent(pauseEvent);
@@ -72,41 +66,32 @@ class Player {
      * @param  {String} direction 'next' or 'prev'.
      */
     skip(direction) {
-        const _this = this;
-        const track = _this.tracks.find(track => track.id === _this.currentTrackId);
-        if (!track)
-            return;
-        const currentIndex = _this.tracks.indexOf(track);
-        // Get the next track based on the direction of the track.
-        let index = 0;
         if (direction === 'prev') {
-            index = currentIndex - 1;
-            if (index < 0) {
-                index = _this.tracks.length - 1;
+            this.currentIndex--;
+            if (this.currentIndex < 0) {
+                this.currentIndex = this.tracks.length - 1;
             }
             dispatchEvent(skipPrevEvent);
         }
-        else {
-            index = currentIndex + 1;
-            if (index >= _this.tracks.length) {
-                index = 0;
+        else if (direction === 'next') {
+            this.currentIndex++;
+            if (this.currentIndex >= this.tracks.length) {
+                this.currentIndex = 0;
             }
             dispatchEvent(skipNextEvent);
         }
-        _this.skipTo(_this.tracks[index].id);
+        this.skipTo(this.currentIndex);
     }
     /**
      * Skip to a specific track based on its playlist index.
-     * @param  {Number} index Index in the playlist.
+     * @param newIndex
      */
-    skipTo(index) {
-        const _this = this;
-        // Stop the current track.
-        // if (_this.playlist[_this.index].howl) {
-        //     _this.playlist[_this.index].howl.stop();
-        // }
-        // Play the new track.
-        // _this.play(index);
+    skipTo(newIndex) {
+        var _a;
+        for (const track of this.tracks) {
+            (_a = track.howl) === null || _a === void 0 ? void 0 : _a.stop();
+        }
+        this.play(newIndex);
     }
     /**
      * Format the time from seconds to M:SS.
@@ -120,7 +105,11 @@ class Player {
     }
     getHowl(track) {
         const _this = this;
-        return track.howl ? track.howl : (track.howl = new index_1.Howl({
+        // use Howl as type only... can't construct class this way.
+        const howl = {};
+        return track.howl ? track.howl : (
+        // @ts-ignore
+        track.howl = new Howl({
             src: [`${window.location.origin}/media/${track.audio_file}`],
             html5: true,
             onload: function () {
@@ -158,7 +147,7 @@ addEventListener('play', (e) => {
     console.dir(detail);
     playButton.style.display = 'none';
     pauseButton.style.display = 'block';
-    requests_js_1.HttpTool.updateLastSongPlayed(detail.playlistId, detail.trackId, cookies)
+    HttpTool.updateLastSongPlayed(detail.playlistId, detail.trackId, cookies)
         .then((r) => console.log(r))
         .catch((e) => console.error(e));
 });
