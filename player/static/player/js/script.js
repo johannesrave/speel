@@ -1,4 +1,4 @@
-import { HttpTool } from './requests';
+import { HttpTool } from './requests.js';
 // inspired by https://github.com/goldfire/howler.js/tree/master/examples/player
 // Cache references to DOM elements.
 const howler = document.getElementById('howler');
@@ -34,31 +34,45 @@ class Player {
     }
     /**
      * Play a track in the playlist.
-     * @param index
+     * @param newIndex
      */
-    play(index) {
-        var _a;
-        index = index || this.currentIndex;
-        const track = this.tracks[this.currentIndex];
-        const sound = this.getHowl(track);
+    play(newIndex) {
+        var _a, _b;
+        // stop all other tracks playing.
         for (const track of this.tracks) {
             (_a = track.howl) === null || _a === void 0 ? void 0 : _a.stop();
         }
-        sound.play();
-        this.currentIndex = index;
+        this.currentIndex = newIndex !== null && newIndex !== void 0 ? newIndex : this.currentIndex;
+        const track = this.tracks[this.currentIndex];
+        // @ts-ignore
+        track.howl = (_b = track.howl) !== null && _b !== void 0 ? _b : new Howl(this.getOptions(track));
+        track.howl.play();
         const detail = {
             trackId: track.id,
             playlistId: this.playlist.id
         };
         dispatchEvent(new CustomEvent('play', { detail: detail }));
     }
+    getOptions(track) {
+        const _this = this;
+        return {
+            src: [`${window.location.origin}/media/${track.audio_file}`],
+            html5: true,
+            onload: function () {
+                dispatchEvent(loadEvent);
+            },
+            onend: function () {
+                _this.skip('next');
+            },
+        };
+    }
     /**
      * Pause the currently playing track.
      */
     pause() {
+        var _a;
         const track = this.tracks[this.currentIndex];
-        const sound = this.getHowl(track);
-        sound.pause();
+        (_a = track.howl) === null || _a === void 0 ? void 0 : _a.pause();
         dispatchEvent(pauseEvent);
     }
     /**
@@ -102,23 +116,6 @@ class Player {
         const minutes = Math.floor(secs / 60) || 0;
         const seconds = (secs - minutes * 60) || 0;
         return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-    }
-    getHowl(track) {
-        const _this = this;
-        // use Howl as type only... can't construct class this way.
-        const howl = {};
-        return track.howl ? track.howl : (
-        // @ts-ignore
-        track.howl = new Howl({
-            src: [`${window.location.origin}/media/${track.audio_file}`],
-            html5: true,
-            onload: function () {
-                dispatchEvent(loadEvent);
-            },
-            onend: function () {
-                _this.skip('next');
-            },
-        }));
     }
 }
 function getObjectByElementId(elementId) {
