@@ -58,15 +58,12 @@ class SingleView(GuardedView):
 
         model_instance = model.objects.get(id=model_id)
 
-        # check if field on model is ForeignKey
-        # if yes, update related UUID
-        # else, just update field directly
-        # TODO: this doesn't yet work for ManyToManyFields! might not be necessary though
         for attribute in body_data:
             if isinstance(model_instance._meta.get_field(attribute), models.ForeignKey):
                 setattr(model_instance, f'{attribute}_id', body_data[attribute])
             else:
                 setattr(model_instance, attribute, body_data[attribute])
+
         pprint(model_instance)
 
         model_instance.save()
