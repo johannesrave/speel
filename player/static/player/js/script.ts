@@ -1,4 +1,4 @@
-import {HttpTool} from './requests.js';
+import {HttpTool} from './ajax.js';
 import type {Howl, HowlOptions} from './howler'
 
 // inspired by https://github.com/goldfire/howler.js/tree/master/examples/player
@@ -14,7 +14,7 @@ const backButton = document.getElementById('skip-back-button');
 const forwardButton = document.getElementById('skip-forward-button');
 
 
-const playlist = getObjectByElementId("playlist");
+const playlist = getObjectByElementId('playlist');
 console.dir(playlist)
 
 const cookies = HttpTool.parseCookies();
