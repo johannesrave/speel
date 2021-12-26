@@ -2,6 +2,7 @@ import json
 from pprint import pprint
 from urllib.parse import parse_qsl
 
+from django.db import models
 from django.db.models import Model
 from django.http import HttpResponse, HttpRequest, HttpResponseBadRequest, JsonResponse
 
@@ -49,6 +50,7 @@ class SingleView(GuardedView):
 
     def patch(self, request: HttpRequest, model: Model, model_id):
         print(f'Hit PATCH endpoint for {model}')
+
         if request.content_type == 'application/json':
             body_data = json.loads(request.body)
         elif request.content_type == 'application/x-www-form-urlencoded':
@@ -56,11 +58,19 @@ class SingleView(GuardedView):
         else:
             return HttpResponseBadRequest()
         print('BODY:', body_data)
+
         model_instance = model.objects.get(id=model_id)
 
+        # check if field on model is ForeignKey
+        # if yes, update related UUID
+        # else, just update field directly
+        # TODO: this doesn't yet work for ManyToManyFields!
         for attribute in body_data:
-            print(attribute)
-            setattr(model_instance, attribute, body_data[attribute])
+            if isinstance(model_instance._meta.get_field(attribute), models.ForeignKey):
+                setattr(model_instance, f'{attribute}_id', body_data[attribute])
+            else:
+                setattr(model_instance, attribute, body_data[attribute])
+        pprint(model_instance)
 
         model_instance.save()
 
