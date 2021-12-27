@@ -16,7 +16,7 @@ export class HttpTool {
                 'last_track_played': trackId
             })
         };
-        console.dir(init);
+        // console.dir(init)
         return fetch(url, init);
     }
     static parseCookies() {

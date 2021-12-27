@@ -38,12 +38,14 @@ class Player {
      */
     play(newIndex) {
         var _a, _b;
-        // stop all other tracks playing.
-        for (const track of this.tracks) {
-            (_a = track.howl) === null || _a === void 0 ? void 0 : _a.stop();
-        }
         this.currentIndex = newIndex !== null && newIndex !== void 0 ? newIndex : this.currentIndex;
         const track = this.tracks[this.currentIndex];
+        // stop all other tracks playing.
+        for (const [index, track] of this.tracks.entries()) {
+            if (index == this.currentIndex)
+                continue;
+            (_a = track.howl) === null || _a === void 0 ? void 0 : _a.stop();
+        }
         // @ts-ignore
         track.howl = (_b = track.howl) !== null && _b !== void 0 ? _b : new Howl(this.getOptions(track));
         track.howl.play();
@@ -141,11 +143,11 @@ forwardButton.addEventListener('click', function () {
 addEventListener('play', (e) => {
     const detail = e.detail;
     console.log('play event fired.');
-    console.dir(detail);
+    // console.dir(detail)
     playButton.style.display = 'none';
     pauseButton.style.display = 'block';
     HttpTool.updateLastSongPlayed(detail.playlistId, detail.trackId, cookies)
-        .then((r) => console.log(r))
+        // .then((r: any) => console.log(r))
         .catch((e) => console.error(e));
 });
 addEventListener('pause', (e) => {

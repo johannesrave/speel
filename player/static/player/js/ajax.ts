@@ -18,7 +18,7 @@ export class HttpTool {
             })
         } as RequestInit;
 
-        console.dir(init)
+        // console.dir(init)
         return fetch(url, init)
     }
 
