@@ -1,91 +1,73 @@
 /* LAYOUT */
 #howler {
-  width: 40rem;
-  height: 30rem;
+  width: 100%;
+  height: 100%;
+  max-height: 90vh;
+  max-width: 70vw;
   display: grid;
-  grid-template-areas:
-    "title"
-    "controls";
-  //justify-content: stretch;
   place-items: center;
+  //place-content: center;
+  overflow: visible;
 
-  #title {
-    grid-area: title;
+  img, #controls {
+    grid-area: 1 / 1 / 1 / 1;
   }
 
+  img {
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    max-height: 100%;
+    width: 60%;
+    border-radius: 50%;
+  }
+
+
   #controls {
-    grid-area: controls;
+    width: 80%;
     display: grid;
-    grid-auto-flow: column;
+    grid-template-columns: 1fr 2fr 1fr;
+    place-content: center;
     place-items: center;
-    gap: 16px;
+
+    > * {
+      aspect-ratio: 1 / 1;
+    }
+
+    button {
+      /*RESET*/
+      cursor: pointer;
+      background: none;
+      color: inherit;
+      border: none;
+      padding: 0;
+      font: inherit;
+      outline: inherit;
+
+      width: 100%;
+
+      svg {
+        fill: white;
+        width: 70%;
+        //height: 150px;
+      }
+    }
 
     #play-pause {
-      width: 300px;
-      border-radius: 50%;
-
       display: grid;
+      width: 100%;
 
       > * {
         grid-area: 1 / 1;
-        border-radius: 50%;
-
       }
     }
 
     #skip-back-button, #skip-forward-button {
-    width: 150px;
-    height: 150px;
-    background-color: #04414d;
-    //place-items: center;
-    border-radius: 50%;
+      background-color: #04414d;
+      border-radius: 50%;
     }
   }
 }
 
-
-/* STYLING */
-
-#howler {
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-
-  * {
-    font-family: "Helvetica Neue", "Futura", "Trebuchet MS", Arial, sans-serif;
-    user-select: none;
-    text-align: center;
-    font-size: xx-large;
-    opacity: 0.9;
-    font-weight: 400;
-    color: #fff;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.33);
-  }
-
-
-  /* CONTROLS */
-  button {
-    /*RESET*/
-    cursor: pointer;
-    background: none;
-    color: inherit;
-    border: none;
-    padding: 0;
-    font: inherit;
-    outline: inherit;
-
-    svg {
-      fill: white;
-      width: 70%;
-      //height: 150px;
-    }
-  }
-
-  #play-button {
-  }
-
-  #pause-button {
-    display: none;
-  }
-
+#pause-button {
+  display: none;
 }
