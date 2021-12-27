@@ -75,14 +75,16 @@ class Player {
      */
 
     play(newIndex?: number) {
-        // stop all other tracks playing.
-        for (const track of this.tracks){
-            track.howl?.stop()
-        }
 
         this.currentIndex = newIndex ?? this.currentIndex
-        const track = this.tracks[this.currentIndex]
 
+        // stop all other tracks playing.
+        this.tracks.forEach((track, index) => {
+            if (index == this.currentIndex) return;
+            track.howl?.stop()
+        })
+
+        const track = this.tracks[this.currentIndex]
         // @ts-ignore
         track.howl = track.howl ?? new Howl(this.getOptions(track))
         track.howl.play();
@@ -145,10 +147,6 @@ class Player {
      * @param newIndex
      */
     skipTo(newIndex: number) {
-        for (const track of this.tracks){
-            track.howl?.stop()
-        }
-
         this.play(newIndex);
     }
 
@@ -192,12 +190,12 @@ forwardButton!.addEventListener('click', function () {
 addEventListener('play', (e: Event) => {
     const detail = (e as CustomEvent).detail
     console.log('play event fired.')
-    console.dir(detail)
+    // console.dir(detail)
     playButton!.style.display = 'none';
     pauseButton!.style.display = 'block';
 
     HttpTool.updateLastSongPlayed(detail.playlistId, detail.trackId, cookies)
-        .then((r: any) => console.log(r))
+        // .then((r: any) => console.log(r))
         .catch((e: Error) => console.error(e))
 })
 
