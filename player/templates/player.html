@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
+{% block header %}{% endblock %}
 {% block content %}
-  <div class="d-flex flex-column align-items-center">
     {% include "howler.html" %}
     <noscript>
       <p class="h3">{{ playlist.name }}</p>
@@ -20,5 +20,4 @@
              controls></audio>
       <p class="h3">{{ track_to_play.title }}</p>
     </noscript>
-  </div>
 {% endblock content %}
