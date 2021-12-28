@@ -37,17 +37,18 @@ class Player {
      * @param newIndex
      */
     play(newIndex) {
-        var _a, _b;
+        var _a;
         this.currentIndex = newIndex !== null && newIndex !== void 0 ? newIndex : this.currentIndex;
-        const track = this.tracks[this.currentIndex];
         // stop all other tracks playing.
-        for (const [index, track] of this.tracks.entries()) {
+        this.tracks.forEach((track, index) => {
+            var _a;
             if (index == this.currentIndex)
-                continue;
+                return;
             (_a = track.howl) === null || _a === void 0 ? void 0 : _a.stop();
-        }
+        });
+        const track = this.tracks[this.currentIndex];
         // @ts-ignore
-        track.howl = (_b = track.howl) !== null && _b !== void 0 ? _b : new Howl(this.getOptions(track));
+        track.howl = (_a = track.howl) !== null && _a !== void 0 ? _a : new Howl(this.getOptions(track));
         track.howl.play();
         const detail = {
             trackId: track.id,
@@ -103,10 +104,6 @@ class Player {
      * @param newIndex
      */
     skipTo(newIndex) {
-        var _a;
-        for (const track of this.tracks) {
-            (_a = track.howl) === null || _a === void 0 ? void 0 : _a.stop();
-        }
         this.play(newIndex);
     }
     /**

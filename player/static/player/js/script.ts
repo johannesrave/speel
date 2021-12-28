@@ -77,13 +77,14 @@ class Player {
     play(newIndex?: number) {
 
         this.currentIndex = newIndex ?? this.currentIndex
-        const track = this.tracks[this.currentIndex]
 
         // stop all other tracks playing.
-        for (const [index, track] of this.tracks.entries()){
-            if (index == this.currentIndex) continue;
+        this.tracks.forEach((track, index) => {
+            if (index == this.currentIndex) return;
             track.howl?.stop()
-        }
+        })
+
+        const track = this.tracks[this.currentIndex]
         // @ts-ignore
         track.howl = track.howl ?? new Howl(this.getOptions(track))
         track.howl.play();
@@ -146,10 +147,6 @@ class Player {
      * @param newIndex
      */
     skipTo(newIndex: number) {
-        for (const track of this.tracks){
-            track.howl?.stop()
-        }
-
         this.play(newIndex);
     }
 
