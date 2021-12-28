@@ -20,7 +20,6 @@ class Artist(UUIDModel):
         return f'{self.name}'
 
 
-# TODO kann man den Titel auch aus den Meta Infos ziehen, so wie hoffentlich auch Length?
 class Track(UUIDModel):
     title = models.CharField(max_length=128, blank=True, default="Unbekannter Track")
     duration = models.IntegerField(editable=False, null=True)
