@@ -28,3 +28,4 @@ class Playlist(GuardedView):
 
         playlist = playlist_form.save()
         return redirect('play_playlist', playlist_id=playlist.id)
+
