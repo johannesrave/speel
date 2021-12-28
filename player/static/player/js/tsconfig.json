@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "ES6",
+    "strict": true,
+    "importsNotUsedAsValues": "preserve"
+  }
+}

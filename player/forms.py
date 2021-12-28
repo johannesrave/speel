@@ -1,8 +1,9 @@
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, Form, CharField, PasswordInput
+from tinytag import TinyTag
 
-from player.models import Song, Playlist, TemporaryFile
+from player.models import Track, Playlist, TemporaryFile
 
 
 class LoginForm(Form):
@@ -20,19 +21,30 @@ class LoginForm(Form):
                 raise ValidationError("Benutzername oder Passwort sind nicht korrekt")
 
 
-class SongForm(ModelForm):
+class TrackForm(ModelForm):
     class Meta:
-        model = Song
+        model = Track
         fields = ['title', 'artists']
 
 
 class PlaylistForm(ModelForm):
     class Meta:
         model = Playlist
-        fields = ['name', 'songs', 'thumbnail_file']
+        fields = ['name', 'tracks', 'thumbnail_file']
 
 
 class TemporaryFileForm(ModelForm):
     class Meta:
         model = TemporaryFile
         fields = ['file']
+
+    def clean_file(self):
+        clean_file = self.cleaned_data.get('file')
+
+        if not TinyTag.is_supported(clean_file.name):
+            raise ValidationError('Dateiformat wird nicht unterstützt.')
+
+        if not clean_file.size < 1024 * 1024 * 50:
+            raise ValidationError('Datei ist größer als 50MB.')
+
+        return clean_file

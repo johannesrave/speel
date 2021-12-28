@@ -3,12 +3,14 @@
 <div id="howler">
   <link href="{% sass_src 'player/scss/howler.scss' %}" rel="stylesheet" type="text/css"/>
 
-  <div id="title">
-    <span id="track"></span>
-    <div><span id="timer">0:00</span> / <span id="duration">0:00</span></div>
-  </div>
+{#  <div id="title">#}
+{#    <span id="track"></span>#}
+{#    <div><span id="timer">0:00</span> / <span id="duration">0:00</span></div>#}
+{#  </div>#}
 
 
+  <img id="playlist-image" src="{{ thumbnail_url }}" alt="{{ playlist.name }}">
+{#icons von https://www.carbondesignsystem.com/guidelines/icons/library/#}
   <div id="controls">
     <button type="button" id="skip-back-button">
       <svg viewBox="0 0 32 32">
@@ -17,7 +19,6 @@
       </svg>
     </button>
     <div id="play-pause">
-      <img id="playlist-image" src="{{ playlist.thumbnail_file.thumbnails.large.url }}" alt="{{ playlist.name }}">
       <div id="loading-spinner"></div>
       <button type="button" id="play-button">
         <svg viewBox="0 0 32 32">
@@ -39,10 +40,9 @@
     </button>
   </div>
 
+  {{ playlist|json_script:"playlist" }}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"
           integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
           crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  {{ playlist.id|json_script:"playlist_id" }}
-  {{ song_list|json_script:"song_list" }}
-  <script src="{% static 'player/js/player.js' %}" type="module"></script>
+  <script src="{% static 'player/js/script.js' %}" type="module"></script>
 </div>

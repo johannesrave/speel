@@ -1,55 +1,27 @@
-from pprint import pprint
+from django.http import HttpResponseNotFound
+from django.shortcuts import render
 
-from django.shortcuts import render, redirect
-from player.models import Song, Playlist
+from player.models import Playlist
 from player.views.views import GuardedView
 
 
 class Player(GuardedView):
 
     def get(self, request, playlist_id):
-
-        song_id = request.GET.get('song_id')
-
         try:
-            playlist = Playlist.objects.get(id=playlist_id)
+            tracklist = Playlist.objects.get(id=playlist_id)
+            thumbnail_url = tracklist.thumbnail_file.thumbnails.large.url
         except Playlist.DoesNotExist:
-            print(f'Requested nonexistent song with id {str(playlist_id)}')
-            print(f' Redirecting to playlist selection.')
-            return redirect('library')
+            return HttpResponseNotFound(f'Requested nonexistent playlist with id {str(playlist_id)}')
 
-        songs = playlist.songs.all()
+        tracks = list(tracklist.tracks.all().values())
 
-        # this mixes two concerns: setting the song to play and updating the last song played in the playlist.
-        # TODO: these two concerns should be taken apart to get simpler logic.
-        if len(songs):
-            try:
-                song_to_play = songs.get(id=song_id)
-                playlist.last_song_played = song_to_play
-                playlist.save()
-                print(f'Beginning playback at song in playlist and setting as "last_song_played": {song_to_play.title}')
-            except Song.DoesNotExist:
-                print(f'Requested nonexistent song with id {str(song_id)}')
-                if playlist.last_song_played:
-                    print(f'Beginning playback at last song played in playlist: {songs.first().title}')
-                    song_to_play = playlist.last_song_played
-                else:
-                    print(f'Beginning playback at first song in playlist: {songs.first().title}')
-                    song_to_play = songs.first()
-        else:
-            print(f'Playlist contains no songs.')
-            print(f' Redirecting to playlist selection.')
-            return redirect('library')
-
-        song_list = list(songs.values())
-        pprint(song_list)
+        playlist = list(Playlist.objects.filter(id=playlist_id).values())[0]
+        playlist['tracks'] = tracks
 
         context = {
-            "playlist": playlist,
-            "songs": songs,
-            "song_list": song_list,
-            "song_to_play": song_to_play
+            'playlist': playlist,
+            'thumbnail_url': thumbnail_url,
         }
 
         return render(request, 'player.html', context)
-
