@@ -19,6 +19,26 @@ export class HttpTool {
         // console.dir(init)
         return fetch(url, init);
     }
+    static updateLastTimestampPlayed(playlistId, lastTimestampPlayed, cookies) {
+        const url = `${window.location.origin}/api/playlists/${playlistId}/`;
+        const init = {
+            method: 'PATCH',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            redirect: 'follow',
+            referrer: 'no-referrer',
+            headers: {
+                'X-CSRFToken': cookies.csrftoken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'last_timestamp_played': lastTimestampPlayed
+            })
+        };
+        // console.dir(init)
+        return fetch(url, init);
+    }
     static parseCookies() {
         console.log("Parsing cookies:");
         if (!(document.cookie && document.cookie !== '')) {
