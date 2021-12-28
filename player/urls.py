@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.urls import path, re_path
 from django.views.generic import RedirectView
 
@@ -17,7 +16,13 @@ urlpatterns = [
 
     # content management pages
     path('manage/', manage.index.Index.as_view(), name='manage_content'),
-    path('playlist/create', manage.playlist.Playlist.as_view(), name='create_playlist'),
+    path('manage/playlist/',
+         manage.playlist.Playlist.as_view(),
+         name='create_playlist'),
+    path('manage/playlist/<uuid:playlist_id>/',
+         manage.playlist.Playlist.as_view(),
+         name='manage_playlist'),
+    # path('playlist/create', manage.playlist.Playlist.as_view(), name='create_playlist'),
     path('upload/', manage.upload_file.UploadFile.as_view(), name='upload_track'),
     path('scan/', manage.upload_file.ScanFile.as_view(), name='scan_track'),
 
