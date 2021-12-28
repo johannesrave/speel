@@ -1,4 +1,5 @@
 from pprint import pprint
+from urllib.request import Request
 
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -23,11 +24,16 @@ class UploadFile(GuardedView):
         temp_file_form = TemporaryFileForm(request.POST, request.FILES)
 
         if not temp_file_form.is_valid():
-            print('Invalid file uploaded! Redirecting back to track_upload')
-            return redirect('upload_track')
+            context = {
+                'action': reverse('upload_track'),
+                'form': temp_file_form,
+                'button_label': 'Datei hochladen',
+            }
+            return render(request, 'generic/form.html', context)
 
         temp_file_instance = temp_file_form.save()
-        params = f"?temp_file_id={temp_file_instance.id}"
+        raw_file_name = str(temp_file_form.files.get('file')).split('.')[0].strip()
+        params = f"?temp_file_id={temp_file_instance.id}&raw_file_name={raw_file_name}"
         return redirect(reverse('scan_track') + params)
 
 
@@ -35,6 +41,7 @@ class ScanFile(GuardedView):
 
     def get(self, request):
         temp_file_id = request.GET['temp_file_id']
+        raw_file_name = request.GET['raw_file_name']
 
         if not temp_file_id:
             print(f'No temp file query string found. Redirecting to file upload.')
@@ -47,7 +54,7 @@ class ScanFile(GuardedView):
             return redirect('track_upload')
 
         mp3_file = TinyTag.get(file_to_scan.file.path)
-        title = mp3_file.title or 'Unbekannter Titel'
+        title = mp3_file.title or raw_file_name or 'Unbekannter Titel'
 
         artist, _ = Artist.objects.get_or_create(name=(mp3_file.artist or 'Unbekannter Artist'))
 
@@ -74,8 +81,6 @@ class ScanFile(GuardedView):
             return redirect('upload_track')
 
         if not track_to_save.is_valid():
-            pprint('SongForm not valid! Rerendering to correct entries')
-
             context = {
                 'action': reverse('scan_track'),
                 'form': track_to_save,

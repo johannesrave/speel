@@ -11,7 +11,7 @@ from player.views import player, login, api, library, manage
 urlpatterns = [
     path('login/', login.Login.as_view(), name='login'),
 
-    # main pages
+    # player pages
     path('library/', library.Library.as_view(), name='library'),
     path('player/<uuid:playlist_id>/', player.Player.as_view(), name='play_playlist'),
 
