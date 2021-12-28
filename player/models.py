@@ -1,4 +1,6 @@
 import uuid
+
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from thumbnails.fields import ImageField
 
@@ -83,10 +85,17 @@ class Album(UUIDModel):
         return f'{self.title}'
 
 
+class TemporaryFile(UUIDModel):
+    file = models.FileField(upload_to='audio',
+                            validators=[FileExtensionValidator(allowed_extensions=['mp3', 'webm'])])
+
+
 # these explicit relation models are only there to join the M2M-models on their
 # UUIDs instead of their PKIDs
 # this is to enable updating the relationships by sending UUIDs via the HTTP api
 # maybe it would've been easier to just use UUIDs only instead of keeping the bigint PKIDs?
+
+
 class TrackArtist(UUIDModel):
     track = models.ForeignKey('Track', to_field='id', on_delete=models.CASCADE)
     artist = models.ForeignKey('Artist', to_field='id', on_delete=models.CASCADE)
@@ -100,11 +109,6 @@ class PlaylistTrack(UUIDModel):
 class AlbumTrack(UUIDModel):
     album = models.ForeignKey('Album', to_field='id', on_delete=models.CASCADE)
     track = models.ForeignKey('Track', to_field='id', on_delete=models.CASCADE)
-
-
-class TemporaryFile(UUIDModel):
-    file = models.FileField()
-
 
 '''
 # got this from https://stackoverflow.com/questions/16041232/django-delete-filefield#16041527
