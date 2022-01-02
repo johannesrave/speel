@@ -2,7 +2,10 @@ import uuid
 
 from django.core.validators import FileExtensionValidator
 from django.db import models
-from thumbnails.fields import ImageField
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
+
+from audioplayer.settings import MEDIA_ROOT
 
 
 class UUIDModel(models.Model):
@@ -50,12 +53,16 @@ class Playlist(UUIDModel):
         related_name='playlists',
         blank=True,
     )
-    thumbnail_file = ImageField(
+    image = models.ImageField(
         upload_to='images',
-        resize_source_to='large',
+        max_length=1000,
         blank=True,
-        null=True
+        default=f'{MEDIA_ROOT}/default_images/default_img1.jpeg',
     )
+    thumbnail_file = ImageSpecField(source='image',
+                                    processors=[ResizeToFill(300, 300)],
+                                    format='JPEG',
+                                    options={'quality': 80})
     last_track_played = models.ForeignKey(
         to='Track',
         to_field='id',
@@ -108,6 +115,7 @@ class PlaylistTrack(UUIDModel):
 class AlbumTrack(UUIDModel):
     album = models.ForeignKey('Album', to_field='id', on_delete=models.CASCADE)
     track = models.ForeignKey('Track', to_field='id', on_delete=models.CASCADE)
+
 
 '''
 # got this from https://stackoverflow.com/questions/16041232/django-delete-filefield#16041527

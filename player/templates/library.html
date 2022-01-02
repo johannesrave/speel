@@ -3,11 +3,7 @@
   <div id="library-grid">
     {% for playlist in playlists %}
       <a class="library-item" href="{% url 'play_playlist' playlist.id %}">
-        {% if playlist.thumbnail_file %}
-          <img class="library-thumbnail" src="{{ playlist.thumbnail_file.thumbnails.medium.url }}" alt="{{ playlist.name }}">
-        {% else %}
-          {{ playlist.name }}
-        {% endif %}
+          <img class="library-thumbnail" src="{{ playlist.thumbnail_file.url }}" alt="{{ playlist.name }}">
       </a>
     {% endfor %}
   </div>
