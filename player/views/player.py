@@ -10,7 +10,6 @@ class Player(GuardedView):
     def get(self, request, playlist_id):
         try:
             tracklist = Playlist.objects.get(id=playlist_id)
-            thumbnail_url = tracklist.thumbnail_file.thumbnails.large.url
         except Playlist.DoesNotExist:
             return HttpResponseNotFound(f'Requested nonexistent playlist with id {str(playlist_id)}')
 
@@ -18,10 +17,9 @@ class Player(GuardedView):
 
         playlist = list(Playlist.objects.filter(id=playlist_id).values())[0]
         playlist['tracks'] = tracks
-
+        playlist['thumbnail_file'] = tracklist.thumbnail_file.url
         context = {
             'playlist': playlist,
-            'thumbnail_url': thumbnail_url,
         }
 
         return render(request, 'player.html', context)
