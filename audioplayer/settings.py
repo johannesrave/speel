@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'sass_processor',
     'player',
-    'thumbnails',
+    'imagekit',
     'django_browser_reload',
 ]
 
@@ -128,27 +128,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-THUMBNAILS = {
-    'METADATA': {
-        'BACKEND': 'thumbnails.backends.metadata.DatabaseBackend',
-    },
-    'STORAGE': {
-        'BACKEND': 'django.core.files.storage.FileSystemStorage',
-    },
-    'SIZES': {
-        'medium': {
-            'PROCESSORS': [
-                {'PATH': 'thumbnails.processors.resize', 'width': 150, 'height': 150},
-            ],
-        },
-        'large': {
-            'PROCESSORS': [
-                {'PATH': 'thumbnails.processors.resize', 'width': 300, 'height': 300, 'method': 'fill'},
-                {'PATH': 'thumbnails.processors.crop', 'width': 300, 'height': 300}
-            ],
-        }
-    }
-}
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
