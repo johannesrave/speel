@@ -1,5 +1,6 @@
 import uuid
 
+from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from imagekit.models import ImageSpecField
@@ -11,6 +12,13 @@ from audioplayer.settings import MEDIA_ROOT
 class UUIDModel(models.Model):
     pkid = models.BigAutoField(primary_key=True, editable=False)
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+
+    class Meta:
+        abstract = True
+
+
+class OwnedModel(UUIDModel):
+    #owner = models.ForeignKey(User)
 
     class Meta:
         abstract = True

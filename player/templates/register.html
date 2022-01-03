@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+  <form action="" method="POST" enctype="multipart/form-data"
+        id="generic-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% for name, value in hidden_fields %}
+      <input type="hidden" name="{{ name }}" value="{{ value }}">
+    {% endfor %}
+    <button type="submit" class="h5">{{ button_label }}</button>
+  </form>
+{% endblock content %}
+{% block footer %}{% endblock %}
