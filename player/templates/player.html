@@ -1,23 +1,51 @@
 {% extends "layout.html" %}
-{% block header %}{% endblock %}
+{% load static %}
 {% block content %}
-    {% include "howler.html" %}
-    <noscript>
-      <p class="h3">{{ playlist.name }}</p>
-      <ol>
-        {% for track in tracks %}
-          <li>
-            <a href="{% url 'play_playlist' playlist.id %}?track_id={{ track.id }}"
-               class="d-block w-100 text-center h4">
-              {{ track.title }}
-            </a>
-          </li>
-        {% endfor %}
-      </ol>
-      <audio id="html_player" class="m-3 w-50"
-             src="{{ track_to_play.audio_file.url }}"
-             type="audio/{{ audios.Audio_File.type }}"
-             controls></audio>
-      <p class="h3">{{ track_to_play.title }}</p>
-    </noscript>
+  <div id="player-wrapper">
+    <div id="player">
+      <img id="playlist-image" src="{{ playlist.thumbnail_file }}" alt="{{ playlist.name }}">
+      {#icons von https://www.carbondesignsystem.com/guidelines/icons/library/#}
+      <div id="controls">
+        <button type="button" id="skip-back-button">
+          <svg viewBox="0 0 32 32">
+            <path
+                d="M27,28a.9975.9975,0,0,1-.501-.1348l-19-11a1,1,0,0,1,0-1.73l19-11A1,1,0,0,1,28,5V27a1,1,0,0,1-1,1Z"></path>
+            <rect x="2" y="4" width="2" height="24"></rect>
+          </svg>
+        </button>
+        <div id="play-pause">
+          <div id="loading-spinner"></div>
+          <button type="button" id="play-button">
+            <svg viewBox="0 0 32 32">
+              <path
+                  d="M7,28a1,1,0,0,1-1-1V5a1,1,0,0,1,1.4819-.8763l20,11a1,1,0,0,1,0,1.7525l-20,11A1.0005,1.0005,0,0,1,7,28Z"></path>
+            </svg>
+          </button>
+          <button type="button" id="pause-button">
+            <svg viewBox="0 0 32 32">
+              <path d="M12,6H10A2,2,0,0,0,8,8V24a2,2,0,0,0,2,2h2a2,2,0,0,0,2-2V8a2,2,0,0,0-2-2Z"></path>
+              <path d="M22,6H20a2,2,0,0,0-2,2V24a2,2,0,0,0,2,2h2a2,2,0,0,0,2-2V8a2,2,0,0,0-2-2Z"></path>
+            </svg>
+          </button>
+        </div>
+        <button type="button" id="skip-forward-button">
+          <svg viewBox="0 0 32 32">
+            <path
+                d="M5,28a1,1,0,0,1-1-1V5a1,1,0,0,1,1.501-.8652l19,11a1,1,0,0,1,0,1.73l-19,11A.9975.9975,0,0,1,5,28Z"></path>
+            <rect x="28" y="4" width="2" height="24"></rect>
+          </svg>
+        </button>
+      </div>
+      {{ playlist|json_script:"playlist" }}
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"
+              integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <script src="{% static 'player/js/script.js' %}" type="module"></script>
+    </div>
+    <nav id="library-header">
+      <a id="view-library" href="{% url 'view_library' %}">Playlists</a>
+    </nav>
+
+  </div>
 {% endblock content %}

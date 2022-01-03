@@ -1,25 +1,101 @@
+/* VARS */
+/* RESET */
 /* MAIN LAYOUT */
-#wrapper {
-  display: grid;
+#library-wrapper, #player-wrapper {
   width: 100vw;
   height: 100vh;
-  grid-template-rows: max-content auto max-content;
-  grid-auto-flow: row; }
-  #wrapper header {
-    justify-self: center;
-    padding: 32px 32px 0; }
-  #wrapper main {
-    width: 100%;
-    height: 100%;
-    padding: 0 32px 0;
+  display: grid;
+  padding: 3em; }
+
+#library-wrapper {
+  grid-template-rows: max-content 1fr;
+  gap: 3em;
+  padding: 3em; }
+
+#library-grid {
+  display: grid;
+  justify-content: space-between;
+  align-content: start;
+  place-items: center;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, 150px); }
+  #library-grid .library-item {
+    width: 150px;
+    height: 150px;
     display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: white;
+    font-size: 2em;
+    text-decoration-line: none;
+    text-align: center; }
+    #library-grid .library-item .play-playlist {
+      width: 100%;
+      height: 100%;
+      background-position: center;
+      display: grid;
+      place-items: center;
+      border-radius: 50%; }
+
+#player-wrapper > * {
+  grid-area: 1 / 1 / 1 / 1; }
+
+#library-header {
+  display: flex;
+  justify-content: space-between; }
+
+#view-library, #edit-library {
+  display: grid;
+  place-content: center;
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  background-color: #b8435c;
+  color: white; }
+
+/* PLAYER */
+#player {
+  display: grid;
+  place-items: center; }
+  #player img, #player #controls {
+    grid-area: 1 / 1 / 1 / 1; }
+  #player img {
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    max-height: 100%;
+    width: 60%;
+    border-radius: 50%; }
+  #player #controls {
+    width: 80%;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    place-content: center;
     place-items: center; }
-  #wrapper footer {
-    justify-self: stretch;
-    display: grid;
-    justify-content: space-between;
-    grid-auto-flow: column;
-    padding: 0 32px 32px; }
+    #player #controls > * {
+      aspect-ratio: 1 / 1; }
+    #player #controls button {
+      /*RESET*/
+      cursor: pointer;
+      background: none;
+      color: inherit;
+      border: none;
+      padding: 0;
+      font: inherit;
+      outline: inherit;
+      width: 100%; }
+      #player #controls button svg {
+        fill: white;
+        width: 70%; }
+    #player #controls #play-pause {
+      display: grid;
+      width: 100%; }
+      #player #controls #play-pause > * {
+        grid-area: 1 / 1; }
+      #player #controls #play-pause #pause-button {
+        display: none; }
+    #player #controls #skip-back-button, #player #controls #skip-forward-button {
+      background-color: #04414d;
+      border-radius: 50%; }
 
 #generic-form {
   display: grid;
@@ -41,32 +117,5 @@
     font-size: 2em;
     height: 4rem;
     margin-top: 1rem; }
-
-#library-grid {
-  margin: 32px;
-  display: grid;
-  place-items: center;
-  place-content: center;
-  gap: 16px;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
-  #library-grid .library-item {
-    min-width: 128px;
-    min-height: 128px;
-    width: calc(min(12vw, 150px));
-    height: calc(min(12vw, 150px));
-    background-color: #04414d;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    color: white;
-    font-size: 2em;
-    text-decoration-line: none;
-    text-align: center; }
-  #library-grid .library-thumbnail {
-    min-width: 100px;
-    min-height: 100px;
-    width: calc(min(12vw, 100px));
-    height: calc(min(12vw, 100px));
-    border-radius: 50%; }
 
 /*# sourceMappingURL=style.css.map */

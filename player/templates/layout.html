@@ -16,26 +16,7 @@
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
         crossorigin="anonymous">
 </head>
-
-<body class="vh100 vw100">
-<div id="wrapper" class="">
-  <header>
-    {% block header %}
-      <a href="{% url 'library' %}" class="h1">audioplayer</a>
-    {% endblock %}
-  </header>
-  <main>
+<body>
     {% block content %}{% endblock %}
-  </main>
-  <footer>
-    {% block footer %}
-    <a href="{% url 'manage_content' %}">Mediathek verwalten</a>
-    <form action="{% url 'login' %}" method="post" class="ms-auto">
-      {% csrf_token %}
-      <button name="logout" value="true">Abmelden</button>
-    </form>
-    {% endblock %}
-  </footer>
-</div>
 </body>
 </html>

@@ -1,0 +1,5 @@
+<div class="library-item" style="background-image: url({{ playlist.thumbnail_file.url }})">
+{#  <img class="library-thumbnail" src="{{ playlist.thumbnail_file.url }}" alt="{{ playlist.name }}">#}
+  <a class="edit-playlist" href="{% url 'edit_playlist' playlist.id %}">Editieren</a>
+  <a class="delete-playlist" href="{% url 'delete_playlist' playlist.id %}">X</a>
+</div>

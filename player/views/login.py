@@ -35,5 +35,5 @@ class Login(View):
         user = User.objects.get(username=request.POST.get('username'))
         login(request, user)
 
-        destination = request.POST.get('redirect_to', 'library')
+        destination = request.POST.get('redirect_to', 'view_library')
         return redirect(destination)

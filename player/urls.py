@@ -11,17 +11,17 @@ urlpatterns = [
     path('login/', login.Login.as_view(), name='login'),
 
     # player pages
-    path('library/', library.Library.as_view(), name='library'),
+    path('library/', library.ViewLibrary.as_view(), name='view_library'),
+    path('library/edit/', library.EditLibrary.as_view(), name='edit_library'),
     path('player/<uuid:playlist_id>/', player.Player.as_view(), name='play_playlist'),
 
     # content management pages
-    path('manage/', manage.index.Index.as_view(), name='manage_content'),
-    path('manage/playlist/',
-         manage.playlist.Playlist.as_view(),
+    path('playlists/create/', manage.playlist.CreatePlaylist.as_view(),
          name='create_playlist'),
-    path('manage/playlist/<uuid:playlist_id>/',
-         manage.playlist.Playlist.as_view(),
-         name='manage_playlist'),
+    path('playlists/update/<uuid:playlist_id>/', manage.playlist.UpdatePlaylist.as_view(),
+         name='edit_playlist'),
+    path('playlists/delete/<uuid:playlist_id>/', manage.playlist.DeletePlaylist.as_view(),
+         name='delete_playlist'),
     # path('playlist/create', manage.playlist.Playlist.as_view(), name='create_playlist'),
     path('upload/', manage.upload_file.UploadFile.as_view(), name='upload_track'),
     path('scan/', manage.upload_file.ScanFile.as_view(), name='scan_track'),
@@ -37,7 +37,7 @@ urlpatterns = [
          {'model': Track}, name='track_list'),
 
     # redirect and catch-all
-    path('', RedirectView.as_view(pattern_name='library', permanent=True)),
+    path('', RedirectView.as_view(pattern_name='view_library', permanent=False)),
     # should be a 404 and then redirect
-    re_path(r'^player/.*$', RedirectView.as_view(pattern_name='library', permanent=False))
+    # re_path(r'^player/.*$', RedirectView.as_view(pattern_name='library', permanent=False))
 ]

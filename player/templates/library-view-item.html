@@ -1,0 +1,6 @@
+<div class="library-item"
+     style="background-image: url({{ playlist.thumbnail_file.url }});">
+  <a class="play-playlist" href="{% url 'play_playlist' playlist.id %}">{{ playlist.name }}
+{#    <img class="library-thumbnail" src="{{ playlist.thumbnail_file.url }}" alt="{{ playlist.name }}">#}
+  </a>
+</div>
