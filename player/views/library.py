@@ -6,9 +6,9 @@ from player.views.views import GuardedView
 
 class Library(GuardedView):
 
-    def get(self, request):
+    @staticmethod
+    def get(request):
         context = {
-            'playlists': Playlist.objects.all(),
-            'show_edit_buttons': False
+            'playlists': Playlist.objects.filter(owner=request.user),
         }
         return render(request, 'library.html', context)

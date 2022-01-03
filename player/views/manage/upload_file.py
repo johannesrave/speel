@@ -12,7 +12,8 @@ from player.views.views import GuardedView
 
 class UploadFile(GuardedView):
 
-    def get(self, request):
+    @staticmethod
+    def get(request):
         context = {
             'action': reverse('upload_track'),
             'form': TemporaryFileForm(),
@@ -20,7 +21,8 @@ class UploadFile(GuardedView):
         }
         return render(request, 'generic/form.html', context)
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         temp_file_form = TemporaryFileForm(request.POST, request.FILES)
 
         if not temp_file_form.is_valid():
@@ -39,7 +41,8 @@ class UploadFile(GuardedView):
 
 class ScanFile(GuardedView):
 
-    def get(self, request):
+    @staticmethod
+    def get(request):
         temp_file_id = request.GET['temp_file_id']
         raw_file_name = request.GET['raw_file_name']
 
@@ -69,7 +72,8 @@ class ScanFile(GuardedView):
         }
         return render(request, 'generic/form.html', context)
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         temp_file_id = request.POST.get('temp_file_id')
         track_to_save = TrackForm(request.POST)
 
@@ -93,6 +97,7 @@ class ScanFile(GuardedView):
             saved_track = track_to_save.save(commit=False)
             saved_track.audio_file = temp_file.file
             saved_track.duration = TinyTag.get(temp_file.file.path).duration
+            saved_track.owner = request.user
             saved_track.save()
             temp_file.delete()
             pprint(f'Song {saved_track.title} has been uploaded! Redirecting back to upload_track')
