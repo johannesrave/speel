@@ -19,8 +19,6 @@ class Player(GuardedView):
         playlist = list(Playlist.objects.filter(id=playlist_id).values())[0]
         playlist['tracks'] = tracks
         playlist['thumbnail_file'] = tracklist.thumbnail_file.url
-        if tracklist not in Playlist.objects.filter(owner=request.user):
-            playlist = []
         context = {
             'playlist': playlist,
         }

@@ -7,11 +7,9 @@ from player.models import Playlist, Track
 from player.views.views import GuardedView
 
 
-def validate_form(form, request):
+def save_form_if_valid(form):
     if form.is_valid():
-        playlist = form.save(commit=False)
-        playlist.owner = request.user
-        playlist.save()
+        playlist = form.save()
         return redirect('play_playlist', playlist_id=playlist.id)
 
 
@@ -30,7 +28,7 @@ class CreatePlaylist(GuardedView):
     @staticmethod
     def post(request):
         form = PlaylistForm(request.POST, request.FILES)
-        return validate_form(form, request)
+        return save_form_if_valid(form)
 
 
 class UpdatePlaylist(GuardedView):
@@ -38,12 +36,8 @@ class UpdatePlaylist(GuardedView):
     @staticmethod
     def get(request: HttpRequest, playlist_id):
         playlist = Playlist.objects.get(id=playlist_id)
-        if playlist in Playlist.objects.filter(owner=request.user):
-            form = PlaylistForm(instance=playlist)
-            action = reverse('update_playlist', kwargs={'playlist_id': playlist_id})
-        else:
-            form = PlaylistForm()
-            action = reverse('update_playlist')
+        form = PlaylistForm(instance=playlist)
+        action = reverse('update_playlist', kwargs={'playlist_id': playlist_id})
 
         context = {
             'action': action,
@@ -56,5 +50,7 @@ class UpdatePlaylist(GuardedView):
     def post(request, playlist_id):
         playlist = Playlist.objects.get(id=playlist_id)
         form = PlaylistForm(request.POST, request.FILES, instance=playlist)
-        return validate_form(form, request)
+        return save_form_if_valid(form)
+
+#class DeletePlaylist(GuardedView):
 

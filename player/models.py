@@ -51,7 +51,7 @@ class Track(UUIDModel):
         return f'{self.title}'
 
 
-class Playlist(UUIDModel, OwnedModel):
+class Playlist(UUIDModel):
     name = models.CharField(max_length=128, blank=False)
 
     tracks = models.ManyToManyField(

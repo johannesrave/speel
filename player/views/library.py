@@ -9,6 +9,6 @@ class Library(GuardedView):
     @staticmethod
     def get(request):
         context = {
-            'playlists': Playlist.objects.filter(owner=request.user),
+            'playlists': Playlist.objects.all(),
         }
         return render(request, 'library.html', context)
