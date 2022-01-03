@@ -34,7 +34,7 @@ class CreatePlaylist(GuardedView):
 class UpdatePlaylist(GuardedView):
 
     @staticmethod
-    def get(request: HttpRequest, playlist_id):
+    def get(request, playlist_id):
         playlist = Playlist.objects.get(id=playlist_id)
         form = PlaylistForm(instance=playlist)
         action = reverse('update_playlist', kwargs={'playlist_id': playlist_id})
@@ -52,5 +52,9 @@ class UpdatePlaylist(GuardedView):
         form = PlaylistForm(request.POST, request.FILES, instance=playlist)
         return save_form_if_valid(form)
 
-#class DeletePlaylist(GuardedView):
 
+def delete_playlist(request, playlist_id):
+    playlist = Playlist.objects.get(id=playlist_id)
+    playlist.delete()
+
+    return redirect('update_or_delete_playlist_overview')

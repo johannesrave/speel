@@ -1,5 +1,5 @@
 {% extends "../library.html" %}
 {% block edit %}
     <a value="true" class="btn btn-sm btn-info" href="{% url 'update_playlist' playlist.id %}">Playlist bearbeiten</a>
-    <a value="true" class="btn btn-sm btn-danger" href="{% url 'update_or_delete_playlist_overview' %}">Playlist löschen</a>
+    <a value="true" class="btn btn-sm btn-danger" href="{% url 'delete_playlist' playlist.id%}">Playlist löschen</a>
 {% endblock %}
