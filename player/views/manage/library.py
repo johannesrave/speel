@@ -9,6 +9,6 @@ class Library(GuardedView):
     def get(self, request):
         context = {
             'playlists': Playlist.objects.all(),
-            'show_edit_buttons': False
+            'show_edit_buttons': True
         }
-        return render(request, 'library.html', context)
+        return render(request, 'manage/library.html', context)

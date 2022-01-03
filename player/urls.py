@@ -3,12 +3,14 @@ from django.views.generic import RedirectView
 
 import player.views.manage.index
 import player.views.manage.playlist
+import player.views.manage.library
 import player.views.manage.upload_file
 from player.models import Playlist, Track
-from player.views import player, login, api, library, manage
+from player.views import player, login, register, api, library, manage
 
 urlpatterns = [
     path('login/', login.Login.as_view(), name='login'),
+    path('register/', register.registerPage, name='register'),
 
     # player pages
     path('library/', library.Library.as_view(), name='library'),
@@ -16,12 +18,15 @@ urlpatterns = [
 
     # content management pages
     path('manage/', manage.index.Index.as_view(), name='manage_content'),
-    path('manage/playlist/',
-         manage.playlist.Playlist.as_view(),
+    path('manage/playlist/create',
+         manage.playlist.create_playlist,
          name='create_playlist'),
     path('manage/playlist/<uuid:playlist_id>/',
-         manage.playlist.Playlist.as_view(),
-         name='manage_playlist'),
+         manage.playlist.update_playlist,
+         name='update_playlist'),
+    path('manage/playlist/all',
+         manage.library.Library.as_view(),
+         name='update_or_delete_playlist_overview'),
     # path('playlist/create', manage.playlist.Playlist.as_view(), name='create_playlist'),
     path('upload/', manage.upload_file.UploadFile.as_view(), name='upload_track'),
     path('scan/', manage.upload_file.ScanFile.as_view(), name='scan_track'),

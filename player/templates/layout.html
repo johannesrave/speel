@@ -30,7 +30,7 @@
   <footer>
     {% block footer %}
     <a href="{% url 'manage_content' %}">Mediathek verwalten</a>
-    <form action="{% url 'login' %}" method="post" class="ms-auto">
+    <form action="{% url 'login' %}" method="POST" class="ms-auto">
       {% csrf_token %}
       <button name="logout" value="true">Abmelden</button>
     </form>

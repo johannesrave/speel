@@ -5,6 +5,7 @@
       <a class="library-item" href="{% url 'play_playlist' playlist.id %}">
           <img class="library-thumbnail" src="{{ playlist.thumbnail_file.url }}" alt="{{ playlist.name }}">
       </a>
+        {% block edit %}{% endblock %}
     {% endfor %}
   </div>
 {% endblock content %}
