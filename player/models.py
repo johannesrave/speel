@@ -1,6 +1,7 @@
 import uuid
 
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from imagekit.models import ImageSpecField
@@ -17,8 +18,11 @@ class UUIDModel(models.Model):
         abstract = True
 
 
-class OwnedModel(UUIDModel):
-    #owner = models.ForeignKey(User)
+class OwnedModel(models.Model):
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
 
     class Meta:
         abstract = True
@@ -47,13 +51,9 @@ class Track(UUIDModel):
         return f'{self.title}'
 
 
-class Playlist(UUIDModel):
+class Playlist(UUIDModel, OwnedModel):
     name = models.CharField(max_length=128, blank=False)
-    # user = models.ForeignKey(
-    #     settings.AUTH_USER_MODEL,
-    #     on_delete=models.CASCADE,
-    #     default=1
-    # )
+
     tracks = models.ManyToManyField(
         to='Track',
         through='PlaylistTrack',

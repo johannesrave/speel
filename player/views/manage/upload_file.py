@@ -94,10 +94,9 @@ class ScanFile(GuardedView):
             return render(request, 'generic/form.html', context)
 
         else:
-            saved_track = track_to_save.save(commit=False)
+            saved_track = track_to_save.save()
             saved_track.audio_file = temp_file.file
             saved_track.duration = TinyTag.get(temp_file.file.path).duration
-            saved_track.owner = request.user
             saved_track.save()
             temp_file.delete()
             pprint(f'Song {saved_track.title} has been uploaded! Redirecting back to upload_track')
