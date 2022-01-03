@@ -79,10 +79,7 @@ class Player {
         this.currentIndex = newIndex ?? this.currentIndex
 
         // stop all other tracks playing.
-        this.tracks.forEach((track, index) => {
-            if (index == this.currentIndex) return;
-            track.howl?.stop()
-        })
+        this.tracks.forEach((track, index) => track.howl?.stop())
 
         const track = this.tracks[this.currentIndex]
         // @ts-ignore
