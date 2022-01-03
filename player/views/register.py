@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse
 
 
-def registerPage(request):
+def register_page(request):
     form = UserCreationForm
 
     if request.method == 'POST':

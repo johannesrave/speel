@@ -10,7 +10,7 @@ from player.views import player, login, register, api, library, manage
 
 urlpatterns = [
     path('login/', login.Login.as_view(), name='login'),
-    path('register/', register.registerPage, name='register'),
+    path('register/', register.register_page, name='register'),
 
     # player pages
     path('library/', library.Library.as_view(), name='library'),
@@ -19,10 +19,10 @@ urlpatterns = [
     # content management pages
     path('manage/', manage.index.Index.as_view(), name='manage_content'),
     path('manage/playlist/create',
-         manage.playlist.create_playlist,
+         manage.playlist.CreatePlaylist.as_view(),
          name='create_playlist'),
     path('manage/playlist/<uuid:playlist_id>/',
-         manage.playlist.update_playlist,
+         manage.playlist.UpdatePlaylist.as_view(),
          name='update_playlist'),
     path('manage/playlist/all',
          manage.library.Library.as_view(),
