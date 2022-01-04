@@ -1,17 +1,15 @@
 {% extends "layout.html" %}
 {% block content %}
   <div id="library-wrapper">
-    <nav id="library-header">
-      {% if edit_library %}
-        <a id="edit-library" href="{% url 'edit_library' %}">Editieren</a>
-      {% else %}
-        <a id="view-library" href="{% url 'view_library' %}">Playlists</a>
-      {% endif %}
-      <form action="{% url 'login' %}" method="post" class="ms-auto">
-        {% csrf_token %}
-        <button name="logout" value="true">Abmelden</button>
-      </form>
-    </nav>
+    {% if edit_library %}
+      <a id="edit-library" href="{% url 'edit_library' %}">Editieren</a>
+    {% else %}
+      <a id="view-library" href="{% url 'view_library' %}">Playlists</a>
+    {% endif %}
+    <form id="logout-button" action="{% url 'login' %}" method="post">
+      {% csrf_token %}
+      <button name="logout" value="true">Abmelden</button>
+    </form>
     <main id="library-grid">
       {% for playlist in playlists %}
         {% include item_template %}
