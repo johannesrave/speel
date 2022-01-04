@@ -1,19 +1,20 @@
 {% extends "layout.html" %}
 {% block content %}
   <div id="library-wrapper">
-    {% if edit_library %}
+    {% if view_library %}
       <a id="edit-library" href="{% url 'edit_library' %}">Editieren</a>
     {% else %}
-      <a id="view-library" href="{% url 'view_library' %}">Playlists</a>
+      <a id="view-library" href="{% url 'view_library' %}">Hören</a>
     {% endif %}
     <form id="logout-button" action="{% url 'login' %}" method="post">
       {% csrf_token %}
       <button name="logout" value="true">Abmelden</button>
     </form>
-    <main id="library-grid">
+    <ul id="library-grid">
       {% for playlist in playlists %}
         {% include item_template %}
       {% endfor %}
-    </main>
+        {% include 'components/library-create-item.html' %}
+    </ul>
   </div>
 {% endblock content %}

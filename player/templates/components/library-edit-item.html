@@ -1,9 +1,9 @@
-<div class="library-item">
-  <a class="edit-playlist" href="{% url 'edit_playlist' playlist.id %}">
+<li class="library-item">
+  <a class="update-playlist" href="{% url 'update_playlist' playlist.id %}">
     <img class="library-thumbnail" src="{{ playlist.thumbnail_file.url }}" alt="{{ playlist.name }}">
     <span>Editieren</span>
   </a>
   <a class="delete-playlist" href="{% url 'delete_playlist' playlist.id %}">
     <span>X</span>
   </a>
-</div>
+</li>

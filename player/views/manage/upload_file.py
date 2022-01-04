@@ -18,7 +18,7 @@ class UploadFile(GuardedView):
             'form': TemporaryFileForm(),
             'button_label': 'Datei hochladen',
         }
-        return render(request, 'generic/form.html', context)
+        return render(request, 'generic/../../templates/components/form.html', context)
 
     def post(self, request):
         temp_file_form = TemporaryFileForm(request.POST, request.FILES)
@@ -29,7 +29,7 @@ class UploadFile(GuardedView):
                 'form': temp_file_form,
                 'button_label': 'Datei hochladen',
             }
-            return render(request, 'generic/form.html', context)
+            return render(request, 'generic/../../templates/components/form.html', context)
 
         temp_file_instance = temp_file_form.save()
         raw_file_name = str(temp_file_form.files.get('file')).split('.')[0].strip()
@@ -67,7 +67,7 @@ class ScanFile(GuardedView):
             'hidden_fields': [('temp_file_id', temp_file_id)],
             'button_label': 'Song speichern'
         }
-        return render(request, 'generic/form.html', context)
+        return render(request, 'generic/../../templates/components/form.html', context)
 
     def post(self, request):
         temp_file_id = request.POST.get('temp_file_id')
@@ -87,7 +87,7 @@ class ScanFile(GuardedView):
                 'temp_file_id': temp_file_id,
                 'button_label': 'Song speichern'
             }
-            return render(request, 'generic/form.html', context)
+            return render(request, 'generic/../../templates/components/form.html', context)
 
         else:
             saved_track = track_to_save.save(commit=False)

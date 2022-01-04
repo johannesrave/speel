@@ -19,7 +19,7 @@ urlpatterns = [
     path('playlists/create/', manage.playlist.CreatePlaylist.as_view(),
          name='create_playlist'),
     path('playlists/update/<uuid:playlist_id>/', manage.playlist.UpdatePlaylist.as_view(),
-         name='edit_playlist'),
+         name='update_playlist'),
     path('playlists/delete/<uuid:playlist_id>/', manage.playlist.DeletePlaylist.as_view(),
          name='delete_playlist'),
     # path('playlist/create', manage.playlist.Playlist.as_view(), name='create_playlist'),

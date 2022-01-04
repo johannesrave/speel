@@ -1,0 +1,8 @@
+<li class="library-item">
+  {% if edit_library %}
+  <a class="create-playlist" href="{% url 'create_playlist' %}">
+{#    <img class="library-thumbnail" src="{{ playlist.thumbnail_file.url }}" alt="{{ playlist.name }}">#}
+    <span>+</span>
+  </a>
+  {% endif %}
+</li>

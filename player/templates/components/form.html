@@ -4,12 +4,15 @@
     <form action="{{ action }}" method="post" enctype="multipart/form-data"
           id="generic-form">
       {% csrf_token %}
+      {% if image %}
+        <img src="{{ image.url }}" alt="image associated with item">
+      {% endif %}
       {{ form.as_p }}
       {% for name, value in hidden_fields %}
         <input type="hidden" name="{{ name }}" value="{{ value }}">
       {% endfor %}
       <button type="submit" class="primary-button">{{ button_label }}</button>
+      <a id="back-link" class="button-anchor back-button" href="{{ request.META.HTTP_REFERER }}">Zurück</a>
     </form>
   </div>
 {% endblock content %}
-{% block footer %}{% endblock %}

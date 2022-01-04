@@ -9,8 +9,8 @@ class ViewLibrary(GuardedView):
     def get(self, request):
         context = {
             'playlists': Playlist.objects.all(),
-            'item_template': 'library-view-item.html',
-            'edit_library': True
+            'item_template': 'components/library-view-item.html',
+            'view_library': True
         }
         return render(request, 'library.html', context)
 
@@ -20,6 +20,7 @@ class EditLibrary(GuardedView):
     def get(self, request):
         context = {
             'playlists': Playlist.objects.all(),
-            'item_template': 'library-edit-item.html'
+            'item_template': 'components/library-edit-item.html',
+            'edit_library': True
         }
         return render(request, 'library.html', context)
