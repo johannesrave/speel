@@ -68,7 +68,7 @@ class ScanFile(GuardedView):
                 'artists': [artist],
             }),
             'hidden_fields': [('temp_file_id', temp_file_id)],
-            'button_label': 'Song speichern'
+            'button_label': 'Track speichern'
         }
         return render(request, 'generic/form.html', context)
 
@@ -89,7 +89,7 @@ class ScanFile(GuardedView):
                 'action': reverse('scan_track'),
                 'form': track_to_save,
                 'temp_file_id': temp_file_id,
-                'button_label': 'Song speichern'
+                'button_label': 'Track speichern'
             }
             return render(request, 'generic/form.html', context)
 
