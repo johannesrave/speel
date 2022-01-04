@@ -7,12 +7,6 @@ from player.models import Playlist, Track
 from player.views.views import GuardedView
 
 
-def save_form_if_valid(form):
-    if form.is_valid():
-        playlist = form.save()
-        return redirect('play_playlist', playlist_id=playlist.id)
-
-
 class CreatePlaylist(GuardedView):
 
     @staticmethod
@@ -28,7 +22,9 @@ class CreatePlaylist(GuardedView):
     @staticmethod
     def post(request):
         form = PlaylistForm(request.POST, request.FILES)
-        return save_form_if_valid(form)
+        if form.is_valid():
+            playlist = form.save()
+            return redirect('play_playlist', playlist_id=playlist.id)
 
 
 class UpdatePlaylist(GuardedView):
@@ -43,6 +39,7 @@ class UpdatePlaylist(GuardedView):
             'action': action,
             'form': form,
             'button_label': 'Playlist speichern',
+            'image': playlist.thumbnail_file
         }
         return render(request, 'generic/form.html', context)
 
@@ -50,7 +47,9 @@ class UpdatePlaylist(GuardedView):
     def post(request, playlist_id):
         playlist = Playlist.objects.get(id=playlist_id)
         form = PlaylistForm(request.POST, request.FILES, instance=playlist)
-        return save_form_if_valid(form)
+        if form.is_valid():
+            playlist = form.save()
+            return redirect('update_playlist', playlist_id=playlist.id)
 
 
 def delete_playlist(request, playlist_id):

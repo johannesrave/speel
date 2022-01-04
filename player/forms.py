@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, Form, CharField, PasswordInput
+from django.forms import ModelForm, Form, CharField, PasswordInput, ImageField, FileInput
 from tinytag import TinyTag
 
 from player.models import Track, Playlist, TemporaryFile
@@ -28,6 +28,8 @@ class TrackForm(ModelForm):
 
 
 class PlaylistForm(ModelForm):
+    image = ImageField(required=False, label='Image', widget=FileInput)
+
     class Meta:
         model = Playlist
         fields = ['name', 'tracks', 'image']

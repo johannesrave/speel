@@ -4,6 +4,9 @@
         id="generic-form">
     {% csrf_token %}
     {{ form.as_p }}
+  {% if image %}
+      <img src="{{ image.url }}">
+  {% endif %}
     {% for name, value in hidden_fields %}
       <input type="hidden" name="{{ name }}" value="{{ value }}">
     {% endfor %}
