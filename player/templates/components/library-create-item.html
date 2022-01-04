@@ -1,8 +1,10 @@
 <li class="library-item">
   {% if edit_library %}
-  <a class="create-playlist" href="{% url 'create_playlist' %}">
-{#    <img class="library-thumbnail" src="{{ playlist.thumbnail_file.url }}" alt="{{ playlist.name }}">#}
-    <span>+</span>
-  </a>
+    <a class="create-playlist" href="{% url 'create_playlist' %}">
+      <span>+</span>
+    </a>
+    <div class="contour">
+      {% include 'icons/contour_circle.svg' %}
+    </div>
   {% endif %}
 </li>

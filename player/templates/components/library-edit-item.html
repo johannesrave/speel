@@ -3,6 +3,9 @@
     <img class="library-thumbnail" src="{{ playlist.thumbnail_file.url }}" alt="{{ playlist.name }}">
     <span>Editieren</span>
   </a>
+  <div class="contour">
+    {% include 'icons/contour_circle.svg' %}
+  </div>
   <a class="delete-playlist" href="{% url 'delete_playlist' playlist.id %}">
     <span>X</span>
   </a>

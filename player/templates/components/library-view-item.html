@@ -2,4 +2,7 @@
   <a class="play-playlist" href="{% url 'play_playlist' playlist.id %}">
     <img class="library-thumbnail" src="{{ playlist.thumbnail_file.url }}" alt="{{ playlist.name }}">
   </a>
+  <div class="contour">
+    {% include 'icons/contour_circle.svg' %}
+  </div>
 </li>
