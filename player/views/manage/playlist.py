@@ -1,9 +1,8 @@
-from django.http import HttpRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from player.forms import PlaylistForm
-from player.models import Playlist, Track
+from player.models import Playlist
 from player.views.views import GuardedView
 
 

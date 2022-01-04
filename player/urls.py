@@ -3,6 +3,7 @@ from django.views.generic import RedirectView
 
 import player.views.manage.index
 import player.views.manage.playlist
+import player.views.manage.track
 import player.views.manage.library
 import player.views.manage.upload_file
 from player.models import Playlist, Track
@@ -30,6 +31,15 @@ urlpatterns = [
     path('manage/playlist/all',
          manage.library.Library.as_view(),
          name='update_or_delete_playlist_overview'),
+    path('manage/track/<uuid:track_id>/',
+         manage.track.UpdateTrack.as_view(),
+         name='update_track'),
+    path('manage/track/delete/<uuid:track_id>/',
+         manage.track.delete_track,
+         name='delete_track'),
+    path('manage/track/all',
+         manage.track.TrackOverview.as_view(),
+         name='update_or_delete_track_overview'),
     # path('playlist/create', manage.playlist.Playlist.as_view(), name='create_playlist'),
     path('upload/', manage.upload_file.UploadFile.as_view(), name='upload_track'),
     path('scan/', manage.upload_file.ScanFile.as_view(), name='scan_track'),
