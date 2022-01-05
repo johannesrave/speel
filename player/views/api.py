@@ -12,11 +12,13 @@ from player.views.views import GuardedView
 class ListView(GuardedView):
     http_method_names = ['get', 'post', 'delete', 'head', 'options']
 
-    def get(self, request, model: Model):
+    @staticmethod
+    def get(request, model: Model):
         model_list = model.objects.all().values()
         return JsonResponse(list(model_list), safe=False)
 
-    def post(self, request: HttpRequest, model: Model):
+    @staticmethod
+    def post(request: HttpRequest, model: Model):
         print(f'Hit POST endpoint for {model}')
 
         try:
@@ -30,7 +32,8 @@ class ListView(GuardedView):
         created_object.save()
         return JsonResponse(created_object)
 
-    def delete(self, request, model: Model):
+    @staticmethod
+    def delete(request, model: Model):
         model.objects.all().delete()
         return HttpResponse()
 
@@ -38,7 +41,8 @@ class ListView(GuardedView):
 class SingleView(GuardedView):
     http_method_names = ['get', 'put', 'patch', 'delete', 'head', 'options']
 
-    def get(self, request, model: Model, model_id):
+    @staticmethod
+    def get(request, model: Model, model_id):
         pprint(model.objects.get(id=model_id))
         return HttpResponse()
 
@@ -46,7 +50,8 @@ class SingleView(GuardedView):
         model.objects.update_or_create(id=model_id, defaults=request.POST["item_data"]).save()
         raise NotImplementedError
 
-    def patch(self, request: HttpRequest, model: Model, model_id):
+    @staticmethod
+    def patch(request: HttpRequest, model: Model, model_id):
         print(f'Hit PATCH endpoint for {model}')
 
         try:
@@ -73,7 +78,8 @@ class SingleView(GuardedView):
         model_instance.save()
         return HttpResponse()
 
-    def delete(self, request, model: Model, model_id):
+    @staticmethod
+    def delete(request, model: Model, model_id):
         model.objects.get(id=model_id).delete()
         return HttpResponse()
 

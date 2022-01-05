@@ -8,7 +8,8 @@ from player.forms import LoginForm
 
 
 class Login(View):
-    def get(self, request):
+    @staticmethod
+    def get(request):
         context = {
             'action': reverse('login'),
             'form': LoginForm(),
@@ -16,7 +17,8 @@ class Login(View):
         }
         return render(request, 'login.html', context)
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         intent_to_logout = request.POST.get('logout', False)
         if intent_to_logout:
             logout(request)

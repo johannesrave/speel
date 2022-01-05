@@ -7,7 +7,8 @@ from player.views.views import GuardedView
 
 class Player(GuardedView):
 
-    def get(self, request, playlist_id):
+    @staticmethod
+    def get(request, playlist_id):
         try:
             tracklist = Playlist.objects.get(id=playlist_id)
         except Playlist.DoesNotExist:

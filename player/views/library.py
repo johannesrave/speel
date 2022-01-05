@@ -6,7 +6,8 @@ from player.views.views import GuardedView
 
 class ViewLibrary(GuardedView):
 
-    def get(self, request):
+    @staticmethod
+    def get(request):
         context = {
             'playlists': Playlist.objects.all(),
             'item_template': 'components/library-view-item.html',
@@ -17,6 +18,7 @@ class ViewLibrary(GuardedView):
 
 class EditLibrary(GuardedView):
 
+    @staticmethod
     def get(self, request):
         context = {
             'playlists': Playlist.objects.all(),
