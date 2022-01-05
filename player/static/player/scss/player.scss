@@ -1,6 +1,6 @@
 @mixin circular {
   aspect-ratio: 1 / 1;
-  width: 100%;
+  //width: 100%;
   border-radius: 50%;
 }
 
@@ -15,16 +15,21 @@
 #player-wrapper {
   @include children-overlap;
 
-  & > * {
-    position: relative;
-  }
-
   place-items: center;
   place-content: center;
 
   height: 100vh;
 
   overflow: hidden;
+
+  & > * {
+    position: relative;
+  }
+
+  svg {
+    max-height: 100vh;
+    max-width: 80vw;
+  }
 }
 
 #pause-button {
@@ -32,16 +37,16 @@
 }
 
 #playlist-background {
-  //@include circular;
-  //object-fit: cover;
-  width: 100%;
+  width: 120vw;
   filter: blur(20px) saturate(0.3);
 }
 
 #playlist-image {
   @include circular;
   //object-fit: cover;
-  width: 48%;
+  //max-height: 80vh;
+  //width: 48%;
+  height: calc(min(60vh, 37vw));
 }
 
 #player-ear-left {
@@ -68,13 +73,21 @@
     fill: white;
   }
 
-  &:hover {
-    cursor: pointer;
-    transform: scale(1.03, 1.03);
+  @media (hover: hover) {
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.03, 1.03);
+    }
+
+    &:active {
+      transform: scale(0.95, 0.95);
+    }
   }
 
-  &:active {
-    transform: scale(0.95, 0.95);
+  @media (hover: none) {
+    &:active {
+      transform: scale(1.06, 1.06);
+    }
   }
 }
 

@@ -9,12 +9,9 @@ class CreatePlaylist(GuardedView):
 
     @staticmethod
     def get(request):
-        playlist_form = PlaylistForm()
-        create_playlist = reverse('create_playlist')
-
         context = {
-            'action': create_playlist,
-            'form': playlist_form,
+            'action': reverse('create_playlist'),
+            'form': PlaylistForm(),
             'upload_tracks': True,
             'button_label': 'Playlist erstellen'
         }
