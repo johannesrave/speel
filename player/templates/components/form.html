@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
   <div id="form-wrapper">
-    <form action="{{ action }}" method="post" enctype="multipart/form-data"
+    <form action="{{ action }}" method="POST" enctype="multipart/form-data"
           id="generic-form">
       {% csrf_token %}
       {% if image %}
@@ -13,7 +13,9 @@
       {% endfor %}
       <button type="submit" class="primary-button">{{ button_label }}</button>
       {% if upload_tracks %}
-        <button formaction="{% url 'create_track' %}" id="upload-track-button" type="submit" class="secondary-button">
+        <button
+            id="upload-track-button" class="secondary-button"
+            formaction="{% url 'create_track' %}" formmethod="GET" type="submit">
           Tracks hochladen
         </button>
       {% endif %}

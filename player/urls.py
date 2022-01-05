@@ -3,7 +3,6 @@ from django.views.generic import RedirectView
 
 import player.views.manage.playlist
 import player.views.manage.track
-import player.views.manage.upload_file
 from player.models import Playlist, Track
 from player.views import player, login, api, library, manage, register
 
@@ -29,9 +28,6 @@ urlpatterns = [
          name='update_track'),
     path('tracks/delete/<uuid:track_id>/', manage.track.DeleteTrack.as_view(),
          name='delete_track'),
-    # path('playlist/create', manage.playlist.Playlist.as_view(), name='create_playlist'),
-    path('upload/', manage.upload_file.UploadFile.as_view(), name='upload_track'),
-    path('scan/', manage.upload_file.ScanFile.as_view(), name='scan_track'),
 
     # HTTP-api 'endpoints'
     path('api/playlists/<uuid:model_id>/', api.SingleView.as_view(),
