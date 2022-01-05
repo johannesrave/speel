@@ -1,5 +1,6 @@
 /* VARS */
 $grid-item-diameter: 150px;
+$button-diameter: 75px;
 $sep-dist-l: 3em;
 $sep-dist-m: 1.5em;
 $color-primary: #015d7e;
@@ -8,6 +9,8 @@ $color-tertiary: #34748a;
 $color-text-hover: #ffffff;
 $color-background: #b2eacc;
 $color-warning: #cb414d;
+
+@use "resets";
 
 @mixin circular {
   aspect-ratio: 1 / 1;
@@ -30,10 +33,9 @@ $color-warning: #cb414d;
 }
 
 /* GENERIC STYLES */
-.primary-button {
+.primary-button, .secondary-button {
   @include hover;
 
-  background-color: $color-primary;
   color: white;
   font-size: 1.5rem;
   height: 3rem;
@@ -62,8 +64,48 @@ $color-warning: #cb414d;
 }
 
 
+.button-small {
+  @include children-overlap;
+  @include circular;
+  @include hover;
+
+  width: $button-diameter;
+  height: $button-diameter;
+
+  position: relative;
+
+  display: grid;
+  place-content: center;
+  place-items: center;
+
+  text-decoration-line: none;
+
+  button {
+    @include hover;
+    @include circular;
+    width: $button-diameter;
+    height: $button-diameter;
+
+    position: relative;
+    z-index: 5;
+
+    vertical-align: center;
+  }
+}
+
+.contour {
+  position: relative;
+  width: 110%;
+  pointer-events: none;
+
+  * {
+    fill: $color-primary;
+  }
+}
+
+
 /* MAIN LAYOUT */
-#library-wrapper, #player-wrapper, #form-wrapper {
+#library-wrapper, #form-wrapper {
   position: relative;
   width: 100vw;
   height: 100vh;
@@ -72,39 +114,27 @@ $color-warning: #cb414d;
 }
 
 #library-wrapper {
-  grid-template-rows: max-content 1fr;
-  gap: $sep-dist-l;
   padding: 9em 9em;
 }
 
-@media screen and (max-width: 780px) {
+@media screen and (max-width: 840px) {
   #library-wrapper {
     padding: 9em $sep-dist-l;
   }
 }
 
 /* NAV BUTTONS TOP CORNERS */
-#view-library, #edit-library, #logout-button {
+#view-library, #edit-library {
+  z-index: 3;
   position: absolute;
   top: $sep-dist-l;
-  display: grid;
-  place-content: center;
-  z-index: 3;
-}
-
-#view-library, #edit-library, #logout-button > button {
-  width: $grid-item-diameter / 2;
-  height: $grid-item-diameter / 2;
-  border-radius: 50%;
-  background-color: #b8435c;
-  color: white;
-}
-
-#view-library, #edit-library {
   left: $sep-dist-l;
 }
 
 #logout-button {
+  z-index: 3;
+  position: absolute;
+  top: $sep-dist-l;
   right: $sep-dist-l;
 }
 
@@ -114,14 +144,15 @@ $color-warning: #cb414d;
   justify-content: space-between;
   align-content: start;
   place-items: center;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, $grid-item-diameter);
+  column-gap: 2rem;
+  row-gap: 4rem;
+  padding: 0;
+  grid-template-columns: repeat(auto-fill, $grid-item-diameter);
 
   .library-item {
+    @include children-overlap;
     @include circular;
     width: $grid-item-diameter;
-    //height: $grid-item-diameter;
-    @include children-overlap;
     place-items: center;
     color: white;
 
@@ -141,121 +172,56 @@ $color-warning: #cb414d;
         filter: blur(2px);
       }
 
-      span {
-        position: relative;
-      }
-    }
-
-    .update-playlist,
-    .create-playlist,
-    .play-playlist {
-      @include children-overlap;
-
-      @include hover;
-      position: relative;
-
-      place-items: center;
-
-      font-size: 2rem;
-      color: white;
-      text-decoration-line: none;
-    }
-
-    .create-playlist {
-      @include circular;
-      width: $grid-item-diameter;
-      font-size: 6rem;
-      background: rgba(255, 255, 255, 0.5);
-
-      span {
-        margin: auto;
-      }
-    }
-
-    .delete-playlist {
-      @include circular;
-
-      @include hover;
-      position: relative;
-
-      align-self: start;
-      justify-self: end;
-      width: 3rem;
-
-      display: grid;
-      place-items: center;
-
-      background: $color-secondary;
-      color: white;
-      font-size: 1.6rem;
-      font-weight: bolder;
-      text-decoration-line: none;
-    }
-  }
-}
-
-/* PLAYER */
-#player {
-  display: flex;
-
-  #controls {
-    margin: auto auto;
-    height: 100%;
-    display: grid;
-    grid-template-columns: 2fr 1fr 4fr 1fr 2fr;
-    align-content: center;
-    align-items: center;
-
-    #skip-back-button,
-    #skip-forward-button,
-    #play-pause {
-      @include circular;
-      background-color: $color-secondary;
-      grid-row: 1;
-
-
-      svg {
+      * {
         fill: white;
-        width: 70%;
-      }
-    }
-
-    #play-pause {
-      grid-column: 2 / span 3;
-    }
-
-    #skip-back-button {
-      grid-column: 1 / span 2;
-      z-index: 1;
-    }
-
-    #skip-forward-button {
-      grid-column: -3 / span 2;
-      z-index: 1;
-    }
-
-    #play-pause {
-      display: grid;
-
-      > * {
-        grid-area: 1 / 1;
-      }
-
-      #pause-button {
-        display: none;
-      }
-
-      img {
-        @include circular;
-        object-fit: cover;
       }
     }
   }
 
-  @media screen and (min-width: 1024px) {
-    #controls {
-      width: 928px;
+  .update-playlist,
+  .create-playlist,
+  .play-playlist {
+    @include children-overlap;
+
+    @include hover;
+    position: relative;
+
+    place-items: center;
+
+    font-size: 2rem;
+    color: white;
+    text-decoration-line: none;
+  }
+
+  .create-playlist {
+    @include circular;
+    width: $grid-item-diameter;
+    font-size: 6rem;
+    background: rgba(255, 255, 255, 0.5);
+
+    span {
+      margin: auto;
     }
+  }
+
+  .delete-playlist {
+    @include circular;
+
+    @include hover;
+    position: relative;
+
+    align-self: start;
+    justify-self: end;
+    width: 3rem;
+
+    display: grid;
+    place-items: center;
+
+    background: $color-secondary;
+    color: white;
+    font-size: 1.6rem;
+    font-weight: bolder;
+    text-decoration-line: none;
   }
 }
 
@@ -294,18 +260,28 @@ $color-warning: #cb414d;
 /* COLOR STYLING */
 body {
   background-color: $color-background;
+
+  .button-small, .library-item {
+    color: white;
+  }
 }
 
-
-#edit-library,
-#view-library,
-#logout-button > button {
+#edit-library a,
+#view-library a,
+#logout-button button {
   @include hover;
-  color: white;
   text-decoration-line: none;
 }
 
-#logout-button > button {
+#logout-button {
+  background-color: $color-tertiary;
+}
+
+.primary-button {
+  background-color: $color-primary;
+}
+
+.secondary-button {
   background-color: $color-tertiary;
 }
 
@@ -323,15 +299,27 @@ body {
 
 .delete-playlist {
   background-color: $color-warning;
-  color: white;
 }
 
-.contour {
+.svg-icon {
+  display: grid;
+  place-items: center;
   position: relative;
-  width: 110%;
-  pointer-events: none;
+  z-index: 3;
 
-  * {
-    fill: $color-primary;
+  &.mirrored {
+    svg {
+      transform: scaleX(-1);
+    }
+  }
+
+  &.icon-small {
+    svg {
+      width: 70%;
+    }
+  }
+
+  svg * {
+    fill: white;
   }
 }
