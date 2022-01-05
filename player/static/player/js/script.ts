@@ -4,14 +4,11 @@ import type {Howl, HowlOptions} from './howler'
 // inspired by https://github.com/goldfire/howler.js/tree/master/examples/player
 
 // Cache references to DOM elements.
-const howler = document.getElementById('howler');
-const track = document.getElementById('track');
-const timer = document.getElementById('timer');
-const duration = document.getElementById('duration');
+const playPauseButton = document.getElementById('player-head');
 const playButton = document.getElementById('play-button');
 const pauseButton = document.getElementById('pause-button');
-const backButton = document.getElementById('skip-back-button');
-const forwardButton = document.getElementById('skip-forward-button');
+const backButton = document.getElementById('player-ear-left');
+const forwardButton = document.getElementById('player-ear-right');
 
 
 const playlist = getObjectByElementId('playlist');
@@ -52,6 +49,7 @@ class Player {
     private readonly tracks: TrackModel[];
     private currentIndex: number;
     private currentTrackId: string;
+    private playing: boolean = false;
 
     /**
      * Player class containing the state of our playlist and where we are in it.
@@ -76,6 +74,7 @@ class Player {
 
     play(newIndex?: number) {
 
+        this.playing = true;
         this.currentIndex = newIndex ?? this.currentIndex
 
         // stop all other tracks playing.
@@ -111,9 +110,23 @@ class Player {
      * Pause the currently playing track.
      */
     pause() {
+        this.playing = false;
         const track = this.tracks[this.currentIndex]
         track.howl?.pause();
         dispatchEvent(pauseEvent)
+    }
+
+    /**
+     * Toggle play/pause.
+     */
+    togglePlayPause() {
+        this.playing = !this.playing;
+
+        if (this.playing) {
+            this.play()
+        } else {
+            this.pause()
+        }
     }
 
     /**
@@ -171,12 +184,16 @@ function getObjectByElementId(elementId: string) {
 const player = new Player(playlist)
 
 // Bind our player controls.
-playButton!.addEventListener('click', function () {
-    player.play();
+playPauseButton!.addEventListener('click', function () {
+    console.log('playPause event fired.')
+    player.togglePlayPause();
 });
-pauseButton!.addEventListener('click', function () {
-    player.pause();
-});
+// playButton!.addEventListener('click', function () {
+//     player.play();
+// });
+// pauseButton!.addEventListener('click', function () {
+//     player.pause();
+// });
 backButton!.addEventListener('click', function () {
     player.skip('prev');
 });
@@ -201,6 +218,4 @@ addEventListener('pause', (e) => {
     playButton!.style.display = 'block';
     pauseButton!.style.display = 'none';
 })
-
-
 

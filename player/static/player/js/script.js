@@ -1,14 +1,11 @@
 import { HttpTool } from './ajax.js';
 // inspired by https://github.com/goldfire/howler.js/tree/master/examples/player
 // Cache references to DOM elements.
-const howler = document.getElementById('howler');
-const track = document.getElementById('track');
-const timer = document.getElementById('timer');
-const duration = document.getElementById('duration');
+const playPauseButton = document.getElementById('player-head');
 const playButton = document.getElementById('play-button');
 const pauseButton = document.getElementById('pause-button');
-const backButton = document.getElementById('skip-back-button');
-const forwardButton = document.getElementById('skip-forward-button');
+const backButton = document.getElementById('player-ear-left');
+const forwardButton = document.getElementById('player-ear-right');
 const playlist = getObjectByElementId('playlist');
 console.dir(playlist);
 const cookies = HttpTool.parseCookies();
@@ -24,6 +21,7 @@ class Player {
      * @param {Array} playlist Array of objects with playlist track details ({title, file, howl}).
      */
     constructor(playlist) {
+        this.playing = false;
         this.playlist = playlist;
         this.tracks = playlist.tracks;
         if (this.tracks.length < 1) {
@@ -38,6 +36,7 @@ class Player {
      */
     play(newIndex) {
         var _a;
+        this.playing = true;
         this.currentIndex = newIndex !== null && newIndex !== void 0 ? newIndex : this.currentIndex;
         // stop all other tracks playing.
         this.tracks.forEach((track, index) => { var _a; return (_a = track.howl) === null || _a === void 0 ? void 0 : _a.stop(); });
@@ -69,9 +68,22 @@ class Player {
      */
     pause() {
         var _a;
+        this.playing = false;
         const track = this.tracks[this.currentIndex];
         (_a = track.howl) === null || _a === void 0 ? void 0 : _a.pause();
         dispatchEvent(pauseEvent);
+    }
+    /**
+     * Toggle play/pause.
+     */
+    togglePlayPause() {
+        this.playing = !this.playing;
+        if (this.playing) {
+            this.play();
+        }
+        else {
+            this.pause();
+        }
     }
     /**
      * Skip to the next or previous track.
@@ -120,12 +132,16 @@ function getObjectByElementId(elementId) {
 }
 const player = new Player(playlist);
 // Bind our player controls.
-playButton.addEventListener('click', function () {
-    player.play();
+playPauseButton.addEventListener('click', function () {
+    console.log('playPause event fired.');
+    player.togglePlayPause();
 });
-pauseButton.addEventListener('click', function () {
-    player.pause();
-});
+// playButton!.addEventListener('click', function () {
+//     player.play();
+// });
+// pauseButton!.addEventListener('click', function () {
+//     player.pause();
+// });
 backButton.addEventListener('click', function () {
     player.skip('prev');
 });
