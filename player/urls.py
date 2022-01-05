@@ -16,17 +16,17 @@ urlpatterns = [
     path('player/<uuid:playlist_id>/', player.Player.as_view(), name='play_playlist'),
 
     # content management pages
-    path('playlists/create/', manage.playlist.CreatePlaylist.as_view(),
+    path('playlists/new/', manage.playlist.CreatePlaylist.as_view(),
          name='create_playlist'),
-    path('playlists/update/<uuid:playlist_id>/', manage.playlist.UpdatePlaylist.as_view(),
+    path('playlists/<uuid:playlist_id>/edit/', manage.playlist.UpdatePlaylist.as_view(),
          name='update_playlist'),
-    path('playlists/delete/<uuid:playlist_id>/', manage.playlist.DeletePlaylist.as_view(),
+    path('playlists/<uuid:playlist_id>/delete/', manage.playlist.DeletePlaylist.as_view(),
          name='delete_playlist'),
-    path('tracks/create/', manage.track.CreateTrack.as_view(),
+    path('tracks/new/', manage.track.CreateTrack.as_view(),
          name='create_track'),
-    path('tracks/update/<uuid:track_id>/', manage.track.UpdateTrack.as_view(),
+    path('tracks/<uuid:track_id>/edit/', manage.track.UpdateTrack.as_view(),
          name='update_track'),
-    path('tracks/delete/<uuid:track_id>/', manage.track.DeleteTrack.as_view(),
+    path('tracks/<uuid:track_id>/delete/', manage.track.DeleteTrack.as_view(),
          name='delete_track'),
 
     # HTTP-api 'endpoints'
