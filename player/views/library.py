@@ -19,7 +19,7 @@ class ViewLibrary(GuardedView):
 class EditLibrary(GuardedView):
 
     @staticmethod
-    def get(self, request):
+    def get(request):
         context = {
             'playlists': Playlist.objects.all(),
             'item_template': 'components/library-edit-item.html',

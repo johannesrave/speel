@@ -5,38 +5,23 @@
       <a id="edit-library" class="button-small" href="{% url 'edit_library' %}">
         <div class="svg-icon mirrored icon-small">
           {% include 'icons/icon_edit.svg' %}
-          {#      {% include 'icons/icon_edit.svg' %}#}
         </div>
       </a>
-      {#        <a id="edit-library" class="button-with-contour" href="{% url 'edit_library' %}">Editieren</a>#}
     {% else %}
       <a id="view-library" class="button-small" href="{% url 'view_library' %}">
         <div class="svg-icon">
-          {#      {% include 'icons/icon_edit.svg' %}#}
           {% include 'icons/icon_listen.svg' %}
         </div>
       </a>
-      {#      <a id="view-library" class="button-with-contour" href="{% url 'view_library' %}">Hören</a>#}
     {% endif %}
     <form id="logout-button" class="button-small" action="{% url 'login' %}" method="post">
       {% csrf_token %}
       <button name="logout" value="true">
         <span class="svg-icon icon-small">
-          {#      {% include 'icons/icon_edit.svg' %}#}
           {% include 'icons/icon_exit.svg' %}
         </span>
       </button>
-      {#        <button name="logout" value="true">Abmelden</button>#}
     </form>
-    {#    <div id="logout-button" class="button-with-contour">#}
-    {#      <form action="{% url 'login' %}" method="post">#}
-    {#        {% csrf_token %}#}
-    {#        <button name="logout" value="true">Abmelden</button>#}
-    {#      </form>#}
-    {#      <div class="contour">#}
-    {#        {% include 'icons/contour_circle.svg' %}#}
-    {#      </div>#}
-    {#    </div>#}
     <ul id="library-grid">
       {% for playlist in playlists %}
         {% include item_template %}

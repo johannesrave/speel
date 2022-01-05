@@ -3,25 +3,12 @@
 {% block content %}
   <a id="view-library" class="button-small" href="{% url 'view_library' %}">
     <div class="svg-icon">
-      {#      {% include 'icons/icon_edit.svg' %}#}
       {% include 'icons/icon_listen.svg' %}
     </div>
   </a>
-  {#  <a id="view-library" class="button-small" href="{% url 'view_library' %}">Playlists</a>#}
   <div id="player-wrapper">
     <img id="playlist-image" src="{{ playlist.thumbnail_file }}" alt="{{ playlist.name }}">
     {% include 'components/player_complete_web.svg' %}
-    {#    <div id="player">#}
-    {#      <div id="controls">#}
-    {#        <button type="button" id="skip-back-button">{% include "icons/skip-back.html" %}</button>#}
-    {#        <div id="play-pause">#}
-    {#          <img id="playlist-image" src="{{ playlist.thumbnail_file }}" alt="{{ playlist.name }}">#}
-    {#          <button type="button" id="play-button">{% include "icons/play.html" %}</button>#}
-    {#          <button type="button" id="pause-button">{% include "icons/pause.html" %}</button>#}
-    {#        </div>#}
-    {#        <button type="button" id="skip-forward-button">{% include "icons/skip-forward.html" %}</button>#}
-    {#      </div>#}
-
     {{ playlist|json_script:"playlist" }}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"
             integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
