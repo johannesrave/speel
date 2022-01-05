@@ -1,5 +1,4 @@
 from pprint import pprint
-from urllib.request import Request
 
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -12,15 +11,17 @@ from player.views.views import GuardedView
 
 class UploadFile(GuardedView):
 
-    def get(self, request):
+    @staticmethod
+    def get(request):
         context = {
             'action': reverse('upload_track'),
             'form': TemporaryFileForm(),
             'button_label': 'Datei hochladen',
         }
-        return render(request, 'generic/../../templates/components/form.html', context)
+        return render(request, 'components/form.html', context)
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         temp_file_form = TemporaryFileForm(request.POST, request.FILES)
 
         if not temp_file_form.is_valid():
@@ -29,7 +30,7 @@ class UploadFile(GuardedView):
                 'form': temp_file_form,
                 'button_label': 'Datei hochladen',
             }
-            return render(request, 'generic/../../templates/components/form.html', context)
+            return render(request, 'components/form.html', context)
 
         temp_file_instance = temp_file_form.save()
         raw_file_name = str(temp_file_form.files.get('file')).split('.')[0].strip()
@@ -39,7 +40,8 @@ class UploadFile(GuardedView):
 
 class ScanFile(GuardedView):
 
-    def get(self, request):
+    @staticmethod
+    def get(request):
         temp_file_id = request.GET['temp_file_id']
         raw_file_name = request.GET['raw_file_name']
 
@@ -65,11 +67,12 @@ class ScanFile(GuardedView):
                 'artists': [artist],
             }),
             'hidden_fields': [('temp_file_id', temp_file_id)],
-            'button_label': 'Song speichern'
+            'button_label': 'Track speichern'
         }
-        return render(request, 'generic/../../templates/components/form.html', context)
+        return render(request, 'components/form.html', context)
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         temp_file_id = request.POST.get('temp_file_id')
         track_to_save = TrackForm(request.POST)
 
@@ -85,12 +88,12 @@ class ScanFile(GuardedView):
                 'action': reverse('scan_track'),
                 'form': track_to_save,
                 'temp_file_id': temp_file_id,
-                'button_label': 'Song speichern'
+                'button_label': 'Track speichern'
             }
-            return render(request, 'generic/../../templates/components/form.html', context)
+            return render(request, 'components/form.html', context)
 
         else:
-            saved_track = track_to_save.save(commit=False)
+            saved_track = track_to_save.save()
             saved_track.audio_file = temp_file.file
             saved_track.duration = TinyTag.get(temp_file.file.path).duration
             saved_track.save()
