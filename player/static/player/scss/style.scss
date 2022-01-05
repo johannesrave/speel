@@ -7,7 +7,7 @@ $color-primary: #015d7e;
 $color-secondary: #e16666;
 $color-tertiary: #34748a;
 $color-text-hover: #ffffff;
-$color-background: #b2eacc;
+$color-background: #1e3642;
 $color-warning: #cb414d;
 
 @use "resets";
@@ -27,7 +27,7 @@ $color-warning: #cb414d;
 
 @mixin hover {
   &:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.3);
     color: $color-text-hover;
   }
 }
@@ -286,7 +286,7 @@ body {
 }
 
 #edit-library {
-  background-color: $color-secondary;
+  background-color: $color-tertiary;
 }
 
 #view-library {

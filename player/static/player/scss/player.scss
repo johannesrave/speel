@@ -15,31 +15,44 @@
 #player-wrapper {
   @include children-overlap;
 
+  & > * {
+    position: relative;
+  }
+
   place-items: center;
   place-content: center;
+
+  height: 100vh;
+
+  overflow: hidden;
 }
 
 #pause-button {
   display: none;
 }
 
-img {
-  @include circular;
-  object-fit: cover;
+#playlist-background {
+  //@include circular;
+  //object-fit: cover;
+  width: 100%;
+  filter: blur(20px) saturate(0.3);
 }
 
-#player-ear-left
-{
+#playlist-image {
+  @include circular;
+  //object-fit: cover;
+  width: 48%;
+}
+
+#player-ear-left {
   transform-origin: 30% 50%;
 }
 
-#player-ear-right
-{
+#player-ear-right {
   transform-origin: 70% 50%;
 }
 
-#player-head
-{
+#player-head {
   transform-origin: 50% 50%;
 }
 
@@ -50,16 +63,17 @@ img {
 #player-hair,
 #player-ear-left,
 #player-ear-right,
-#player-head
-{
+#player-head {
   * {
     fill: white;
   }
-  &:hover{
+
+  &:hover {
     cursor: pointer;
     transform: scale(1.03, 1.03);
   }
-  &:active{
+
+  &:active {
     transform: scale(0.95, 0.95);
   }
 }
@@ -67,8 +81,7 @@ img {
 #ear-right-clickzone,
 #ear-left-clickzone,
 #head-clickzone,
-#hair-clickzone
-{
+#hair-clickzone {
   cursor: pointer;
   fill: transparent;
 }

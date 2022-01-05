@@ -7,7 +7,7 @@
   height: 3rem;
   margin-top: 1rem; }
   .primary-button:hover, .secondary-button:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.3);
     color: #ffffff; }
 
 .button-anchor {
@@ -22,7 +22,7 @@
   flex-direction: column;
   justify-content: center; }
   .button-anchor:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.3);
     color: #ffffff; }
   .button-anchor > * {
     color: #ffffff; }
@@ -42,7 +42,7 @@
   .button-small > * {
     grid-area: 1 / 1 / 1 / 1; }
   .button-small:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.3);
     color: #ffffff; }
   .button-small button {
     aspect-ratio: 1 / 1;
@@ -54,7 +54,7 @@
     z-index: 5;
     vertical-align: center; }
     .button-small button:hover {
-      filter: brightness(1.1);
+      filter: brightness(1.3);
       color: #ffffff; }
 
 .contour {
@@ -144,7 +144,7 @@
     #library-grid .update-playlist:hover,
     #library-grid .create-playlist:hover,
     #library-grid .play-playlist:hover {
-      filter: brightness(1.1);
+      filter: brightness(1.3);
       color: #ffffff; }
   #library-grid .create-playlist {
     aspect-ratio: 1 / 1;
@@ -171,7 +171,7 @@
     font-weight: bolder;
     text-decoration-line: none; }
     #library-grid .delete-playlist:hover {
-      filter: brightness(1.1);
+      filter: brightness(1.3);
       color: #ffffff; }
 
 /* GENERIC FORM */
@@ -200,7 +200,7 @@
 
 /* COLOR STYLING */
 body {
-  background-color: #b2eacc; }
+  background-color: #1e3642; }
   body .button-small, body .library-item {
     color: white; }
 
@@ -211,7 +211,7 @@ body {
   #edit-library a:hover,
   #view-library a:hover,
   #logout-button button:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.3);
     color: #ffffff; }
 
 #logout-button {
@@ -224,7 +224,7 @@ body {
   background-color: #34748a; }
 
 #edit-library {
-  background-color: #e16666; }
+  background-color: #34748a; }
 
 #view-library {
   background-color: #015d7e; }

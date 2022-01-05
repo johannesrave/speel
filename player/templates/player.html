@@ -7,6 +7,7 @@
     </div>
   </a>
   <div id="player-wrapper">
+    <img id="playlist-background" src="{{ playlist.thumbnail_file }}" alt="background-image for playlist">
     <img id="playlist-image" src="{{ playlist.thumbnail_file }}" alt="{{ playlist.name }}">
     {% include 'components/player_complete_web.svg' %}
     {{ playlist|json_script:"playlist" }}
