@@ -12,6 +12,11 @@
         <input type="hidden" name="{{ name }}" value="{{ value }}">
       {% endfor %}
       <button type="submit" class="primary-button">{{ button_label }}</button>
+      {% if upload_tracks %}
+        <button formaction="{% url 'create_track' %}" id="upload-track-button" type="submit" class="secondary-button">
+          Tracks hochladen
+        </button>
+      {% endif %}
       <a id="back-link" class="button-anchor back-button" href="{{ request.META.HTTP_REFERER }}">Zurück</a>
     </form>
   </div>
