@@ -1,12 +1,12 @@
 /* VARS */
+@use "resets";
 /* GENERIC STYLES */
-.primary-button {
-  background-color: #015d7e;
+.primary-button, .secondary-button {
   color: white;
   font-size: 1.5rem;
   height: 3rem;
   margin-top: 1rem; }
-  .primary-button:hover {
+  .primary-button:hover, .secondary-button:hover {
     filter: brightness(1.1);
     color: #ffffff; }
 
@@ -27,8 +27,45 @@
   .button-anchor > * {
     color: #ffffff; }
 
+.button-small {
+  display: grid;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  border-radius: 50%;
+  width: 75px;
+  height: 75px;
+  position: relative;
+  display: grid;
+  place-content: center;
+  place-items: center;
+  text-decoration-line: none; }
+  .button-small > * {
+    grid-area: 1 / 1 / 1 / 1; }
+  .button-small:hover {
+    filter: brightness(1.1);
+    color: #ffffff; }
+  .button-small button {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    border-radius: 50%;
+    width: 75px;
+    height: 75px;
+    position: relative;
+    z-index: 5;
+    vertical-align: center; }
+    .button-small button:hover {
+      filter: brightness(1.1);
+      color: #ffffff; }
+
+.contour {
+  position: relative;
+  width: 110%;
+  pointer-events: none; }
+  .contour * {
+    fill: #015d7e; }
+
 /* MAIN LAYOUT */
-#library-wrapper, #player-wrapper, #form-wrapper {
+#library-wrapper, #form-wrapper {
   position: relative;
   width: 100vw;
   height: 100vh;
@@ -36,33 +73,23 @@
   padding: 3em; }
 
 #library-wrapper {
-  grid-template-rows: max-content 1fr;
-  gap: 3em;
   padding: 9em 9em; }
 
-@media screen and (max-width: 780px) {
+@media screen and (max-width: 840px) {
   #library-wrapper {
     padding: 9em 3em; } }
 
 /* NAV BUTTONS TOP CORNERS */
-#view-library, #edit-library, #logout-button {
+#view-library, #edit-library {
+  z-index: 3;
   position: absolute;
   top: 3em;
-  display: grid;
-  place-content: center;
-  z-index: 3; }
-
-#view-library, #edit-library, #logout-button > button {
-  width: 75px;
-  height: 75px;
-  border-radius: 50%;
-  background-color: #b8435c;
-  color: white; }
-
-#view-library, #edit-library {
   left: 3em; }
 
 #logout-button {
+  z-index: 3;
+  position: absolute;
+  top: 3em;
   right: 3em; }
 
 /* LIBRARY GRID FOR VIEW AND EDIT VIEWS*/
@@ -71,14 +98,16 @@
   justify-content: space-between;
   align-content: start;
   place-items: center;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, 150px); }
+  column-gap: 2rem;
+  row-gap: 4rem;
+  padding: 0;
+  grid-template-columns: repeat(auto-fill, 150px); }
   #library-grid .library-item {
+    display: grid;
     aspect-ratio: 1 / 1;
     width: 100%;
     border-radius: 50%;
     width: 150px;
-    display: grid;
     place-items: center;
     color: white; }
     #library-grid .library-item > * {
@@ -97,99 +126,54 @@
         width: 110%;
         margin: -10%;
         filter: blur(2px); }
-      #library-grid .library-item .update-playlist span {
-        position: relative; }
-    #library-grid .library-item .update-playlist,
-    #library-grid .library-item .create-playlist,
-    #library-grid .library-item .play-playlist {
-      display: grid;
-      position: relative;
-      place-items: center;
-      font-size: 2rem;
-      color: white;
-      text-decoration-line: none; }
-      #library-grid .library-item .update-playlist > *,
-      #library-grid .library-item .create-playlist > *,
-      #library-grid .library-item .play-playlist > * {
-        grid-area: 1 / 1 / 1 / 1; }
-      #library-grid .library-item .update-playlist:hover,
-      #library-grid .library-item .create-playlist:hover,
-      #library-grid .library-item .play-playlist:hover {
-        filter: brightness(1.1);
-        color: #ffffff; }
-    #library-grid .library-item .create-playlist {
-      aspect-ratio: 1 / 1;
-      width: 100%;
-      border-radius: 50%;
-      width: 150px;
-      font-size: 6rem;
-      background: rgba(255, 255, 255, 0.5); }
-      #library-grid .library-item .create-playlist span {
-        margin: auto; }
-    #library-grid .library-item .delete-playlist {
-      aspect-ratio: 1 / 1;
-      width: 100%;
-      border-radius: 50%;
-      position: relative;
-      align-self: start;
-      justify-self: end;
-      width: 3rem;
-      display: grid;
-      place-items: center;
-      background: #e16666;
-      color: white;
-      font-size: 1.6rem;
-      font-weight: bolder;
-      text-decoration-line: none; }
-      #library-grid .library-item .delete-playlist:hover {
-        filter: brightness(1.1);
-        color: #ffffff; }
-
-/* PLAYER */
-#player {
-  display: flex; }
-  #player #controls {
-    margin: auto auto;
-    height: 100%;
+      #library-grid .library-item .update-playlist * {
+        fill: white; }
+  #library-grid .update-playlist,
+  #library-grid .create-playlist,
+  #library-grid .play-playlist {
     display: grid;
-    grid-template-columns: 2fr 1fr 4fr 1fr 2fr;
-    align-content: center;
-    align-items: center; }
-    #player #controls #skip-back-button,
-    #player #controls #skip-forward-button,
-    #player #controls #play-pause {
-      aspect-ratio: 1 / 1;
-      width: 100%;
-      border-radius: 50%;
-      background-color: #e16666;
-      grid-row: 1; }
-      #player #controls #skip-back-button svg,
-      #player #controls #skip-forward-button svg,
-      #player #controls #play-pause svg {
-        fill: white;
-        width: 70%; }
-    #player #controls #play-pause {
-      grid-column: 2 / span 3; }
-    #player #controls #skip-back-button {
-      grid-column: 1 / span 2;
-      z-index: 1; }
-    #player #controls #skip-forward-button {
-      grid-column: -3 / span 2;
-      z-index: 1; }
-    #player #controls #play-pause {
-      display: grid; }
-      #player #controls #play-pause > * {
-        grid-area: 1 / 1; }
-      #player #controls #play-pause #pause-button {
-        display: none; }
-      #player #controls #play-pause img {
-        aspect-ratio: 1 / 1;
-        width: 100%;
-        border-radius: 50%;
-        object-fit: cover; }
-  @media screen and (min-width: 1024px) {
-    #player #controls {
-      width: 928px; } }
+    position: relative;
+    place-items: center;
+    font-size: 2rem;
+    color: white;
+    text-decoration-line: none; }
+    #library-grid .update-playlist > *,
+    #library-grid .create-playlist > *,
+    #library-grid .play-playlist > * {
+      grid-area: 1 / 1 / 1 / 1; }
+    #library-grid .update-playlist:hover,
+    #library-grid .create-playlist:hover,
+    #library-grid .play-playlist:hover {
+      filter: brightness(1.1);
+      color: #ffffff; }
+  #library-grid .create-playlist {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    border-radius: 50%;
+    width: 150px;
+    font-size: 6rem;
+    background: rgba(255, 255, 255, 0.5); }
+    #library-grid .create-playlist span {
+      margin: auto; }
+  #library-grid .delete-playlist {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    border-radius: 50%;
+    position: relative;
+    align-self: start;
+    justify-self: end;
+    width: 3rem;
+    display: grid;
+    place-items: center;
+    background: #e16666;
+    color: white;
+    font-size: 1.6rem;
+    font-weight: bolder;
+    text-decoration-line: none; }
+    #library-grid .delete-playlist:hover {
+      filter: brightness(1.1);
+      color: #ffffff; }
+
 /* GENERIC FORM */
 #generic-form {
   display: grid;
@@ -217,19 +201,26 @@
 /* COLOR STYLING */
 body {
   background-color: #b2eacc; }
+  body .button-small, body .library-item {
+    color: white; }
 
-#edit-library,
-#view-library,
-#logout-button > button {
-  color: white;
+#edit-library a,
+#view-library a,
+#logout-button button {
   text-decoration-line: none; }
-  #edit-library:hover,
-  #view-library:hover,
-  #logout-button > button:hover {
+  #edit-library a:hover,
+  #view-library a:hover,
+  #logout-button button:hover {
     filter: brightness(1.1);
     color: #ffffff; }
 
-#logout-button > button {
+#logout-button {
+  background-color: #34748a; }
+
+.primary-button {
+  background-color: #015d7e; }
+
+.secondary-button {
   background-color: #34748a; }
 
 #edit-library {
@@ -242,7 +233,18 @@ body {
   background-color: #cb414d; }
 
 .delete-playlist {
-  background-color: #cb414d;
-  color: white; }
+  background-color: #cb414d; }
+
+.svg-icon {
+  display: grid;
+  place-items: center;
+  position: relative;
+  z-index: 3; }
+  .svg-icon.mirrored svg {
+    transform: scaleX(-1); }
+  .svg-icon.icon-small svg {
+    width: 70%; }
+  .svg-icon svg * {
+    fill: white; }
 
 /*# sourceMappingURL=style.css.map */
