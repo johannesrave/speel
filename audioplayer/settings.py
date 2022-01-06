@@ -33,10 +33,11 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'speel-compose.azurewebsites.net',
+    '0.0.0.0',
     '127.0.0.1',
     '192.168.178.100',
-    '0.0.0.0'
+    '192.168.178.85',
+    'speel-compose.azurewebsites.net',
 ]
 
 # Application definition
