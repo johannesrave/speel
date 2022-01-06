@@ -1,7 +1,9 @@
+from pprint import pprint
+
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from player.forms import PlaylistForm, DeleteForm
+from player.forms import PlaylistForm, DeleteForm, PlaylistCreateForm
 from player.models import Playlist
 from player.views.views import GuardedView
 
@@ -11,11 +13,10 @@ class CreatePlaylist(GuardedView):
     def get(request):
         context = {
             'action': reverse('create_playlist'),
-            'form': PlaylistForm(),
-            'upload_tracks': True,
+            'playlist_create_form': PlaylistCreateForm(),
             'button_label': 'Playlist erstellen'
         }
-        return render(request, 'components/form.html', context)
+        return render(request, 'components/playlist-create-form.html', context)
 
     @staticmethod
     def post(request):
@@ -23,6 +24,15 @@ class CreatePlaylist(GuardedView):
         if form.is_valid():
             playlist = form.save()
             return redirect('play_playlist', playlist_id=playlist.id)
+
+        pprint(form.errors)
+
+        context = {
+            'action': reverse('create_playlist'),
+            'playlist_create_form': PlaylistCreateForm(request.POST, request.FILES),
+            'button_label': 'Playlist erstellen'
+        }
+        return render(request, 'components/playlist-create-form.html', context)
 
 
 class UpdatePlaylist(GuardedView):

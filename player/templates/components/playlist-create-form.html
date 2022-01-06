@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div id="form-wrapper">
+    {% if playlist_create_form.image.url %}
+      <img src="{{ playlist_create_form.image.url }}" alt="playlist thumbnail">
+    {% endif %}
+    <form action="{{ action }}" method="POST" enctype="multipart/form-data" class="generic-form playlist-form">
+      {% csrf_token %}
+    <div class="playlist-fields">
+      <div class="form-field-wrapper">
+        {{ playlist_create_form.image.errors }}
+        {{ playlist_create_form.image.label_tag }}
+        {{ playlist_create_form.image }}
+      </div>
+      <div class="form-field-wrapper">
+        {{ playlist_create_form.name.errors }}
+        {{ playlist_create_form.name.label_tag }}
+        {{ playlist_create_form.name }}
+      </div>
+      <div class="form-field-wrapper">
+        {{ playlist_create_form.non_field_errors }}
+      </div>
+      <button type="submit" class="primary-button">{{ button_label }}</button>
+      <a class="button-anchor back-button" href="{% url 'edit_library' %}">Zurück</a>
+    </div>
+    <div class="tracks-fields">
+      <div class="form-field-wrapper">
+        {{ playlist_create_form.tracks.errors }}
+        {{ playlist_create_form.tracks.label_tag }}
+        {{ playlist_create_form.tracks }}
+      </div>
+      <div class="form-field-wrapper">
+        {{ playlist_create_form.new_tracks.errors }}
+        {{ playlist_create_form.new_tracks.label_tag }}
+        {{ playlist_create_form.new_tracks }}
+      </div>
+      <button class="secondary-button" formaction="{% url 'create_track' %}"
+              formmethod="GET" type="submit">
+        Tracks hochladen
+      </button>
+    </div>
+      {% for name, value in hidden_fields %}
+        <input type="hidden" name="{{ name }}" value="{{ value }}">
+      {% endfor %}
+    </form>
+  </div>
+{% endblock content %}

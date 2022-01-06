@@ -1,8 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
   <div id="form-wrapper">
-    <form action="{{ action }}" method="POST" enctype="multipart/form-data"
-          id="generic-form">
+    <form action="{{ action }}" method="POST" enctype="multipart/form-data" class="generic-form">
       {% csrf_token %}
       {% if image %}
         <img src="{{ image.url }}" alt="image associated with item">

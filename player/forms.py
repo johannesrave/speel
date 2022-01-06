@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, Form, CharField, PasswordInput, ImageField, FileInput, FileField
+from django.forms import ModelForm, Form, CharField, PasswordInput, ImageField, FileInput, FileField, ClearableFileInput
 from tinytag import TinyTag
 
 from player.models import Track, Playlist, TemporaryFile
@@ -23,10 +23,25 @@ class LoginForm(Form):
 
 class PlaylistForm(ModelForm):
     image = ImageField(required=False, label='Image', widget=FileInput)
+    new_tracks = FileField()
 
     class Meta:
         model = Playlist
         fields = ['name', 'tracks', 'image']
+
+
+class PlaylistCreateForm(ModelForm):
+    image = ImageField(required=False, label='Image', widget=FileInput)
+    new_tracks = FileField(
+        required=False,
+        label='New Tracks',
+        widget=ClearableFileInput(attrs={'multiple': True})
+    )
+
+    class Meta:
+        model = Playlist
+        fields = ['name', 'tracks', 'image', 'new_tracks']
+        # widgets = {'new_tracks': ClearableFileInput(attrs={'multiple': True})}
 
 
 class DeleteForm(Form):
