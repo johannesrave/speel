@@ -1,8 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
   <div id="form-wrapper">
-    <form action="{{ action }}" method="post" enctype="multipart/form-data"
-          id="generic-form">
+    <form action="{{ action }}" method="post" enctype="multipart/form-data" class="generic-form">
       {% csrf_token %}
       {{ form.as_p }}
       {% for name, value in hidden_fields %}
