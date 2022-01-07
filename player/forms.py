@@ -1,6 +1,8 @@
 from django.contrib.auth import authenticate
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, Form, CharField, PasswordInput, ImageField, FileInput
+from django.forms import ModelForm, Form, CharField, PasswordInput, ImageField, FileInput, FileField
 from tinytag import TinyTag
 
 from player.models import Track, Playlist, TemporaryFile
