@@ -1,9 +1,15 @@
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, Form, CharField, PasswordInput, ImageField, FileInput, FileField
+from django.forms import ModelForm, Form, CharField, PasswordInput, ImageField, FileInput
 from tinytag import TinyTag
 
 from player.models import Track, Playlist, TemporaryFile
+
+
+class CreateUserForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
 
 
 class LoginForm(Form):

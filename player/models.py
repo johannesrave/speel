@@ -4,10 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
 from django.db import models
-from imagekit.models import ImageSpecField
-from imagekit.processors import ResizeToFill
-
-from audioplayer.settings import MEDIA_ROOT
+from django_resized import ResizedImageField
 
 
 class UUIDModel(models.Model):
@@ -61,16 +58,15 @@ class Playlist(UUIDModel):
         related_name='playlists',
         blank=True,
     )
-    image = models.ImageField(
+    image = ResizedImageField(
+        size=[500, 500],
+        crop=['middle', 'center'],
+        quality=100,
         upload_to='images',
         max_length=1000,
         blank=True,
-        default=f'{MEDIA_ROOT}/default_images/default_img1.jpeg',
+        null=True
     )
-    thumbnail_file = ImageSpecField(source='image',
-                                    processors=[ResizeToFill(300, 300)],
-                                    format='JPEG',
-                                    options={'quality': 80})
     last_track_played = models.ForeignKey(
         to='Track',
         to_field='id',

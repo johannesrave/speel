@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div>
+    {% for track in tracks %}
+      <p><a href="{% url 'update_track' track.id %}">
+          {{ track.title }}
+      </a></p>
+        <a value="true" class="btn btn-sm btn-info" href="{% url 'update_track' track.id%}">Track bearbeiten</a>
+        <a value="true" class="btn btn-sm btn-danger" href="{% url 'delete_track' track.id%}">Track löschen</a>
+    {% endfor %}
+  </div>
+{% endblock content %}

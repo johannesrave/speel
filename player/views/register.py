@@ -1,20 +1,24 @@
 #!/usr/bin/python
 # -*- encoding: utf-8 -*-
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse
+from django.views import View
+
+from player.forms import CreateUserForm
 
 
-def register_page(request):
-    form = UserCreationForm
+class Register(View):
 
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+    @staticmethod
+    def get(request):
+        context = {'action': reverse('register'),
+                   'form': CreateUserForm,
+                   'button_label': 'Registrieren'}
+        return render(request, 'register.html', context)
+
+    @staticmethod
+    def post(request):
+        form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('login')
-
-    context = {'action': reverse('register'),
-               'form': form,
-               'button_label': 'Registrieren'}
-    return render(request, 'register.html', context)

@@ -38,7 +38,7 @@ interface PlaylistModel {
     pkid: number,
     id: string,
     name: string,
-    thumbnail_file: string,
+    image: string,
     last_track_played_id: string,
     last_timestamp_played: number,
     tracks: TrackModel[]

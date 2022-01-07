@@ -1,14 +1,18 @@
 {% extends "layout.html" %}
 {% block content %}
-  <div id="form-wrapper">
-    <form action="" method="POST" enctype="multipart/form-data"
-          id="generic-form">
-      {% csrf_token %}
-      {{ form.as_p }}
-      {% for name, value in hidden_fields %}
-        <input type="hidden" name="{{ name }}" value="{{ value }}">
-      {% endfor %}
-      <button type="submit" class="primary-button">{{ button_label }}</button>
-    </form>
-  </div>
+  <form action="{{ action }}" method="POST" id="generic-form">
+    {% csrf_token %}
+    {{ form.username.label }}
+    {{ form.username }}
+
+    {{ form.email.label }}
+    {{ form.email }}
+
+    {{ form.password1.label }}
+    {{ form.password1 }}
+
+    {{ form.password2.label }}
+    {{ form.password2 }}
+    <button type="submit" class="h5">{{ button_label }}</button>
+  </form>
 {% endblock content %}

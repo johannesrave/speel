@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'sass_processor',
     'player',
-    'imagekit',
     'django_browser_reload',
 ]
 
