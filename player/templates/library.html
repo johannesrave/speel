@@ -14,6 +14,7 @@
         </div>
       </a>
     {% endif %}
+  <p>Hello, {{ request.user }}</p>
     <form id="logout-button" class="button-small" action="{% url 'login' %}" method="POST">
       {% csrf_token %}
       <button name="logout" value="true">
