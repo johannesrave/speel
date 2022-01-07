@@ -1,6 +1,6 @@
 <li class="library-item">
   <a class="update-playlist" href="{% url 'update_playlist' playlist.id %}">
-    <img class="library-thumbnail" src="{{ playlist.thumbnail_file.url }}" alt="{{ playlist.name }}">
+    <img class="library-thumbnail" src="{{ playlist.image.url }}" alt="{{ playlist.name }}">
     <div class="svg-icon mirrored icon-small">
       {% include 'icons/icon_edit.svg' %}
     </div>
