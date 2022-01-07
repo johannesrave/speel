@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
   <div id="form-wrapper">
-    <form action="{{ action }}" method="post" enctype="multipart/form-data"
+    <form action="{{ action }}" method="POST" enctype="multipart/form-data"
           id="generic-form">
       {% csrf_token %}
       {{ form.as_p }}
