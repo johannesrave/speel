@@ -5,10 +5,15 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelForm, Form, CharField, PasswordInput, ImageField, FileInput, FileField
 from tinytag import TinyTag
 
-from player.models import Track, Playlist, TemporaryFile
+from player.models import Track, Playlist
 
 
 class CreateUserForm(UserCreationForm):
+    username = CharField(label='Benutzername')
+    email = CharField(label='Email Addresse')
+    password1 = CharField(label='Passwort', widget=PasswordInput)
+    password2 = CharField(label='Passwort bestätigen', widget=PasswordInput)
+
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
