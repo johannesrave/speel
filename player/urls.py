@@ -11,7 +11,7 @@ from player.views import player, login, register, api, library, manage
 
 urlpatterns = [
     path('login/', login.Login.as_view(), name='login'),
-    path('register/', register.register_page, name='register'),
+    path('register/', register.Register.as_view(), name='register'),
 
     # player pages
     path('library/', library.Library.as_view(), name='library'),
