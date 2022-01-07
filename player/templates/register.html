@@ -1,5 +1,6 @@
 {% extends "login.html" %}
 {% block form_block %}
+    <h3 class="d-flex justify-content-center h-100">REGISTRIEREN</h3>
     {{ form.username.label }}
     {{ form.username }}
 
@@ -12,4 +13,8 @@
     {{ form.password2.label }}
     {{ form.password2 }}
 {% endblock form_block %}
-{% block extra-content %}{% endblock extra-content %}
+{% block account_handling %}
+  <div class="d-flex justify-content-center links">
+      Hast du bereits einen Account? <a href="{% url 'login' %}" class="ml-2">Login</a>
+  </div>
+{% endblock account_handling %}

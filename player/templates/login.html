@@ -5,9 +5,15 @@
           id="generic-form">
       {% csrf_token %}
       {% block form_block %}
+        <h3 class="d-flex justify-content-center h-100">LOGIN</h3>
         {{ form.as_p }}
       {% endblock form_block %}
       <button type="submit" class="primary-button">{{ button_label }}</button>
     </form>
+  {% block account_handling %}
+    <div class="d-flex justify-content-center links">
+        Du hast noch keinen Account? <a href="{% url 'register' %}" class="ml-2">Registrieren</a>
+    </div>
+  {% endblock account_handling %}
   </div>
 {% endblock content %}
