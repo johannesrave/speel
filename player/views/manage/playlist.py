@@ -50,10 +50,9 @@ class CreatePlaylist(GuardedView):
         context = {
             'action': reverse('create_playlist'),
             'form': PlaylistForm(),
-            'upload_tracks': True,
             'button_label': 'Playlist erstellen'
         }
-        return render(request, 'components/form.html', context)
+        return render(request, 'upload_track.html', context)
 
     @staticmethod
     def post(request):
@@ -77,11 +76,10 @@ class UpdatePlaylist(GuardedView):
         context = {
             'action': update_playlist,
             'form': PlaylistForm(instance=playlist),
-            'upload_tracks': True,
             'button_label': 'Playlist speichern',
             'image': playlist.image
         }
-        return render(request, 'components/form.html', context)
+        return render(request, 'upload_track.html', context)
 
     @staticmethod
     def post(request, playlist_id):
