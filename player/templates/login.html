@@ -1,2 +1,13 @@
-{% extends "components/form.html" %}
-{% block extra-content %}{% endblock extra-content %}
+{% extends "layout.html" %}
+{% block content %}
+  <div id="form-wrapper">
+    <form action="{{ action }}" method="POST" enctype="multipart/form-data"
+          id="generic-form">
+      {% csrf_token %}
+      {% block form_block %}
+        {{ form.as_p }}
+      {% endblock form_block %}
+      <button type="submit" class="primary-button">{{ button_label }}</button>
+    </form>
+  </div>
+{% endblock content %}
