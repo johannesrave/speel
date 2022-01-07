@@ -1,7 +1,5 @@
-{% extends "layout.html" %}
-{% block content %}
-  <form action="{{ action }}" method="POST" id="generic-form">
-    {% csrf_token %}
+{% extends "components/form.html" %}
+{% block form_block %}
     {{ form.username.label }}
     {{ form.username }}
 
@@ -13,6 +11,5 @@
 
     {{ form.password2.label }}
     {{ form.password2 }}
-    <button type="submit" class="h5">{{ button_label }}</button>
-  </form>
-{% endblock content %}
+{% endblock form_block %}
+{% block extra-content %}{% endblock extra-content %}

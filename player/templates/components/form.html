@@ -7,19 +7,16 @@
       {% if image %}
         <img src="{{ image.url }}" alt="image associated with item">
       {% endif %}
-      {{ form.as_p }}
+      {% block form_block %}
+        {{ form.as_p }}
+      {% endblock form_block %}
       {% for name, value in hidden_fields %}
         <input type="hidden" name="{{ name }}" value="{{ value }}">
       {% endfor %}
       <button type="submit" class="primary-button">{{ button_label }}</button>
-      {% if upload_tracks %}
-        <button
-            id="upload-track-button" class="secondary-button"
-            formaction="{% url 'create_track' %}" formmethod="GET" type="submit">
-          Tracks hochladen
-        </button>
-      {% endif %}
-      <a id="back-link" class="button-anchor back-button" href="{{ request.META.HTTP_REFERER }}">Zurück</a>
+      {% block extra-content %}
+          <a id="back-link" class="button-anchor back-button" href="{{ request.META.HTTP_REFERER }}">Zurück</a>
+      {% endblock extra-content %}
     </form>
   </div>
 {% endblock content %}
