@@ -8,9 +8,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.datastructures import MultiValueDict
 
-from player.forms import PlaylistForm, DeleteForm
-from player.models import Playlist
 from audioplayer.settings import MEDIA_ROOT
+from player.forms import DeleteForm
 from player.forms import PlaylistForm
 from player.models import Playlist
 from player.views.views import GuardedView
@@ -42,6 +41,7 @@ def create_random_image():
 def cleanup_post(post):
     del post.copy()['image']
     return post
+
 
 class CreatePlaylist(GuardedView):
 
