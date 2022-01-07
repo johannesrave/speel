@@ -11,8 +11,10 @@ class Register(View):
 
     @staticmethod
     def get(request):
+        if request.user.is_authenticated:
+            return redirect('view_library')
         context = {'action': reverse('register'),
-                   'form': CreateUserForm,
+                   'form': CreateUserForm(),
                    'button_label': 'Registrieren'}
         return render(request, 'register.html', context)
 
@@ -22,3 +24,5 @@ class Register(View):
         if form.is_valid():
             form.save()
             return redirect('login')
+        else:
+            return render(request, 'register.html', {'form': form})
