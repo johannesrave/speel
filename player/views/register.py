@@ -3,6 +3,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
+from django.contrib import messages
 
 from player.forms import CreateUserForm
 
@@ -23,6 +24,8 @@ class Register(View):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Account für {username} wurde erzeugt')
             return redirect('login')
         else:
             return render(request, 'register.html', {'form': form})
