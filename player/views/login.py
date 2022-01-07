@@ -10,6 +10,8 @@ from player.forms import LoginForm
 class Login(View):
     @staticmethod
     def get(request):
+        if request.user.is_authenticated:
+            return redirect('view_library')
         context = {
             'action': reverse('login'),
             'form': LoginForm(),
