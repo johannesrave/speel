@@ -11,9 +11,14 @@
       <button type="submit" class="primary-button">{{ button_label }}</button>
     </form>
   {% block account_handling %}
-    <div class="d-flex justify-content-center links">
+      <div class="d-flex justify-content-center links">
+          {% for message in messages %}
+              <p id="messages">{{ message }}</p>
+          {% endfor %}
+      </div>
+      <div class="d-flex justify-content-center links">
         Du hast noch keinen Account? <a href="{% url 'register' %}" class="ml-2">Registrieren</a>
-    </div>
+      </div>
   {% endblock account_handling %}
   </div>
 {% endblock content %}
