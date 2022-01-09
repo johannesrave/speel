@@ -2,7 +2,6 @@ from django.urls import path
 from django.views.generic import RedirectView
 
 import player.views.manage.playlist
-import player.views.manage.track
 from player.models import Playlist, Track
 from player.views import player, login, api, library, manage, register
 
@@ -22,12 +21,7 @@ urlpatterns = [
          name='update_playlist'),
     path('playlists/<uuid:playlist_id>/delete/', manage.playlist.DeletePlaylist.as_view(),
          name='delete_playlist'),
-    path('tracks/new/', manage.track.CreateTrack.as_view(),
-         name='create_track'),
-    path('tracks/<uuid:track_id>/edit/', manage.track.UpdateTrack.as_view(),
-         name='update_track'),
-    path('tracks/<uuid:track_id>/delete/', manage.track.DeleteTrack.as_view(),
-         name='delete_track'),
+
 
     # HTTP-api 'endpoints'
     path('api/playlists/<uuid:model_id>/', api.SingleView.as_view(),
