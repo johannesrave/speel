@@ -1,0 +1,6 @@
+<li class="grid-item" title="{{ playlist.name }}">
+  <div class="filter-blur circular-thumbnail" style="background-image: url('{{ playlist.thumbnail_file.url }}')"></div>
+  <a class="grid-item-link" href="{% url 'update_playlist' playlist.id %}">Anpassen</a>
+{#  <div class="svg-icon">{% include 'icons/icon_edit.svg' %}</div>#}
+  <div class="handdrawn-contour"></div>
+</li>

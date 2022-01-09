@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "base.html" %}
 {% block content %}
   <div id="form-wrapper">
     {% if playlist_create_form.image.url %}
@@ -21,7 +21,7 @@
         {{ playlist_create_form.non_field_errors }}
       </div>
       <button type="submit" class="primary-button">{{ button_label }}</button>
-      <a class="button-anchor back-button" href="{% url 'edit_library' %}">Zurück</a>
+      <a class="button-anchor back-button" href="{% url 'playlists' %}">Zurück</a>
     </div>
     <div class="tracks-fields">
       <div class="form-field-wrapper">

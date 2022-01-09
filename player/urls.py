@@ -11,8 +11,8 @@ urlpatterns = [
     path('register/', register.register_page, name='register'),
 
     # player pages
-    path('library/', library.ViewLibrary.as_view(), name='view_library'),
-    path('library/edit/', library.EditLibrary.as_view(), name='edit_library'),
+    path('library/', library.ViewLibrary.as_view(), name='library'),
+    path('playlists/', library.EditLibrary.as_view(), name='playlists'),
     path('player/<uuid:playlist_id>/', player.Player.as_view(), name='play_playlist'),
 
     # content management pages
@@ -40,5 +40,5 @@ urlpatterns = [
          {'model': Track}, name='track_list'),
 
     # redirect and catch-all
-    path('', RedirectView.as_view(pattern_name='view_library', permanent=False)),
+    path('', RedirectView.as_view(pattern_name='library', permanent=False)),
 ]

@@ -39,12 +39,20 @@ class Track(UUIDModel):
     title = models.CharField(max_length=128, blank=True, default="Unbekannter Track")
     duration = models.IntegerField(editable=False, null=True)
     audio_file = models.FileField()
-    artists = models.ManyToManyField(
-        'Artist',
-        through='TrackArtist',
-        through_fields=('track', 'artist'),  # does this even work?
+    # artists = models.ManyToManyField(
+    #     'Artist',
+    #     through='TrackArtist',
+    #     through_fields=('track', 'artist'),  # does this even work?
+    #     related_name='tracks',
+    #     blank=True,
+    # )
+
+    playlist = models.ForeignKey(
+        to='Playlist',
+        to_field='id',
         related_name='tracks',
-        blank=True,
+        blank=True, null=True,
+        on_delete=models.SET_NULL
     )
 
     def __str__(self):
@@ -54,29 +62,23 @@ class Track(UUIDModel):
 class Playlist(UUIDModel):
     name = models.CharField(max_length=128, blank=False)
 
-    tracks = models.ManyToManyField(
-        to='Track',
-        through='PlaylistTrack',
-        through_fields=('playlist', 'track'),  # does this even work?
-        related_name='playlists',
-        blank=True,
-    )
     image = models.ImageField(
         upload_to='images',
         max_length=1000,
         blank=True,
-        default=f'{MEDIA_ROOT}/default_images/default_img1.jpeg',
-    )
-    thumbnail_file = ImageSpecField(source='image',
-                                    processors=[ResizeToFill(300, 300)],
-                                    format='JPEG',
-                                    options={'quality': 80})
+        default=f'{MEDIA_ROOT}/default_images/default_img1.jpeg')
+
+    thumbnail_file = ImageSpecField(
+        source='image', format='JPEG',
+        processors=[ResizeToFill(300, 300)],
+        options={'quality': 80})
+
     last_track_played = models.ForeignKey(
-        to='Track',
-        to_field='id',
+        to='Track', to_field='id',
         blank=True, null=True,
-        on_delete=models.SET_NULL
-    )
+        related_name='last_played_in_playlist',
+        on_delete=models.SET_NULL)
+
     last_timestamp_played = models.IntegerField(
         blank=True, null=True
     )

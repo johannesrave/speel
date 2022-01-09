@@ -1,20 +1,21 @@
-{% extends "layout.html" %}
-{% load static %}
-{% block content %}
-  <a id="view-library" class="button-small" href="{% url 'view_library' %}">
-    <div class="svg-icon">
-      {% include 'icons/icon_listen.svg' %}
-    </div>
-  </a>
+{% extends "base.html" %}
+{% block css %}
+  {% load sass_tags %}
+  <link href="{% sass_src 'player/scss/player.scss' %}" rel="stylesheet" type="text/css"/>
+{% endblock css %}
+{% block main %}
   <div id="player-wrapper">
-    <img id="playlist-background" src="{{ playlist.thumbnail_file }}" alt="background-image for playlist">
-    <img id="playlist-image" src="{{ playlist.thumbnail_file }}" alt="{{ playlist.name }}">
+    <div id="background-image" style="background-image: url('{{ playlist.thumbnail_file }}')"></div>
     {% include 'components/player_complete_web.svg' %}
+    <div id="player-home-link">
+      {% include 'components/page-link.html' with link_url='library' icon='icons/icon_exit.svg' %}
+    </div>
+
     {{ playlist|json_script:"playlist" }}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"
             integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    {% load static %}
     <script src="{% static 'player/js/script.js' %}" type="module"></script>
   </div>
-
-{% endblock content %}
+{% endblock main %}

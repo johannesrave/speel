@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block main %}
+  <ul id="library" class="main-grid">
+      {% for playlist in playlists %}
+        {% include 'components/library-item.html' %}
+      {% endfor %}
+  </ul>
+{% endblock main %}
+{% block footer %}
+  {% include 'components/page-link.html' with link_url='playlists' icon='icons/icon_edit.svg' %}
+{% endblock footer %}

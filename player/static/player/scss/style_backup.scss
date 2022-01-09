@@ -149,7 +149,7 @@ $color-warning: #cb414d;
   padding: 0;
   grid-template-columns: repeat(auto-fill, $grid-item-diameter);
 
-  .library-item {
+  .grid-item {
     @include children-overlap;
     @include circular;
     width: $grid-item-diameter;
@@ -276,7 +276,7 @@ body {
   background-color: $color-background;
 
   .button-small,
-  .library-item,
+  .grid-item,
   label
   {
     color: white;

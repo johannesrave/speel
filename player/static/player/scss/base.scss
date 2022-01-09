@@ -1,0 +1,18 @@
+/* BASE LAYOUT */
+body {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr max-content;
+  padding: 3rem;
+
+  & > footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+svg * {
+  fill: white;
+}
+

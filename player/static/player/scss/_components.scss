@@ -1,0 +1,75 @@
+@import '_variables';
+@import '_mixins';
+
+/* COMPONENTS */
+.circular-link {
+  @include children-overlap;
+  @include circular;
+
+  width: 6rem;
+  background: $color-tertiary;
+}
+
+.circular-button {
+  @include children-overlap;
+  @include circular;
+
+  width: 6rem;
+  background: $color-tertiary;
+}
+
+.handdrawn-contour {
+  @include children-overlap;
+  @include circular;
+
+  &::after {
+    position: relative;
+    content: '';
+    pointer-events: none;
+    background-image: $circle-contour;
+    background-repeat: no-repeat;
+  }
+}
+
+.main-grid {
+  display: grid;
+  column-gap: 2rem;
+  row-gap: 4rem;
+
+  grid-template-columns: repeat(auto-fill, $grid-item-diameter);
+
+  gap: 1rem;
+  grid-auto-flow: column;
+}
+
+.grid-item {
+  @include children-overlap;
+  @include circular;
+  @include hover;
+
+  width: $grid-item-diameter;
+  place-items: stretch;
+  place-content: stretch;
+  color: white;
+
+  .grid-item-link {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+}
+
+.filter-blur {
+  filter: blur(3px) saturate(.7);
+}
+
+.circular-thumbnail {
+  clip-path: circle(45%);
+  background-size: cover;
+  background-repeat: no-repeat;
+}

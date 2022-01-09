@@ -11,11 +11,9 @@ class Login(View):
     @staticmethod
     def get(request):
         context = {
-            'action': reverse('login'),
-            'form': LoginForm(),
-            'button_label': 'Anmelden',
+            'form': LoginForm()
         }
-        return render(request, 'login.html', context)
+        return render(request, 'forms/login.html', context)
 
     @staticmethod
     def post(request):
@@ -32,10 +30,10 @@ class Login(View):
                 'form': login_form,
                 'button_label': 'Anmelden',
             }
-            return render(request, 'login.html', context)
+            return render(request, 'pages/../templates/forms/login.html', context)
 
         user = User.objects.get(username=request.POST.get('username'))
         login(request, user)
 
-        destination = request.POST.get('redirect_to', 'view_library')
+        destination = request.POST.get('redirect_to', 'library')
         return redirect(destination)

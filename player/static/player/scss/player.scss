@@ -1,52 +1,51 @@
-@mixin circular {
-  aspect-ratio: 1 / 1;
-  //width: 100%;
-  border-radius: 50%;
-}
-
-@mixin children-overlap {
-  display: grid;
-  > * {
-    grid-area: 1 / 1 / 1 / 1;
-  }
-}
+@import '_variables';
+@import '_mixins';
 
 /* PLAYER */
+body {
+  //padding: 0;
+}
+
+
 #player-wrapper {
-  @include children-overlap;
-
-  place-items: center;
-  place-content: center;
-
   height: 100vh;
-
+  width: 100vw;
   overflow: hidden;
 
-  & > * {
-    position: relative;
+  display: grid;
+
+  #background-image {
+    height: 100%;
+    width: 100%;
+
+    position: absolute;
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: -1;
+
+    filter: blur(20px);
   }
 
-  svg {
-    max-height: 100vh;
-    max-width: 80vw;
+  #player {
+   max-height: 84vh;
+
+    justify-self: center;
+    align-self: center;
+  }
+
+
+  #player-home-link {
+    position: absolute;
+    width: 6rem;
+    margin: 1rem;
+    justify-self: center;
+    align-self: end;
   }
 }
+
 
 #pause-button {
   display: none;
-}
-
-#playlist-background {
-  width: 120vw;
-  filter: blur(20px) saturate(0.3);
-}
-
-#playlist-image {
-  @include circular;
-  //object-fit: cover;
-  //max-height: 80vh;
-  //width: 48%;
-  height: calc(min(60vh, 37vw));
 }
 
 #player-ear-left {
@@ -68,7 +67,9 @@
 #player-hair,
 #player-ear-left,
 #player-ear-right,
-#player-head {
+#player-head,
+#player-home-link
+{
   * {
     fill: white;
   }
@@ -77,6 +78,7 @@
     &:hover {
       cursor: pointer;
       transform: scale(1.03, 1.03);
+      filter: brightness(1.2);
     }
 
     &:active {

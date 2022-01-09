@@ -23,4 +23,4 @@ class Player(GuardedView):
             'playlist': playlist,
         }
 
-        return render(request, 'player.html', context)
+        return render(request, 'pages/player.html', context)

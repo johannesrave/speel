@@ -17,4 +17,4 @@ def register_page(request):
     context = {'action': reverse('register'),
                'form': form,
                'button_label': 'Registrieren'}
-    return render(request, 'register.html', context)
+    return render(request, 'pages/register.html', context)

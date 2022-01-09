@@ -1,0 +1,21 @@
+@import '_variables';
+
+/* MIXINS */
+@mixin circular {
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+}
+
+@mixin children-overlap {
+  display: grid;
+  > * {
+    grid-area: 1 / 1 / 1 / 1;
+  }
+}
+
+@mixin hover {
+  &:hover {
+    filter: brightness(1.5);
+    color: $color-text-hover;
+  }
+}

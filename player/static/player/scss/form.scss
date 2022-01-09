@@ -1,0 +1,18 @@
+@import '_variables';
+@import '_mixins';
+
+main form {
+  width: 32rem;
+
+  margin: auto;
+  padding: 2rem;
+
+  display: grid;
+
+  place-items: center;
+
+  border: $color-primary;
+  background: white;
+
+
+}

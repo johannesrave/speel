@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block main %}
+  <form action="{{ action }}" method="POST" enctype="multipart/form-data" class="generic-form">
+    {% csrf_token %}
+    {% block form %}
+      {{ form.as_p }}
+      {% for name, value in hidden_fields %}
+        <input type="hidden" name="{{ name }}" value="{{ value }}">
+      {% endfor %}
+      <button type="submit" class="primary-button">{{ button_label }}</button>
+    {% endblock form %}
+  </form>
+{% endblock main %}
+{% block footer %}
+  {% include 'components/page-link.html' with link_url='playlists' icon='icons/icon_edit.svg' %}
+  <h1>Formular</h1>
+  {% include 'components/logout-form.html' %}
+{% endblock footer %}

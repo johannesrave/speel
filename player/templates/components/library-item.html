@@ -1,0 +1,6 @@
+<li class="grid-item" title="{{ playlist.name }}">
+  <div class="circular-thumbnail" style="background-image: url('{{ playlist.thumbnail_file.url }}')"></div>
+  <a class="grid-item-link" href="{% url 'play_playlist' playlist.id %}">
+  </a>
+  <div class="handdrawn-contour"></div>
+</li>

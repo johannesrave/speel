@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block main %}
+    <ul id="playlists" class="main-grid">
+      {% for playlist in playlists %}
+        {% include 'components/playlist-item.html' %}
+      {% endfor %}
+      {% include 'components/playlist-item-new.html' %}
+    </ul>
+{% endblock main %}
+{% block footer %}
+  {%  include 'components/page-link.html' with link_url='library' icon='icons/icon_listen.svg' %}
+  <h1>Playlists verwalten</h1>
+  {%  include 'components/logout-form.html' %}
+{% endblock footer %}

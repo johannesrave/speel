@@ -18,7 +18,7 @@ class CreateTrack(GuardedView):
             'form': CreateTrackForm(),
             'button_label': 'Track hochladen',
         }
-        return render(request, 'components/form.html', context)
+        return render(request, 'forms/base.html', context)
 
     @staticmethod
     def post(request):
@@ -30,7 +30,7 @@ class CreateTrack(GuardedView):
                 'form': CreateTrackForm(track_form),
                 'button_label': 'Track hochladen',
             }
-            return render(request, 'components/form.html', context)
+            return render(request, 'forms/base.html', context)
 
         track = track_form.save(commit=False)
         CreateTrack.populate_track_from_tag(track)
@@ -64,7 +64,7 @@ class UpdateTrack(GuardedView):
             'form': update_track_form,
             'button_label': 'Track speichern',
         }
-        return render(request, 'components/form.html', context)
+        return render(request, 'forms/base.html', context)
 
     @staticmethod
     def post(request, track_id):

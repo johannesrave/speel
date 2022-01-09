@@ -1,0 +1,9 @@
+{% extends "forms/base.html" %}
+{% block form %}
+  {{ form.as_p }}
+  <button type="submit" formaction="{% url 'login' %}">
+    Anmelden
+  </button>
+{% endblock form %}
+
+{% block footer %}{% endblock %}

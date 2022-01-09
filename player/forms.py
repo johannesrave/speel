@@ -21,16 +21,16 @@ class LoginForm(Form):
                 raise ValidationError("Benutzername oder Passwort sind nicht korrekt")
 
 
-class PlaylistForm(ModelForm):
+class UpdatePlaylistForm(ModelForm):
     image = ImageField(required=False, label='Image', widget=FileInput)
-    new_tracks = FileField()
+    new_tracks = FileField(required=False)
 
     class Meta:
         model = Playlist
-        fields = ['name', 'tracks', 'image']
+        fields = ['name', 'image']
 
 
-class PlaylistCreateForm(ModelForm):
+class CreatePlaylistForm(ModelForm):
     image = ImageField(required=False, label='Image', widget=FileInput)
     new_tracks = FileField(
         required=False,
@@ -40,20 +40,17 @@ class PlaylistCreateForm(ModelForm):
 
     class Meta:
         model = Playlist
-        fields = ['name', 'tracks', 'image', 'new_tracks']
-        # widgets = {'new_tracks': ClearableFileInput(attrs={'multiple': True})}
-
-
-class DeleteForm(Form):
-    pass
+        fields = ['name', 'image', 'new_tracks']
 
 
 class CreateTrackForm(ModelForm):
+    test = CharField()
+    test_file = FileField()
     audio_file = FileField(max_length=(1024 * 1024 * 50))
 
     class Meta:
         model = Track
-        fields = ['audio_file']
+        fields = ['test', 'test_file', 'audio_file']
 
     def clean_file(self):
         clean_file = self.cleaned_data.get('audio_file')
@@ -67,4 +64,4 @@ class CreateTrackForm(ModelForm):
 class UpdateTrackForm(ModelForm):
     class Meta:
         model = Track
-        fields = ['title', 'artists']
+        fields = ['title']

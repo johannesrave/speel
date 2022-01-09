@@ -1,0 +1,18 @@
+@import '_resets';
+@import '_components';
+@import 'base';
+@import 'player';
+@import 'form';
+
+/* STYLING */
+html {
+  font-size: 18px;
+}
+
+body {
+  background-color: $color-background;
+}
+
+svg * {
+  fill: white;
+}

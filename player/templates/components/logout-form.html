@@ -1,0 +1,8 @@
+ <form id="logout-button" action="{% url 'login' %}" method="post">
+    {% csrf_token %}
+    <button class="circular-button" name="logout" value="true">
+        <span class="svg-icon icon-small">
+          {% include 'icons/icon_exit.svg' %}
+        </span>
+    </button>
+  </form>
