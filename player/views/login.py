@@ -1,7 +1,6 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
-from django.urls import reverse
 from django.views import View
 
 from player.forms import LoginForm
@@ -10,9 +9,7 @@ from player.forms import LoginForm
 class Login(View):
     @staticmethod
     def get(request):
-        context = {
-            'form': LoginForm()
-        }
+        context = {'form': LoginForm()}
         return render(request, 'forms/login.html', context)
 
     @staticmethod
@@ -23,17 +20,11 @@ class Login(View):
             return redirect('login')
 
         login_form = LoginForm(request.POST)
-
         if not login_form.is_valid():
-            context = {
-                'action': reverse('login'),
-                'form': login_form,
-                'button_label': 'Anmelden',
-            }
-            return render(request, 'pages/../templates/forms/login.html', context)
+            context = {'form': login_form}
+            return render(request, 'forms/login.html', context)
 
         user = User.objects.get(username=request.POST.get('username'))
         login(request, user)
-
         destination = request.POST.get('redirect_to', 'library')
         return redirect(destination)

@@ -35,7 +35,7 @@ class ListView(GuardedView):
     @staticmethod
     def delete(request, model: Model):
         model.objects.all().delete()
-        return HttpResponse()
+        return HttpResponse(f'Alle Instanzen von {model} wurden gelöscht.')
 
 
 class SingleView(GuardedView):

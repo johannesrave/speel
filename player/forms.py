@@ -1,9 +1,8 @@
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, Form, CharField, PasswordInput, ImageField, FileInput, FileField, ClearableFileInput
-from tinytag import TinyTag
 
-from player.models import Track, Playlist, TemporaryFile
+from player.models import Playlist
 
 
 class LoginForm(Form):
@@ -35,7 +34,8 @@ class CreatePlaylistForm(ModelForm):
     new_tracks = FileField(
         required=False,
         label='New Tracks',
-        widget=ClearableFileInput(attrs={'multiple': True})
+        widget=ClearableFileInput(attrs={'multiple': True}),
+        max_length=(1024 * 1024 * 50)
     )
 
     class Meta:
@@ -43,25 +43,19 @@ class CreatePlaylistForm(ModelForm):
         fields = ['name', 'image', 'new_tracks']
 
 
-class CreateTrackForm(ModelForm):
-    test = CharField()
-    test_file = FileField()
-    audio_file = FileField(max_length=(1024 * 1024 * 50))
-
-    class Meta:
-        model = Track
-        fields = ['test', 'test_file', 'audio_file']
-
-    def clean_file(self):
-        clean_file = self.cleaned_data.get('audio_file')
-
-        if not TinyTag.is_supported(clean_file.name):
-            raise ValidationError('Dateiformat wird nicht unterstützt.')
-
-        return clean_file
-
-
-class UpdateTrackForm(ModelForm):
-    class Meta:
-        model = Track
-        fields = ['title']
+# class CreateTrackForm(ModelForm):
+#     test = CharField()
+#     test_file = FileField()
+#     audio_file = FileField(max_length=(1024 * 1024 * 50))
+#
+#     class Meta:
+#         model = Track
+#         fields = ['test', 'test_file', 'audio_file']
+#
+#     def clean_file(self):
+#         clean_file = self.cleaned_data.get('audio_file')
+#
+#         if not TinyTag.is_supported(clean_file.name):
+#             raise ValidationError('Dateiformat wird nicht unterstützt.')
+#
+#         return clean_file

@@ -2,7 +2,6 @@ import uuid
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.validators import FileExtensionValidator
 from django.db import models
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
@@ -28,24 +27,10 @@ class OwnedModel(models.Model):
         abstract = True
 
 
-class Artist(UUIDModel):
-    name = models.CharField(max_length=128, blank=True, default="Unbekannter Artist")
-
-    def __str__(self):
-        return f'{self.name}'
-
-
 class Track(UUIDModel):
     title = models.CharField(max_length=128, blank=True, default="Unbekannter Track")
     duration = models.IntegerField(editable=False, null=True)
     audio_file = models.FileField()
-    # artists = models.ManyToManyField(
-    #     'Artist',
-    #     through='TrackArtist',
-    #     through_fields=('track', 'artist'),  # does this even work?
-    #     related_name='tracks',
-    #     blank=True,
-    # )
 
     playlist = models.ForeignKey(
         to='Playlist',
@@ -85,42 +70,3 @@ class Playlist(UUIDModel):
 
     def __str__(self):
         return f'{self.name}'
-
-
-class Album(UUIDModel):
-    title = models.CharField(max_length=128, blank=False)
-    tracks = models.ManyToManyField(
-        'Track',
-        through='AlbumTrack',
-        through_fields=('album', 'track'),
-        related_name='albums',
-        blank=True,
-    )
-
-    def __str__(self):
-        return f'{self.title}'
-
-
-class TemporaryFile(UUIDModel):
-    file = models.FileField(upload_to='audio',
-                            validators=[FileExtensionValidator(allowed_extensions=['mp3', 'webm'])])
-
-
-# these explicit relation models are only there to join the M2M-models on their
-# UUIDs instead of their PKIDs
-# this is to enable updating the relationships by sending UUIDs via the HTTP api
-# maybe it would've been easier to just use UUIDs only instead of keeping the bigint PKIDs?
-
-class TrackArtist(UUIDModel):
-    track = models.ForeignKey('Track', to_field='id', on_delete=models.CASCADE)
-    artist = models.ForeignKey('Artist', to_field='id', on_delete=models.CASCADE)
-
-
-class PlaylistTrack(UUIDModel):
-    playlist = models.ForeignKey('Playlist', to_field='id', on_delete=models.CASCADE)
-    track = models.ForeignKey('Track', to_field='id', on_delete=models.CASCADE)
-
-
-class AlbumTrack(UUIDModel):
-    album = models.ForeignKey('Album', to_field='id', on_delete=models.CASCADE)
-    track = models.ForeignKey('Track', to_field='id', on_delete=models.CASCADE)

@@ -4,7 +4,6 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from tinytag import TinyTag
 
-from player.forms import CreateTrackForm, UpdateTrackForm
 from player.models import Track
 from player.views.views import GuardedView
 
