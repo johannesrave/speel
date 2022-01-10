@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
   <body id="player-wrapper">
-    <div id="background-image" style="background-image: url('{{ playlist.thumbnail_file }}')"></div>
+    <div id="background-image" style="background-image: url('{{ playlist.image }}')"></div>
     {% include 'components/player_complete_web.svg' %}
     <div id="player-home-link">
       {% include 'components/page-link.html' with link_url='library' icon='icons/icon_exit.svg' %}

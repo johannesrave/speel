@@ -1,53 +1,16 @@
+import random
 from pprint import pprint
 
 from django.http import HttpRequest
-import io
-import os
-import random
-
-from PIL import Image
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from tinytag import TinyTag
-from django.utils.datastructures import MultiValueDict
 
-from player.forms import UpdatePlaylistForm, CreatePlaylistForm
-from player.models import Playlist, Track
 from audioplayer.settings import MEDIA_ROOT
-from player.forms import DeleteForm
-from player.forms import PlaylistForm
+from player.forms import UpdatePlaylistForm, CreatePlaylistForm
 from player.models import Playlist
+from player.models import Track
 from player.views.views import GuardedView
-
-
-
-def get_random_default_image():
-    random.seed()
-    value = random.randint(1, 10)
-    return f'{MEDIA_ROOT}/default_images/default_img{value}.jpg'
-
-
-def is_no_image_attached(request):
-    return len(request.FILES) == 0
-
-
-def create_random_image():
-    image_path = get_random_default_image()
-    img = Image.open(image_path)
-    img.save(io.BytesIO(), format='JPEG')
-    return InMemoryUploadedFile(open(image_path, 'rb'),
-                                'image',
-                                image_path,
-                                'image/jpg',
-                                os.path.getsize(image_path),
-                                None,
-                                {})
-
-
-def cleanup_post(post):
-    del post.copy()['image']
-    return post
 
 
 class CreatePlaylist(GuardedView):
@@ -61,14 +24,6 @@ class CreatePlaylist(GuardedView):
 
     @staticmethod
     def post(request):
-        files = request.FILES
-        if is_no_image_attached(request):
-            files = MultiValueDict({'image': [create_random_image()]})
-            request.POST = cleanup_post(request.POST)
-        form = PlaylistForm(data=request.POST, files=files)
-        if form.is_valid():
-            playlist = form.save()
-            return redirect('play_playlist', playlist_id=playlist.id)
         form = CreatePlaylistForm(request.POST, request.FILES)
         if not form.is_valid():
             pprint(form.errors)
@@ -78,37 +33,53 @@ class CreatePlaylist(GuardedView):
             }
             return render(request, 'forms/create-playlist.html', context)
 
-        tracks = CreatePlaylist.save_tracks(request)
         playlist = form.save()
+
+        tracks = get_tracks(request)
         playlist.tracks.set(tracks)
+
+        image = request.FILES.get('image', None)
+        print(f'image in request: {image}')
+        if not image:
+            playlist.image.name = pick_random_default_image_path()
+        else:
+            playlist.image = image
         playlist.save()
+        print(playlist.image.name)
 
         return redirect('update_playlist', playlist_id=playlist.id)
 
-    @staticmethod
-    def save_tracks(request: HttpRequest):
-        files = request.FILES.getlist('new_tracks')
-        tracks = []
 
-        for file in files:
-            data = CreatePlaylist.get_metadata(file)
-            track = Track.objects.create(**data)
-            track.save()
-            pprint(f'Song {track.title} has been scanned and uploaded!')
-            tracks.append(track)  # TODO: save all tracks in bulk
-        return tracks
+def pick_random_default_image_path():
+    random.seed()
+    value = random.randint(1, 10)
+    image_path = f'{MEDIA_ROOT}/default_images/default_img{value}.jpg'
+    return image_path
 
-    @staticmethod
-    def get_metadata(audio_file):
-        pprint(audio_file)
-        file_name = str(audio_file.temporary_file_path().split('.')[-2])
-        tag = TinyTag.get(audio_file.temporary_file_path())
 
-        return {
-            'title': tag.title or file_name or 'Unbekannter Track',
-            'duration': tag.duration,
-            'audio_file': audio_file,
-        }
+def get_tracks(request: HttpRequest):
+    files = request.FILES.getlist('new_tracks')
+    tracks = []
+
+    for file in files:
+        data = get_metadata(file)
+        track = Track.objects.create(**data)
+        track.save()
+        pprint(f'Song {track.title} has been scanned and uploaded!')
+        tracks.append(track)  # TODO: save all tracks in bulk
+    return tracks
+
+
+def get_metadata(audio_file):
+    pprint(audio_file)
+    file_name = str(audio_file.temporary_file_path().split('.')[-2])
+    tag = TinyTag.get(audio_file.temporary_file_path())
+
+    return {
+        'title': tag.title or file_name or 'Unbekannter Track',
+        'duration': tag.duration,
+        'audio_file': audio_file,
+    }
 
 
 class UpdatePlaylist(GuardedView):

@@ -9,19 +9,18 @@ urlpatterns = [
     path('login/', login.Login.as_view(), name='login'),
     path('register/', register.Register.as_view(), name='register'),
 
-    # player pages
+    # player pages ('kids' pages)
     path('library/', library.ViewLibrary.as_view(), name='library'),
     path('playlists/', library.EditLibrary.as_view(), name='playlists'),
     path('player/<uuid:playlist_id>/', player.Player.as_view(), name='play_playlist'),
 
-    # content management pages
+    # content management pages ('parents' pages)
     path('playlists/new/', manage.playlist.CreatePlaylist.as_view(),
          name='create_playlist'),
     path('playlists/<uuid:playlist_id>/edit/', manage.playlist.UpdatePlaylist.as_view(),
          name='update_playlist'),
     path('playlists/<uuid:playlist_id>/delete/', manage.playlist.DeletePlaylist.as_view(),
          name='delete_playlist'),
-
 
     # HTTP-api 'endpoints'
     path('api/playlists/<uuid:model_id>/', api.SingleView.as_view(),
