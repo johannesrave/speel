@@ -1,6 +1,7 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
 
 from player.forms import LoginForm
@@ -9,6 +10,9 @@ from player.forms import LoginForm
 class Login(View):
     @staticmethod
     def get(request):
+        if request.user.is_authenticated:
+            return redirect('library')
+
         context = {'form': LoginForm()}
         return render(request, 'forms/login.html', context)
 

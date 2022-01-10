@@ -3,11 +3,11 @@ from django.views.generic import RedirectView
 
 import player.views.manage.playlist
 from player.models import Playlist, Track
-from player.views import player, login, api, library, manage, register
+from player.views import player, login, register, api, library, manage
 
 urlpatterns = [
     path('login/', login.Login.as_view(), name='login'),
-    path('register/', register.register_page, name='register'),
+    path('register/', register.Register.as_view(), name='register'),
 
     # player pages
     path('library/', library.ViewLibrary.as_view(), name='library'),

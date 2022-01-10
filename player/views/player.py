@@ -18,7 +18,7 @@ class Player(GuardedView):
 
         playlist = list(Playlist.objects.filter(id=playlist_id).values())[0]
         playlist['tracks'] = tracks
-        playlist['thumbnail_file'] = tracklist.thumbnail_file.url
+        playlist['image'] = tracklist.image.url
         context = {
             'playlist': playlist,
         }

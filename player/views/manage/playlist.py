@@ -1,13 +1,53 @@
 from pprint import pprint
 
 from django.http import HttpRequest
+import io
+import os
+import random
+
+from PIL import Image
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from tinytag import TinyTag
+from django.utils.datastructures import MultiValueDict
 
 from player.forms import UpdatePlaylistForm, CreatePlaylistForm
 from player.models import Playlist, Track
+from audioplayer.settings import MEDIA_ROOT
+from player.forms import DeleteForm
+from player.forms import PlaylistForm
+from player.models import Playlist
 from player.views.views import GuardedView
+
+
+
+def get_random_default_image():
+    random.seed()
+    value = random.randint(1, 10)
+    return f'{MEDIA_ROOT}/default_images/default_img{value}.jpg'
+
+
+def is_no_image_attached(request):
+    return len(request.FILES) == 0
+
+
+def create_random_image():
+    image_path = get_random_default_image()
+    img = Image.open(image_path)
+    img.save(io.BytesIO(), format='JPEG')
+    return InMemoryUploadedFile(open(image_path, 'rb'),
+                                'image',
+                                image_path,
+                                'image/jpg',
+                                os.path.getsize(image_path),
+                                None,
+                                {})
+
+
+def cleanup_post(post):
+    del post.copy()['image']
+    return post
 
 
 class CreatePlaylist(GuardedView):
@@ -21,6 +61,14 @@ class CreatePlaylist(GuardedView):
 
     @staticmethod
     def post(request):
+        files = request.FILES
+        if is_no_image_attached(request):
+            files = MultiValueDict({'image': [create_random_image()]})
+            request.POST = cleanup_post(request.POST)
+        form = PlaylistForm(data=request.POST, files=files)
+        if form.is_valid():
+            playlist = form.save()
+            return redirect('play_playlist', playlist_id=playlist.id)
         form = CreatePlaylistForm(request.POST, request.FILES)
         if not form.is_valid():
             pprint(form.errors)
@@ -73,6 +121,7 @@ class UpdatePlaylist(GuardedView):
         context = {
             'form': playlist_form,
             'playlist_id': playlist_id,
+            'image': playlist.image,
         }
         return render(request, 'forms/update-playlist.html', context)
 

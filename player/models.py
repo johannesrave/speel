@@ -3,10 +3,7 @@ import uuid
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
-from imagekit.models import ImageSpecField
-from imagekit.processors import ResizeToFill
-
-from audioplayer.settings import MEDIA_ROOT
+from django_resized import ResizedImageField
 
 
 class UUIDModel(models.Model):
@@ -47,16 +44,14 @@ class Track(UUIDModel):
 class Playlist(UUIDModel):
     name = models.CharField(max_length=128, blank=False)
 
-    image = models.ImageField(
+    image = ResizedImageField(
+        size=[500, 500],
+        crop=['middle', 'center'],
+        quality=100,
         upload_to='images',
         max_length=1000,
-        blank=True,
-        default=f'{MEDIA_ROOT}/default_images/default_img1.jpeg')
-
-    thumbnail_file = ImageSpecField(
-        source='image', format='JPEG',
-        processors=[ResizeToFill(300, 300)],
-        options={'quality': 80})
+        blank=True, null=True
+    )
 
     last_track_played = models.ForeignKey(
         to='Track', to_field='id',
