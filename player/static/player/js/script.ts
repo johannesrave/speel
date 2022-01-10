@@ -78,7 +78,10 @@ class Player {
         this.currentIndex = newIndex ?? this.currentIndex
 
         // stop all other tracks playing.
-        this.tracks.forEach((track, index) => track.howl?.stop())
+        this.tracks.forEach((track, index) => {
+            if (index === this.currentIndex) return;
+            track.howl?.stop();
+        })
 
         const track = this.tracks[this.currentIndex]
         // @ts-ignore
@@ -97,12 +100,8 @@ class Player {
         return {
             src: [`${window.location.origin}/media/${track.audio_file}`],
             html5: true,
-            onload: function () {
-                dispatchEvent(loadEvent)
-            },
-            onend: function () {
-                _this.skip('next');
-            },
+            onload: () => dispatchEvent(loadEvent),
+            onend: () => _this.skip('next'),
         };
     }
 

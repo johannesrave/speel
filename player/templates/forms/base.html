@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block main %}
-  <form action="{{ action }}" method="POST" enctype="multipart/form-data" class="generic-form">
+  <form action="{{ action }}" method="POST" enctype="multipart/form-data" class="padded-wrapper">
     {% csrf_token %}
     {% block form %}
       {{ form.as_p }}

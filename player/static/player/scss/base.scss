@@ -1,6 +1,8 @@
 /* BASE LAYOUT */
 body {
   height: 100vh;
+  width: 100vw;
+
   display: grid;
   grid-template-rows: 1fr max-content;
   padding: 3rem;
@@ -11,8 +13,3 @@ body {
     align-items: center;
   }
 }
-
-svg * {
-  fill: white;
-}
-

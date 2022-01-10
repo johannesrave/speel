@@ -6,7 +6,8 @@
   @include children-overlap;
   @include circular;
 
-  width: 6rem;
+  width: calc(min(6rem, 15vh));
+  min-width: 3rem;
   background: $color-tertiary;
 }
 
@@ -14,7 +15,7 @@
   @include children-overlap;
   @include circular;
 
-  width: 6rem;
+  width: calc(min(6rem, 15vh));
   background: $color-tertiary;
 }
 

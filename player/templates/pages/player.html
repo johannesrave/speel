@@ -1,10 +1,6 @@
 {% extends "base.html" %}
-{% block css %}
-  {% load sass_tags %}
-  <link href="{% sass_src 'player/scss/player.scss' %}" rel="stylesheet" type="text/css"/>
-{% endblock css %}
-{% block main %}
-  <div id="player-wrapper">
+{% block body %}
+  <body id="player-wrapper">
     <div id="background-image" style="background-image: url('{{ playlist.thumbnail_file }}')"></div>
     {% include 'components/player_complete_web.svg' %}
     <div id="player-home-link">
@@ -17,5 +13,5 @@
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     {% load static %}
     <script src="{% static 'player/js/script.js' %}" type="module"></script>
-  </div>
-{% endblock main %}
+  </body>
+{% endblock body %}

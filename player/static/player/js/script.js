@@ -39,7 +39,12 @@ class Player {
         this.playing = true;
         this.currentIndex = newIndex !== null && newIndex !== void 0 ? newIndex : this.currentIndex;
         // stop all other tracks playing.
-        this.tracks.forEach((track, index) => { var _a; return (_a = track.howl) === null || _a === void 0 ? void 0 : _a.stop(); });
+        this.tracks.forEach((track, index) => {
+            var _a;
+            if (index === this.currentIndex)
+                return;
+            (_a = track.howl) === null || _a === void 0 ? void 0 : _a.stop();
+        });
         const track = this.tracks[this.currentIndex];
         // @ts-ignore
         track.howl = (_a = track.howl) !== null && _a !== void 0 ? _a : new Howl(this.getOptions(track));
@@ -55,12 +60,8 @@ class Player {
         return {
             src: [`${window.location.origin}/media/${track.audio_file}`],
             html5: true,
-            onload: function () {
-                dispatchEvent(loadEvent);
-            },
-            onend: function () {
-                _this.skip('next');
-            },
+            onload: () => dispatchEvent(loadEvent),
+            onend: () => _this.skip('next'),
         };
     }
     /**
