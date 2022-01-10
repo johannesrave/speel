@@ -1,4 +1,4 @@
-import { HttpTool } from './ajax.js';
+import { Ajax } from './ajax.js';
 // inspired by https://github.com/goldfire/howler.js/tree/master/examples/player
 // Cache references to DOM elements.
 const playPauseButton = document.getElementById('player-head');
@@ -8,7 +8,7 @@ const backButton = document.getElementById('player-ear-left');
 const forwardButton = document.getElementById('player-ear-right');
 const playlist = getObjectByElementId('playlist');
 console.dir(playlist);
-const cookies = HttpTool.parseCookies();
+const cookies = Ajax.parseCookies();
 const eventConfig = { "cancelable": true };
 const pauseEvent = new CustomEvent('pause', eventConfig);
 const skipPrevEvent = new CustomEvent('skipPrev', eventConfig);
@@ -51,7 +51,8 @@ class Player {
         track.howl.play();
         const detail = {
             trackId: track.id,
-            playlistId: this.playlist.id
+            playlistId: this.playlist.id,
+            currentTime: track.howl.seek()
         };
         dispatchEvent(new CustomEvent('play', { detail: detail }));
     }
@@ -137,12 +138,6 @@ playPauseButton.addEventListener('click', function () {
     console.log('playPause event fired.');
     player.togglePlayPause();
 });
-// playButton!.addEventListener('click', function () {
-//     player.play();
-// });
-// pauseButton!.addEventListener('click', function () {
-//     player.pause();
-// });
 backButton.addEventListener('click', function () {
     player.skip('prev');
 });
@@ -152,12 +147,14 @@ forwardButton.addEventListener('click', function () {
 addEventListener('play', (e) => {
     const detail = e.detail;
     console.log('play event fired.');
-    // console.dir(detail)
     playButton.style.display = 'none';
     pauseButton.style.display = 'block';
-    HttpTool.updateLastSongPlayed(detail.playlistId, detail.trackId, cookies)
-        // .then((r: any) => console.log(r))
+    Ajax.updateLastSongPlayed(detail.playlistId, detail.trackId, cookies)
         .catch((e) => console.error(e));
+    setInterval(() => {
+        Ajax.updateLastTimestampPlayed(detail.playlistId, detail.currentTime, cookies)
+            .catch((e) => console.error(e));
+    }, 5000);
 });
 addEventListener('pause', (e) => {
     console.log('pause event fired.');

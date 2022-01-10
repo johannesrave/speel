@@ -1,4 +1,4 @@
-import {HttpTool} from './ajax.js';
+import {Ajax} from './ajax.js';
 import type {Howl, HowlOptions} from './howler'
 
 // inspired by https://github.com/goldfire/howler.js/tree/master/examples/player
@@ -14,7 +14,7 @@ const forwardButton = document.getElementById('player-ear-right');
 const playlist = getObjectByElementId('playlist');
 console.dir(playlist)
 
-const cookies = HttpTool.parseCookies();
+const cookies = Ajax.parseCookies();
 
 
 const eventConfig = {"cancelable": true};
@@ -90,7 +90,8 @@ class Player {
 
         const detail = {
             trackId: track.id,
-            playlistId: this.playlist.id
+            playlistId: this.playlist.id,
+            currentTime: track.howl.seek()
         }
         dispatchEvent(new CustomEvent('play', {detail: detail}))
     }
@@ -187,12 +188,6 @@ playPauseButton!.addEventListener('click', function () {
     console.log('playPause event fired.')
     player.togglePlayPause();
 });
-// playButton!.addEventListener('click', function () {
-//     player.play();
-// });
-// pauseButton!.addEventListener('click', function () {
-//     player.pause();
-// });
 backButton!.addEventListener('click', function () {
     player.skip('prev');
 });
@@ -203,13 +198,16 @@ forwardButton!.addEventListener('click', function () {
 addEventListener('play', (e: Event) => {
     const detail = (e as CustomEvent).detail
     console.log('play event fired.')
-    // console.dir(detail)
     playButton!.style.display = 'none';
     pauseButton!.style.display = 'block';
 
-    HttpTool.updateLastSongPlayed(detail.playlistId, detail.trackId, cookies)
-        // .then((r: any) => console.log(r))
+    Ajax.updateLastSongPlayed(detail.playlistId, detail.trackId, cookies)
         .catch((e: Error) => console.error(e))
+
+    setInterval(() => {
+        Ajax.updateLastTimestampPlayed(detail.playlistId, detail.currentTime, cookies)
+        .catch((e: Error) => console.error(e))
+    }, 5000)
 })
 
 addEventListener('pause', (e) => {

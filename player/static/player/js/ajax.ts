@@ -1,4 +1,4 @@
-export class HttpTool {
+export class Ajax {
     static updateLastSongPlayed(playlistId: string, trackId: string, cookies: { csrftoken?: any; }) {
         const url = `${window.location.origin}/api/playlists/${playlistId}/`
 
