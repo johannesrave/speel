@@ -1,7 +1,6 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
-from django.urls import reverse
 from django.views import View
 
 from player.forms import LoginForm
