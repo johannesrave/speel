@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block main %}
-  <ul id="library" class="main-grid padded-wrapper">
+  <ul id="library" class="main-grid">
       {% for playlist in playlists %}
         {% include 'components/library-item.html' %}
       {% endfor %}
