@@ -1,6 +1,9 @@
 <li class="grid-item">
-    <a class="grid-item-link" href="{% url 'create_playlist' %}">
-      <div class="mirrored">{% include 'icons/icon_edit.svg' %}</div>
-    </a>
-    <div class="handdrawn-contour"></div>
+  <div id="create-playlist-background" class="circular-thumbnail"></div>
+  <div class="grid-item-contour">{% include 'icons/contour_circle.svg' %}</div>
+{#  <div class="grid-item-icon">{% include 'icons/icon_check.svg' %}</div>#}
+{#  <div class="handdrawn-contour"></div>#}
+  <a id="create-playlist-link" class="grid-item-link" href="{% url 'create_playlist' %}">
+    Playlist erstellen
+  </a>
 </li>

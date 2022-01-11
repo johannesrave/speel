@@ -1,4 +1,4 @@
-@import '_variables';
+@import 'variables';
 
 /* MIXINS */
 @mixin circular {
@@ -16,6 +16,6 @@
 @mixin hover {
   &:hover {
     filter: brightness(1.5);
-    color: $color-text-hover;
+    color: $color-text-bright
   }
 }

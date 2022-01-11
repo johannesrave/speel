@@ -1,4 +1,4 @@
-<a class="circular-link" href="{% url link_url %}">
-  <div class="handdrawn-contour"></div>
+<a id="{{ id }}" class="page-link circular-link" href="{% url link_url %}">
+  <div class="link-contour">{% include 'icons/contour_circle.svg' %}</div>
   <div>{% include icon %}</div>
 </a>

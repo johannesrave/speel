@@ -14,9 +14,98 @@ body {
 }
 
 svg * {
-  fill: white;
+  //fill: $color-text-bright;
 }
 
 h1 {
-  color: white;
+  color: $color-text-bright;
+}
+
+.grid-item {
+  //filter: drop-shadow(0 0 1rem);
+}
+
+.grid-item-link {
+  color: $color-text-bright;
+}
+
+.grid-item-icon {
+  @include children-overlap;
+  //filter: drop-shadow(0 0 4px);
+
+  .grid-item-icon-background {
+    @include circular;
+    background-color: $color-secondary;
+  }
+
+  .icon-edit {
+    //@include circular;
+
+    * {
+      fill: $color-text-bright;
+    }
+  }
+
+  .icon-listen {
+    //@include circular;
+    background-color: $color-primary;
+
+    * {
+      fill: $color-text-bright;
+    }
+  }
+
+  .icon-check {
+    place-self: center;
+    @include circular;
+    background-color: $color-primary;
+
+    * {
+      fill: $color-text-bright;
+    }
+  }
+}
+
+.grid-item-contour {
+  .contour-circle * {
+    fill: $color-primary;
+
+  }
+}
+
+.page-link {
+  svg * {
+    fill: $color-text-bright;
+  }
+
+  .link-contour {
+    .contour-circle * {
+      fill: $color-text-bright;
+    }
+  }
+}
+
+#library-link {
+  background: $color-primary;
+}
+
+#logout-button {
+  background: $color-warning;
+
+  svg * {
+    fill: $color-text-bright
+  }
+}
+
+#playlists-link {
+  background: $color-secondary;
+}
+
+#create-playlist-background {
+  background: $color-accept;
+}
+
+
+#player-home-link a {
+  background-color: $color-warning;
 }
