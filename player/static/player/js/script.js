@@ -6,9 +6,9 @@ const playButton = document.getElementById('play-button');
 const pauseButton = document.getElementById('pause-button');
 const backButton = document.getElementById('player-ear-left');
 const forwardButton = document.getElementById('player-ear-right');
+const cookies = Ajax.parseCookies();
 const playlist = getObjectByElementId('playlist');
 console.dir(playlist);
-const cookies = Ajax.parseCookies();
 const eventConfig = { "cancelable": true };
 const pauseEvent = new CustomEvent('pause', eventConfig);
 const skipPrevEvent = new CustomEvent('skipPrev', eventConfig);
@@ -21,14 +21,21 @@ class Player {
      * @param {Array} playlist Array of objects with playlist track details ({title, file, howl}).
      */
     constructor(playlist) {
+        // private currentTrackId: string;
         this.playing = false;
         this.playlist = playlist;
         this.tracks = playlist.tracks;
         if (this.tracks.length < 1) {
             throw 'Playlist is empty.';
         }
-        this.currentIndex = 0;
-        this.currentTrackId = playlist.tracks[this.currentIndex].id;
+        const indexOfLastPlayedTrack = playlist.tracks
+            .findIndex(track => track.id === playlist.last_track_played_id);
+        this.currentIndex = indexOfLastPlayedTrack !== -1 ? indexOfLastPlayedTrack : 0;
+        this.lastTimestamp = playlist.last_timestamp_played;
+        // this.currentTrackId = playlist.tracks[this.currentIndex].id;
+    }
+    currentTimeEvent(detail) {
+        dispatchEvent(new CustomEvent('updateCurrentTime', { detail: detail }));
     }
     /**
      * Play a track in the playlist.
@@ -36,6 +43,7 @@ class Player {
      */
     play(newIndex) {
         var _a;
+        clearInterval(this.updatingCurrentTime);
         this.playing = true;
         this.currentIndex = newIndex !== null && newIndex !== void 0 ? newIndex : this.currentIndex;
         // stop all other tracks playing.
@@ -48,13 +56,19 @@ class Player {
         const track = this.tracks[this.currentIndex];
         // @ts-ignore
         track.howl = (_a = track.howl) !== null && _a !== void 0 ? _a : new Howl(this.getOptions(track));
+        if (this.lastTimestamp !== 0) {
+            track.howl.seek(this.lastTimestamp);
+            this.lastTimestamp = 0;
+        }
         track.howl.play();
         const detail = {
             trackId: track.id,
             playlistId: this.playlist.id,
-            currentTime: track.howl.seek()
+            lastTimestampPlayed: track.howl.seek(),
+            track: track,
         };
         dispatchEvent(new CustomEvent('play', { detail: detail }));
+        this.updatingCurrentTime = setInterval(this.currentTimeEvent, 3000, detail);
     }
     getOptions(track) {
         const _this = this;
@@ -74,6 +88,7 @@ class Player {
         const track = this.tracks[this.currentIndex];
         (_a = track.howl) === null || _a === void 0 ? void 0 : _a.pause();
         dispatchEvent(pauseEvent);
+        clearInterval(this.updatingCurrentTime);
     }
     /**
      * Toggle play/pause.
@@ -144,6 +159,12 @@ backButton.addEventListener('click', function () {
 forwardButton.addEventListener('click', function () {
     player.skip('next');
 });
+const perdiodicallyPatchPlaylist = (playlistId, currentTime) => {
+    return setInterval(() => {
+        Ajax.updateLastTimestampPlayed(playlistId, currentTime, cookies)
+            .catch((e) => console.error(e));
+    }, 5000, playlistId, currentTime);
+};
 addEventListener('play', (e) => {
     const detail = e.detail;
     console.log('play event fired.');
@@ -151,13 +172,19 @@ addEventListener('play', (e) => {
     pauseButton.style.display = 'block';
     Ajax.updateLastSongPlayed(detail.playlistId, detail.trackId, cookies)
         .catch((e) => console.error(e));
-    setInterval(() => {
-        Ajax.updateLastTimestampPlayed(detail.playlistId, detail.currentTime, cookies)
-            .catch((e) => console.error(e));
-    }, 5000);
+    Ajax.updateLastTimestampPlayed(detail.playlistId, detail.lastTimestampPlayed, cookies)
+        .catch((e) => console.error(e));
+});
+addEventListener('updateCurrentTime', (e) => {
+    const detail = e.detail;
+    console.log('updateCurrentTime event fired.');
+    const lastTimestampPlayed = detail.track.howl.seek();
+    Ajax.updateLastTimestampPlayed(detail.playlistId, lastTimestampPlayed, cookies)
+        .catch((e) => console.error(e));
 });
 addEventListener('pause', (e) => {
     console.log('pause event fired.');
     playButton.style.display = 'block';
     pauseButton.style.display = 'none';
 });
+//# sourceMappingURL=script.js.map

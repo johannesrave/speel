@@ -14,9 +14,10 @@ class Player(GuardedView):
         except Playlist.DoesNotExist:
             return HttpResponseNotFound(f'Requested nonexistent playlist with id {str(playlist_id)}')
 
+        playlist = list(Playlist.objects.filter(id=playlist_id).values())[0]
+
         tracks = list(tracklist.tracks.all().values())
 
-        playlist = list(Playlist.objects.filter(id=playlist_id).values())[0]
         playlist['tracks'] = tracks
         playlist['image'] = tracklist.image.url
         context = {

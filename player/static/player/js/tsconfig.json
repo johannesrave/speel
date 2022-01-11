@@ -3,6 +3,7 @@
     "module": "esnext",
     "target": "ES6",
     "strict": true,
-    "importsNotUsedAsValues": "preserve"
+    "importsNotUsedAsValues": "preserve",
+    "sourceMap": true
   }
 }

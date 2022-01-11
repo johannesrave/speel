@@ -58,3 +58,4 @@ export class Ajax {
         return cookies;
     }
 }
+//# sourceMappingURL=ajax.js.map
