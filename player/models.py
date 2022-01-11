@@ -45,7 +45,7 @@ class Playlist(UUIDModel):
     name = models.CharField(max_length=128, blank=False)
 
     image = ResizedImageField(
-        size=[500, 500],
+        size=[512, 512],
         crop=['middle', 'center'],
         quality=100,
         upload_to='images',

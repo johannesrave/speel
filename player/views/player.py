@@ -20,8 +20,6 @@ class Player(GuardedView):
 
         playlist['tracks'] = tracks
         playlist['image'] = tracklist.image.url
-        context = {
-            'playlist': playlist,
-        }
+        context = {'playlist': playlist}
 
         return render(request, 'pages/player.html', context)
