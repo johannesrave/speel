@@ -4,6 +4,14 @@
   <button type="submit" formaction="{% url 'login' %}">
     Anmelden
   </button>
+    <div>
+      {% for message in messages %}
+          <p id="messages">{{ message }}</p>
+      {% endfor %}
+    </div>
+    <div>
+        Du hast noch keinen Account? <a href="{% url 'register' %}">Registrieren</a>
+    </div>
 {% endblock form %}
 
 {% block footer %}{% endblock %}

@@ -15,6 +15,7 @@
     Registrieren
   </button>
   Hast du bereits einen Account?
+    <div>{{ form.errors }}</div>
    {% include 'components/page-link.html' with link_url='login' icon='icons/icon_exit.svg' %}
 {% endblock form %}
 

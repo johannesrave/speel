@@ -3,6 +3,7 @@
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
 
 from player.forms import CreateUserForm
@@ -13,8 +14,11 @@ class Register(View):
     @staticmethod
     def get(request):
         if request.user.is_authenticated:
-            return redirect('view_library')
-        context = {'form': CreateUserForm()}
+            return redirect('library')
+        context = {
+            'action': reverse('register'),
+            'form': CreateUserForm()
+        }
         return render(request, 'forms/register.html', context)
 
     @staticmethod
