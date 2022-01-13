@@ -55,7 +55,7 @@ class CreatePlaylist(GuardedView):
 def pick_random_default_image_path():
     random.seed()
     value = random.randint(1, 10)
-    image_path = f'{MEDIA_ROOT}/default_images/default_img{value}.jpg'
+    image_path = f'/default_images/default_img{value}.jpg'
     return image_path
 
 
@@ -74,11 +74,11 @@ def get_tracks(request: HttpRequest):
 
 def get_metadata(audio_file):
     pprint(audio_file)
-    file_name = str(audio_file.temporary_file_path().split('.')[-2])
+    file_name = str(audio_file.name)
     tag = TinyTag.get(audio_file.temporary_file_path())
 
     return {
-        'title': tag.title or file_name or 'Unbekannter Track',
+        'title': tag.title or file_name,
         'duration': tag.duration,
         'audio_file': audio_file,
     }

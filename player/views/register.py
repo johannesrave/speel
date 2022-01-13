@@ -16,7 +16,6 @@ class Register(View):
         if request.user.is_authenticated:
             return redirect('library')
         context = {
-            'action': reverse('register'),
             'form': CreateUserForm()
         }
         return render(request, 'forms/register.html', context)
@@ -29,5 +28,5 @@ class Register(View):
             return render(request, 'forms/register.html', context)
 
         user: User = form.save()
-        messages.success(request, f'Account für {user.username} wurde erzeugt')
+        messages.success(request, f'Account für {user.username} wurde erstellt.')
         return redirect('login')
