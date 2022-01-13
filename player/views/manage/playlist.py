@@ -23,7 +23,7 @@ class CreatePlaylist(GuardedView):
 
     @staticmethod
     def post(request):
-        owner = Owner.objects.get(user=request.user)
+        owner = Owner.objects.get(id=request.user.owner.pk)
         form = CreatePlaylistForm(request.POST, request.FILES, instance=owner)
 
         if not form.is_valid():
