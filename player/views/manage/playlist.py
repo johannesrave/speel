@@ -6,7 +6,6 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from tinytag import TinyTag
 
-from audioplayer.settings import MEDIA_ROOT
 from player.forms import UpdatePlaylistForm, CreatePlaylistForm
 from player.models import Playlist
 from player.models import Track
@@ -53,7 +52,7 @@ class CreatePlaylist(GuardedView):
 def pick_random_default_image_path():
     random.seed()
     value = random.randint(1, 10)
-    image_path = f'{MEDIA_ROOT}/default_images/default_img{value}.jpg'
+    image_path = f'/default_images/default_img{value}.jpg'
     return image_path
 
 
@@ -87,13 +86,14 @@ class UpdatePlaylist(GuardedView):
     @staticmethod
     def get(request, playlist_id):
         playlist = Playlist.objects.get(id=playlist_id)
-        playlist_form = UpdatePlaylistForm(instance=playlist)
+        playlist_form = CreatePlaylistForm(instance=playlist)
 
         context = {
+            'playlist': playlist,
             'form': playlist_form,
             'playlist_id': playlist_id,
-            'image': playlist.image,
         }
+
         return render(request, 'forms/update-playlist.html', context)
 
     @staticmethod

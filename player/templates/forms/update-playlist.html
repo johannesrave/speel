@@ -1,6 +1,14 @@
 {% extends "forms/base.html" %}
 {% block form %}
-  {{ form.as_p }}
+  <img class="circular-thumbnail" src="{{ playlist.image.url }}" alt="">
+
+  {{ form.image.label }}
+  {{ form.image }}
+  {{ form.name.label }}
+  {{ form.name }}
+  {% for track in playlist.tracks.all %}
+    <p>{{ track.title }}</p>
+  {% endfor %}
   <button type="submit" formaction="{% url 'update_playlist' playlist_id %}">
     Änderungen speichern
   </button>

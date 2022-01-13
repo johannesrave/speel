@@ -13,4 +13,19 @@ main form {
 
   border: $color-primary;
   background: white;
+
+  text-align: left;
+
+  > * {
+    width: 20rem;
+  }
+
+  button {
+    width: 20rem;
+    height: 3rem;
+
+    background: $color-primary;
+    color: $color-text-bright;
+    margin-top: 1rem;
+  }
 }
