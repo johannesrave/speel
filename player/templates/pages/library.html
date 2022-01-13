@@ -4,6 +4,9 @@
       {% for playlist in playlists %}
         {% include 'components/library-item.html' %}
       {% endfor %}
+  <p>Willkommen {{ request.user }}!</p>
+  {% if not playlists %}<p>du hast keine Playlists in deiner Bibliothek,
+      <br>klicke auf den Button unten links um welche zu erstellen</p>{% endif %}
   </ul>
 {% endblock main %}
 {% block footer %}

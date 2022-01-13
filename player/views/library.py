@@ -8,7 +8,8 @@ class ViewLibrary(GuardedView):
 
     @staticmethod
     def get(request):
-        context = {'playlists': Playlist.objects.all()}
+        playlists = Playlist.objects.filter(user=request.user)
+        context = {'playlists': playlists}
         return render(request, 'pages/library.html', context)
 
 
@@ -16,5 +17,6 @@ class EditLibrary(GuardedView):
 
     @staticmethod
     def get(request):
-        context = {'playlists': Playlist.objects.all()}
+        playlists = Playlist.objects.filter(user=request.user)
+        context = {'playlists': playlists}
         return render(request, 'pages/playlists.html', context)

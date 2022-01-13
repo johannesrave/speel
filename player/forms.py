@@ -1,10 +1,10 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, Form, CharField, PasswordInput, ImageField, FileInput, FileField, ClearableFileInput
 
-from player.models import Playlist
+from player.models import Playlist, User
 
 
 class CreateUserForm(UserCreationForm):

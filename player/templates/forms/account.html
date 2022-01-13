@@ -1,0 +1,13 @@
+{% extends "forms/base.html" %}
+{% block form %}
+  {{ form.as_p }}
+  <button type="submit" formaction="{% url 'account' %}">
+    Änderungen speichern
+  </button>
+{% endblock form %}
+
+{% block footer %}
+  {% include 'components/page-link.html' with link_url='playlists' icon='icons/icon_edit.svg' %}
+  <h1>Account anpassen</h1>
+  <div class="empty"></div>
+{% endblock footer %}

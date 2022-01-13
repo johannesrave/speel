@@ -1,13 +1,14 @@
 from django.urls import path
 from django.views.generic import RedirectView
 
-import player.views.manage.playlist
 from player.models import Playlist, Track
 from player.views import player, login, register, api, library, manage
+from player.views.manage import account, playlist
 
 urlpatterns = [
     path('login/', login.Login.as_view(), name='login'),
     path('register/', register.Register.as_view(), name='register'),
+    path('account/', account.UpdateAccount.as_view(), name='account'),
 
     # player pages ('kids' pages)
     path('library/', library.ViewLibrary.as_view(), name='library'),
