@@ -53,7 +53,7 @@ class CreatePlaylist(GuardedView):
 def pick_random_default_image_path():
     random.seed()
     value = random.randint(1, 10)
-    image_path = f'{MEDIA_ROOT}/default_images/default_img{value}.jpg'
+    image_path = f'/default_images/default_img{value}.jpg'
     return image_path
 
 
