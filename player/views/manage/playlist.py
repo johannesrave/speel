@@ -6,9 +6,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from tinytag import TinyTag
 
-from audioplayer.settings import MEDIA_ROOT
 from player.forms import UpdatePlaylistForm, CreatePlaylistForm
-from player.models import Playlist, Track, User
+from player.models import Track, User
 from player.views.views import GuardedView
 
 
@@ -34,20 +33,35 @@ class CreatePlaylist(GuardedView):
             return render(request, 'forms/create-playlist.html', context)
 
         playlist = form.save(commit=False)
-        playlist.user = request.user
-        tracks = get_tracks(request)
-        playlist.tracks.set(tracks)
 
-        image = request.FILES.get('image', None)
-        print(f'image in request: {image}')
-        if not image:
-            playlist.image.name = pick_random_default_image_path()
-        else:
-            playlist.image = image
+        save_user(request, playlist)
+        save_posted_image_or_default(request, playlist)
+        save_all_posted_tracks(request, playlist)
+
         playlist.save()
         print(playlist.image.name)
 
         return redirect('update_playlist', playlist_id=playlist.id)
+
+
+def save_user(request, playlist):
+    user: User = request.user
+    playlist.user = user
+
+
+def save_posted_image_or_default(request, playlist):
+    image = request.FILES.get('image', None)
+    print(f'image in request: {image}')
+    if not image:
+        playlist.image.name = pick_random_default_image_path()
+    else:
+        playlist.image = image
+
+
+def save_all_posted_tracks(request, playlist):
+    playlist.save()
+    tracks = get_tracks(request)
+    playlist.tracks.set(tracks)
 
 
 def pick_random_default_image_path():
