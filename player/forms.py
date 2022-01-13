@@ -1,17 +1,17 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, Form, CharField, PasswordInput, ImageField, FileInput, FileField, ClearableFileInput
 
-from player.models import Playlist, Owner
+from player.models import Playlist, User
 
 
-class OwnerForm(ModelForm):
-    class Meta:
-        model = Owner
-        fields = '__all__'
-        exclude = ['user']
+# class OwnerForm(ModelForm):
+#     class Meta:
+#         model = Owner
+#         fields = '__all__'
+#         exclude = ['user']
 
 
 class CreateUserForm(UserCreationForm):

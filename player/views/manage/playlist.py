@@ -8,7 +8,7 @@ from tinytag import TinyTag
 
 from audioplayer.settings import MEDIA_ROOT
 from player.forms import UpdatePlaylistForm, CreatePlaylistForm
-from player.models import Playlist, Track, Owner
+from player.models import Playlist, Track, User
 from player.views.views import GuardedView
 
 
@@ -23,8 +23,7 @@ class CreatePlaylist(GuardedView):
 
     @staticmethod
     def post(request):
-        owner = Owner.objects.get(id=request.user.owner.pk)
-        form = CreatePlaylistForm(request.POST, request.FILES, instance=owner)
+        form = CreatePlaylistForm(request.POST, request.FILES)
 
         if not form.is_valid():
             pprint(form.errors)
@@ -34,8 +33,8 @@ class CreatePlaylist(GuardedView):
             }
             return render(request, 'forms/create-playlist.html', context)
 
-        playlist = form.save()
-        # playlist.owner = owner
+        playlist = form.save(commit=False)
+        playlist.user = request.user
         tracks = get_tracks(request)
         playlist.tracks.set(tracks)
 
@@ -48,7 +47,6 @@ class CreatePlaylist(GuardedView):
         playlist.save()
         print(playlist.image.name)
 
-        # playlist.owner = request.user
         return redirect('update_playlist', playlist_id=playlist.id)
 
 
@@ -84,15 +82,11 @@ def get_metadata(audio_file):
     }
 
 
-def get_playlist_if_owned(owner, playlist_id):
-    return owner.playlist_set.all().get(id=playlist_id)
-
-
 class UpdatePlaylist(GuardedView):
 
     @staticmethod
     def get(request, playlist_id):
-        playlist = get_playlist_if_owned(request.user.owner, playlist_id)
+        playlist = retrieve_playlist_if_owned(request.user, playlist_id)
         if not playlist:
             return redirect('playlists')
         playlist_form = UpdatePlaylistForm(instance=playlist)
@@ -106,7 +100,7 @@ class UpdatePlaylist(GuardedView):
 
     @staticmethod
     def post(request, playlist_id):
-        playlist = get_playlist_if_owned(request.user.owner, playlist_id)
+        playlist = retrieve_playlist_if_owned(request.user, playlist_id)
         form = UpdatePlaylistForm(request.POST, request.FILES, instance=playlist)
         if not form.is_valid():
             pprint(form.errors)
@@ -120,11 +114,15 @@ class UpdatePlaylist(GuardedView):
         return redirect('playlists')
 
 
+def retrieve_playlist_if_owned(user, playlist_id):
+    return user.playlist_set.all().get(id=playlist_id)
+
+
 class DeletePlaylist(GuardedView):
 
     @staticmethod
     def get(request, playlist_id):
-        playlist = get_playlist_if_owned(request.user.owner, playlist_id)
+        playlist = retrieve_playlist_if_owned(request.user, playlist_id)
         if not playlist:
             return redirect('playlists')
         context = {
@@ -134,7 +132,7 @@ class DeletePlaylist(GuardedView):
 
     @staticmethod
     def post(request, playlist_id):
-        playlist = get_playlist_if_owned(request.user.owner, playlist_id)
+        playlist = retrieve_playlist_if_owned(request.user, playlist_id)
         if playlist:
             playlist.delete()
         return redirect('playlists')

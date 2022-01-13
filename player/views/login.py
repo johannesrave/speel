@@ -28,6 +28,7 @@ class Login(View):
             return render(request, 'forms/login.html', context)
 
         user = User.objects.get(username=request.POST.get('username'))
+        # TODO: check if request.user already exists
         login(request, user)
         destination = request.POST.get('redirect_to', 'library')
         return redirect(destination)
