@@ -8,8 +8,7 @@ from tinytag import TinyTag
 
 from audioplayer.settings import MEDIA_ROOT
 from player.forms import UpdatePlaylistForm, CreatePlaylistForm
-from player.models import Playlist
-from player.models import Track
+from player.models import Playlist, Track, Owner
 from player.views.views import GuardedView
 
 
@@ -24,7 +23,9 @@ class CreatePlaylist(GuardedView):
 
     @staticmethod
     def post(request):
-        form = CreatePlaylistForm(request.POST, request.FILES)
+        owner = Owner.objects.get(user=request.user)
+        form = CreatePlaylistForm(request.POST, request.FILES, instance=owner)
+
         if not form.is_valid():
             pprint(form.errors)
             context = {
@@ -34,7 +35,7 @@ class CreatePlaylist(GuardedView):
             return render(request, 'forms/create-playlist.html', context)
 
         playlist = form.save()
-
+        # playlist.owner = owner
         tracks = get_tracks(request)
         playlist.tracks.set(tracks)
 
@@ -47,6 +48,7 @@ class CreatePlaylist(GuardedView):
         playlist.save()
         print(playlist.image.name)
 
+        # playlist.owner = request.user
         return redirect('update_playlist', playlist_id=playlist.id)
 
 
@@ -82,11 +84,17 @@ def get_metadata(audio_file):
     }
 
 
+def get_playlist_if_owned(owner, playlist_id):
+    return owner.playlist_set.all().get(id=playlist_id)
+
+
 class UpdatePlaylist(GuardedView):
 
     @staticmethod
     def get(request, playlist_id):
-        playlist = Playlist.objects.get(id=playlist_id)
+        playlist = get_playlist_if_owned(request.user.owner, playlist_id)
+        if not playlist:
+            return redirect('playlists')
         playlist_form = UpdatePlaylistForm(instance=playlist)
 
         context = {
@@ -98,7 +106,7 @@ class UpdatePlaylist(GuardedView):
 
     @staticmethod
     def post(request, playlist_id):
-        playlist = Playlist.objects.get(id=playlist_id)
+        playlist = get_playlist_if_owned(request.user.owner, playlist_id)
         form = UpdatePlaylistForm(request.POST, request.FILES, instance=playlist)
         if not form.is_valid():
             pprint(form.errors)
@@ -116,6 +124,9 @@ class DeletePlaylist(GuardedView):
 
     @staticmethod
     def get(request, playlist_id):
+        playlist = get_playlist_if_owned(request.user.owner, playlist_id)
+        if not playlist:
+            return redirect('playlists')
         context = {
             'playlist_id': playlist_id
         }
@@ -123,6 +134,7 @@ class DeletePlaylist(GuardedView):
 
     @staticmethod
     def post(request, playlist_id):
-        playlist = Playlist.objects.get(id=playlist_id)
-        playlist.delete()
+        playlist = get_playlist_if_owned(request.user.owner, playlist_id)
+        if playlist:
+            playlist.delete()
         return redirect('playlists')
