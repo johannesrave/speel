@@ -11,6 +11,7 @@ def owner_profile(sender, instance, created, **kwargs):
         Owner.objects.create(
             user=instance,
             username=instance.username,
+            email=instance.email
         )
         print('Profile created!')
 
