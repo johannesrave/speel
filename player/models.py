@@ -1,6 +1,7 @@
 import uuid
 
 import django.contrib.auth.models
+from django.conf import settings
 from django.db import models
 from django_resized import ResizedImageField
 
@@ -15,28 +16,6 @@ class UUIDModel(models.Model):
 
 class User(django.contrib.auth.models.User):
     pass
-
-
-# class Owner(UUIDModel):
-#     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
-#     username = models.CharField(max_length=100)
-#     email = models.CharField(max_length=100)
-#     date_created = models.DateTimeField(auto_now_add=True)
-#
-#     def __str__(self):
-#         return self.username
-
-
-# class OwnedModel(UUIDModel):
-#     owner = models.ForeignKey(
-#         settings.AUTH_USER_MODEL,
-#         blank=True,
-#         null=True,
-#         on_delete=models.CASCADE,
-#     )
-#
-#     class Meta:
-#         abstract = True
 
 
 class Track(UUIDModel):
@@ -57,7 +36,12 @@ class Track(UUIDModel):
 
 
 class Playlist(UUIDModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+    )
     name = models.CharField(max_length=128, blank=False)
     image = ResizedImageField(
         size=[512, 512],
