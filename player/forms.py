@@ -7,13 +7,6 @@ from django.forms import ModelForm, Form, CharField, PasswordInput, ImageField, 
 from player.models import Playlist, User
 
 
-# class OwnerForm(ModelForm):
-#     class Meta:
-#         model = Owner
-#         fields = '__all__'
-#         exclude = ['user']
-
-
 class CreateUserForm(UserCreationForm):
     username = CharField(label='Benutzername')
     email = CharField(label='Email Addresse')
