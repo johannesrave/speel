@@ -1,9 +1,0 @@
-{% extends "components/form.html" %}
-{% block extra-content %}
-    <button
-        id="upload-track-button" class="secondary-button"
-        formaction="{% url 'create_track' %}" formmethod="GET" type="submit">
-      Tracks hochladen
-    </button>
-{% endblock extra-content %}
-{% block footer %}{% endblock %}
