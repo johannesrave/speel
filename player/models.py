@@ -18,23 +18,6 @@ class User(django.contrib.auth.models.User):
     pass
 
 
-class Track(UUIDModel):
-    title = models.CharField(max_length=128, blank=True, default="Unbekannter Track")
-    duration = models.IntegerField(editable=False, null=True)
-    audio_file = models.FileField()
-
-    playlist = models.ForeignKey(
-        to='Playlist',
-        to_field='id',
-        related_name='tracks',
-        blank=True, null=True,
-        on_delete=models.CASCADE
-    )
-
-    def __str__(self):
-        return f'{self.title}'
-
-
 class Playlist(UUIDModel):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -64,3 +47,20 @@ class Playlist(UUIDModel):
 
     def __str__(self):
         return f'{self.name}'
+
+
+class Track(UUIDModel):
+    title = models.CharField(max_length=128, blank=True, default="Unbekannter Track")
+    duration = models.IntegerField(editable=False, null=True)
+    audio_file = models.FileField()
+
+    playlist = models.ForeignKey(
+        to='Playlist',
+        to_field='id',
+        related_name='tracks',
+        blank=True, null=True,
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return f'{self.title}'

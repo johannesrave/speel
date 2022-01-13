@@ -1,14 +1,21 @@
 {% extends "base.html" %}
 {% block main %}
-  <ul id="library" class="main-grid">
+  {% if not playlists %}
+    <div class="info-text">
+      <div>
+        <p>Du hast keine Audiobooks in deiner Bibliothek.</p>
+        <p>Klicke auf den Button unten links um welche zu erstellen!</p>
+      </div>
+    </div>
+  {% else %}
+    <ul id="library" class="main-grid">
       {% for playlist in playlists %}
         {% include 'components/library-item.html' %}
       {% endfor %}
-  <p>Willkommen {{ request.user }}!</p>
-  {% if not playlists %}<p>du hast keine Playlists in deiner Bibliothek,
-      <br>klicke auf den Button unten links um welche zu erstellen</p>{% endif %}
-  </ul>
+    </ul>
+  {% endif %}
 {% endblock main %}
 {% block footer %}
   {% include 'components/page-link.html' with id='playlists-link' link_url='playlists' icon='icons/icon_edit.svg' %}
+  <h1>Willkommen {{ request.user }}!</h1>
 {% endblock footer %}

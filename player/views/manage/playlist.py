@@ -33,7 +33,7 @@ class CreatePlaylist(GuardedView):
             }
             return render(request, 'forms/create-playlist.html', context)
 
-        playlist = form.save()
+        playlist = form.save(commit=False)
 
         tracks = get_tracks(request)
         playlist.tracks.set(tracks)

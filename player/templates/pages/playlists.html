@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block main %}
-  <a href="{% url 'account' %}">Account anpassen</a>
   <ul id="playlists" class="main-grid">
     {% for playlist in playlists %}
       {% include 'components/playlist-item.html' %}
@@ -11,5 +10,5 @@
 {% block footer %}
   {% include 'components/page-link.html' with id='library-link' link_url='library' icon='icons/icon_listen.svg' %}
   <h1>Playlists bearbeiten</h1>
-  {% include 'components/logout-form.html' %}
+  {% include 'components/page-link.html' with link_url='account' icon='icons/icon_delete.svg' %}
 {% endblock footer %}

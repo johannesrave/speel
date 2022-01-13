@@ -1,13 +1,19 @@
 {% extends "forms/base.html" %}
 {% block form %}
-  {{ form.as_p }}
+  {{ form.username.errors }}
+  {{ form.username.label }}
+  {{ form.username }}
+
+  {{ form.email.errors }}
+  {{ form.email.label }}
+  {{ form.email }}
   <button type="submit" formaction="{% url 'account' %}">
-    Änderungen speichern
+    Accountdaten speichern
   </button>
 {% endblock form %}
 
 {% block footer %}
-  {% include 'components/page-link.html' with link_url='playlists' icon='icons/icon_edit.svg' %}
-  <h1>Account anpassen</h1>
-  <div class="empty"></div>
+  {% include 'components/page-link.html' with id='playlists-link' link_url='playlists' icon='icons/icon_edit.svg' %}
+  <h1>Accountdaten ändern</h1>
+  {% include 'components/logout-form.html' %}
 {% endblock footer %}
