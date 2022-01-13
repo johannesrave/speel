@@ -12,6 +12,7 @@ urlpatterns = [
     # player pages ('kids' pages)
     path('library/', library.ViewLibrary.as_view(), name='library'),
     path('playlists/', library.EditLibrary.as_view(), name='playlists'),
+    path('player/', RedirectView.as_view(pattern_name='library', permanent=False)),
     path('player/<uuid:playlist_id>/', player.Player.as_view(), name='play_playlist'),
 
     # content management pages ('parents' pages)

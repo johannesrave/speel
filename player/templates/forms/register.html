@@ -11,12 +11,13 @@
 
   {{ form.password2.label }}
   {{ form.password2 }}
-  <button type="submit" formaction="{% url 'login' %}">
+
+  {{ form.errors }}
+  <button class="primary-button" type="submit" formaction="{% url 'register' %}">
     Registrieren
   </button>
   Hast du bereits einen Account?
-    <div>{{ form.errors }}</div>
-   {% include 'components/page-link.html' with link_url='login' icon='icons/icon_exit.svg' %}
+  {% include 'components/page-link.html' with link_url='login' icon='icons/icon_exit.svg' %}
 {% endblock form %}
 
 {% block footer %}<h1>Registrierung</h1>{% endblock %}
