@@ -31,7 +31,7 @@ interface TrackModel {
     audio_file: string
 }
 
-interface PlaylistModel {
+interface AudiobookModel {
     pkid: number,
     id: string,
     name: string,
@@ -42,7 +42,7 @@ interface PlaylistModel {
 }
 
 class Player {
-    private readonly playlist: PlaylistModel;
+    private readonly playlist: AudiobookModel;
     private readonly tracks: TrackModel[];
     private currentIndex: number;
     // private currentTrackId: string;
@@ -55,12 +55,12 @@ class Player {
      * Includes all methods for playing, skipping, updating the display, etc.
      * @param {Array} playlist Array of objects with playlist track details ({title, file, howl}).
      */
-    constructor(playlist: PlaylistModel) {
+    constructor(playlist: AudiobookModel) {
 
         this.playlist = playlist;
         this.tracks = playlist.tracks;
         if (this.tracks.length < 1) {
-            throw 'Playlist is empty.'
+            throw 'Audiobook is empty.'
         }
 
         const indexOfLastPlayedTrack = playlist.tracks
@@ -216,7 +216,7 @@ forwardButton!.addEventListener('click', function () {
     player.skip('next');
 });
 
-const perdiodicallyPatchPlaylist = (playlistId: string, currentTime: number) => {
+const perdiodicallyPatchAudiobook = (playlistId: string, currentTime: number) => {
     return setInterval(() => {
         Ajax.updateLastTimestampPlayed(playlistId, currentTime, cookies)
             .catch((e: Error) => console.error(e))

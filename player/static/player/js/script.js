@@ -26,7 +26,7 @@ class Player {
         this.playlist = playlist;
         this.tracks = playlist.tracks;
         if (this.tracks.length < 1) {
-            throw 'Playlist is empty.';
+            throw 'Audiobook is empty.';
         }
         const indexOfLastPlayedTrack = playlist.tracks
             .findIndex(track => track.id === playlist.last_track_played_id);
@@ -162,7 +162,7 @@ backButton.addEventListener('click', function () {
 forwardButton.addEventListener('click', function () {
     player.skip('next');
 });
-const perdiodicallyPatchPlaylist = (playlistId, currentTime) => {
+const perdiodicallyPatchAudiobook = (playlistId, currentTime) => {
     return setInterval(() => {
         Ajax.updateLastTimestampPlayed(playlistId, currentTime, cookies)
             .catch((e) => console.error(e));

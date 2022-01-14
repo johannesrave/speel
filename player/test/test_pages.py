@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.http import urlencode
 
-from player.models import Playlist
+from player.models import Audiobook
 
 
 class PagesTest(TestCase):
@@ -64,7 +64,7 @@ class PagesTest(TestCase):
         data = {"name": "Created from JSON via HTTP"}
         response = self.client.post(reverse('playlist_list'), data, content_type='application/json')
         pprint(response)
-        created_playlist = Playlist.objects.get(name=data['name'])
+        created_playlist = Audiobook.objects.get(name=data['name'])
         # pprint(created_playlist)
         self.assertIsNotNone(created_playlist)
 
@@ -73,6 +73,6 @@ class PagesTest(TestCase):
         data = urlencode({"name": name})
         response = self.client.post(reverse('playlist_list'), data, content_type="application/x-www-form-urlencoded")
         pprint(response)
-        created_playlist = Playlist.objects.get(name=name)
+        created_playlist = Audiobook.objects.get(name=name)
         # pprint(created_playlist)
         self.assertIsNotNone(created_playlist)

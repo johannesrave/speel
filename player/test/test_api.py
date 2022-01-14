@@ -4,17 +4,17 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.http import urlencode
 
-from player.models import Playlist
+from player.models import Audiobook
 
 
-class PlaylistListViewTest(TestCase):
+class AudiobookListViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         # Create 13 playlists for pagination tests
         number_of_playlists = 13
 
         for playlist_id in range(number_of_playlists):
-            Playlist.objects.create(
+            Audiobook.objects.create(
                 name=f'Christian {playlist_id}',
             )
 
@@ -32,7 +32,7 @@ class PlaylistListViewTest(TestCase):
         data = {"name": "Created from JSON via HTTP"}
         response = self.client.post(reverse('playlist_list'), data, content_type='application/json')
         pprint(response)
-        created_playlist = Playlist.objects.get(name=data['name'])
+        created_playlist = Audiobook.objects.get(name=data['name'])
         # pprint(created_playlist)
         self.assertIsNotNone(created_playlist)
 
@@ -41,6 +41,6 @@ class PlaylistListViewTest(TestCase):
         data = urlencode({"name": name})
         response = self.client.post(reverse('playlist_list'), data, content_type="application/x-www-form-urlencoded")
         pprint(response)
-        created_playlist = Playlist.objects.get(name=name)
+        created_playlist = Audiobook.objects.get(name=name)
         # pprint(created_playlist)
         self.assertIsNotNone(created_playlist)

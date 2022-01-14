@@ -13,12 +13,12 @@
     Änderungen speichern
   </button>
   <button type="submit" formaction="{% url 'delete_playlist' playlist_id %}">
-    Playliste löschen
+    Audiobooke löschen
   </button>
 {% endblock form %}
 
 {% block footer %}
   {% include 'components/page-link.html' with link_url='playlists' icon='icons/icon_edit.svg' %}
-  <h1>Playlist anpassen</h1>
+  <h1>Audiobook anpassen</h1>
   <div class="empty"></div>
 {% endblock footer %}
