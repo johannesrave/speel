@@ -62,13 +62,16 @@ def save_posted_image_or_default(request, playlist):
 def save_all_posted_tracks(request, playlist):
     playlist.save()
     files = request.FILES.getlist('new_tracks')
+    valid_tracks = [Track(audio_file=file, playlist=playlist) for file in files if TinyTag.is_supported(file.name)]
+    if len(valid_tracks) < len(files):
+        names_of_valid_tracks = [track.audio_file.name for track in valid_tracks]
+        invalid_files = [file for file in files if file.name not in names_of_valid_tracks]
+        [pprint(f'{file.name} ist kein gültiges Audiofile und wurde übersprungen') for file in invalid_files]
+        pprint(f'Es wurden {len(valid_tracks)} Audiodateien hochgeladen und '
+               f'{len(invalid_files)} ungültige Dateien übersprungen')
 
-    _tracks = Track.objects.bulk_create(
-        [Track(audio_file=file, playlist=playlist) for file in files if TinyTag.is_supported(file.name)])
+    _tracks = Track.objects.bulk_create(valid_tracks)
 
-    if len(_tracks) < len(files):
-        pprint(
-            f'Es wurden {len(_tracks)} Audiodateien hochgeladen und {len(files) - len(_tracks)} ungültige Dateien übersprungen')
     for track in _tracks:
         tag = TinyTag.get(f'{MEDIA_ROOT}/{track.audio_file.name}')
 
