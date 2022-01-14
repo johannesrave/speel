@@ -9,6 +9,7 @@
   {% for track in playlist.tracks.all %}
     <p>{{ track.title }}</p>
   {% endfor %}
+    {% if not playlist.tracks.all %}<p>enthält keine Tracks</p>{% endif %}
   <button type="submit" formaction="{% url 'update_playlist' playlist_id %}">
     Änderungen speichern
   </button>
