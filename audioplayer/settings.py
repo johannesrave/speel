@@ -116,6 +116,16 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# Password reset
+# https://docs.djangoproject.com/en/3.0/topics/auth/default/#all-authentication-views
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'audiobookplayer.speel@gmail.com'
+EMAIL_HOST_PASSWORD = 'hNnFy_7#TSme9<[2u&Xh'
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
