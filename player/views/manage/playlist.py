@@ -1,5 +1,4 @@
 import random
-import os
 from pprint import pprint
 
 from django.shortcuts import render, redirect
@@ -67,6 +66,9 @@ def save_all_posted_tracks(request, playlist):
     _tracks = Track.objects.bulk_create(
         [Track(audio_file=file, playlist=playlist) for file in files if TinyTag.is_supported(file.name)])
 
+    if len(_tracks) < len(files):
+        pprint(
+            f'Es wurden {len(_tracks)} Audiodateien hochgeladen und {len(files) - len(_tracks)} ungültige Dateien übersprungen')
     for track in _tracks:
         tag = TinyTag.get(f'{MEDIA_ROOT}/{track.audio_file.name}')
 
