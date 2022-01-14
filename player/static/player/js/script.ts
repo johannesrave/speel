@@ -95,6 +95,8 @@ class Player {
         // @ts-ignore
         track.howl = track.howl ?? new Howl(this.getOptions(track))
 
+
+        this.lastTimestamp = this.lastTimestamp ?? 0;
         if (this.lastTimestamp !== 0){
             track.howl.seek(this.lastTimestamp);
             this.lastTimestamp = 0
@@ -175,6 +177,7 @@ class Player {
      * @param newIndex
      */
     skipTo(newIndex: number) {
+        this.tracks[this.currentIndex]?.howl?.stop()
         this.play(newIndex);
     }
 

@@ -42,7 +42,7 @@ class Player {
      * @param newIndex
      */
     play(newIndex) {
-        var _a;
+        var _a, _b;
         clearInterval(this.updatingCurrentTime);
         this.playing = true;
         this.currentIndex = newIndex !== null && newIndex !== void 0 ? newIndex : this.currentIndex;
@@ -56,6 +56,7 @@ class Player {
         const track = this.tracks[this.currentIndex];
         // @ts-ignore
         track.howl = (_a = track.howl) !== null && _a !== void 0 ? _a : new Howl(this.getOptions(track));
+        this.lastTimestamp = (_b = this.lastTimestamp) !== null && _b !== void 0 ? _b : 0;
         if (this.lastTimestamp !== 0) {
             track.howl.seek(this.lastTimestamp);
             this.lastTimestamp = 0;
@@ -128,6 +129,8 @@ class Player {
      * @param newIndex
      */
     skipTo(newIndex) {
+        var _a, _b;
+        (_b = (_a = this.tracks[this.currentIndex]) === null || _a === void 0 ? void 0 : _a.howl) === null || _b === void 0 ? void 0 : _b.stop();
         this.play(newIndex);
     }
     /**
