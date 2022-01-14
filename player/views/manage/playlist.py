@@ -1,4 +1,5 @@
 import random
+import os
 from pprint import pprint
 
 from django.shortcuts import render, redirect
@@ -64,7 +65,7 @@ def save_all_posted_tracks(request, playlist):
     files = request.FILES.getlist('new_tracks')
 
     _tracks = Track.objects.bulk_create(
-        [Track(audio_file=file, playlist=playlist) for file in files])
+        [Track(audio_file=file, playlist=playlist) for file in files if TinyTag.is_supported(file.name)])
 
     for track in _tracks:
         tag = TinyTag.get(f'{MEDIA_ROOT}/{track.audio_file.name}')
@@ -75,6 +76,16 @@ def save_all_posted_tracks(request, playlist):
         pprint(f'Song {track.title} has been scanned and uploaded!')
 
     Track.objects.bulk_update(_tracks, ['title', 'duration'])
+
+
+def get_filename(file):
+    filename, _ = os.path.splitext(file.name)
+    return filename
+
+
+def get_file_extension(file):
+    _, file_extension = os.path.splitext(file.name)
+    return file_extension.lower()
 
 
 def pick_random_default_image_path():
