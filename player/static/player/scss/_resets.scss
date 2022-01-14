@@ -27,3 +27,8 @@ ol {
   padding: 0;
   list-style: none;
 }
+
+// to keep icons from disappearing in chrome
+svg {
+  width: 100%;
+}
