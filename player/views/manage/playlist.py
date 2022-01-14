@@ -6,24 +6,24 @@ from django.urls import reverse
 from tinytag import TinyTag
 
 from audioplayer.settings import MEDIA_ROOT
-from player.forms import UpdateAudiobookForm, CreateAudiobookForm
+from player.forms import UpdatePlaylistForm, CreatePlaylistForm
 from player.models import Track, User
 from player.views.views import GuardedView
 
 
-class CreateAudiobook(GuardedView):
+class CreatePlaylist(GuardedView):
 
     @staticmethod
     def get(request):
         context = {
-            'form': CreateAudiobookForm(),
+            'form': CreatePlaylistForm(),
         }
         return render(request, 'forms/create-playlist.html', context)
 
     @staticmethod
     def post(request):
         # request.upload_handlers = [TemporaryFileUploadHandler(request)]
-        form = CreateAudiobookForm(request.POST, request.FILES)
+        form = CreatePlaylistForm(request.POST, request.FILES)
 
         if not form.is_valid():
             pprint(form.errors)
@@ -84,14 +84,14 @@ def pick_random_default_image_path():
     return image_path
 
 
-class UpdateAudiobook(GuardedView):
+class UpdatePlaylist(GuardedView):
 
     @staticmethod
     def get(request, playlist_id):
         playlist = retrieve_playlist_if_owned(request.user, playlist_id)
         if not playlist:
             return redirect('playlists')
-        playlist_form = UpdateAudiobookForm(instance=playlist)
+        playlist_form = UpdatePlaylistForm(instance=playlist)
 
         context = {
             'form': playlist_form,
@@ -103,7 +103,7 @@ class UpdateAudiobook(GuardedView):
     @staticmethod
     def post(request, playlist_id):
         playlist = retrieve_playlist_if_owned(request.user, playlist_id)
-        form = UpdateAudiobookForm(request.POST, request.FILES, instance=playlist)
+        form = UpdatePlaylistForm(request.POST, request.FILES, instance=playlist)
         if not form.is_valid():
             pprint(form.errors)
             context = {
@@ -116,7 +116,7 @@ class UpdateAudiobook(GuardedView):
         return redirect('playlists')
 
 
-class DeleteAudiobook(GuardedView):
+class DeletePlaylist(GuardedView):
 
     @staticmethod
     def get(request, playlist_id):

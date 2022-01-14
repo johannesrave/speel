@@ -6,7 +6,7 @@ from django.test import LiveServerTestCase
 from django.urls import reverse
 
 
-class AudiobookListViewTest(LiveServerTestCase):
+class PlaylistListViewTest(LiveServerTestCase):
     credentials = None
 
     def setUp(self):

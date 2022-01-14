@@ -1,7 +1,7 @@
 from django.urls import path
 from django.views.generic import RedirectView
 
-from player.models import Audiobook, Track
+from player.models import Playlist, Track
 from player.views import player, login, register, api, library, manage
 from player.views.manage import account, playlist
 
@@ -17,18 +17,18 @@ urlpatterns = [
     path('player/<uuid:playlist_id>/', player.Player.as_view(), name='play_playlist'),
 
     # content management pages ('parents' pages)
-    path('playlists/new/', manage.playlist.CreateAudiobook.as_view(),
+    path('playlists/new/', manage.playlist.CreatePlaylist.as_view(),
          name='create_playlist'),
-    path('playlists/<uuid:playlist_id>/edit/', manage.playlist.UpdateAudiobook.as_view(),
+    path('playlists/<uuid:playlist_id>/edit/', manage.playlist.UpdatePlaylist.as_view(),
          name='update_playlist'),
-    path('playlists/<uuid:playlist_id>/delete/', manage.playlist.DeleteAudiobook.as_view(),
+    path('playlists/<uuid:playlist_id>/delete/', manage.playlist.DeletePlaylist.as_view(),
          name='delete_playlist'),
 
     # HTTP-api 'endpoints'
     path('api/playlists/<uuid:model_id>/', api.SingleView.as_view(),
-         {'model': Audiobook}, name='playlist_single'),
+         {'model': Playlist}, name='playlist_single'),
     path('api/playlists/', api.ListView.as_view(),
-         {'model': Audiobook}, name='playlist_list'),
+         {'model': Playlist}, name='playlist_list'),
     path('api/tracks/<uuid:model_id>/', api.SingleView.as_view(),
          {'model': Track}, name='track_single'),
     path('api/tracks/', api.ListView.as_view(),

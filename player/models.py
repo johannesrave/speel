@@ -18,7 +18,7 @@ class User(django.contrib.auth.models.User):
     pass
 
 
-class Audiobook(UUIDModel):
+class Playlist(UUIDModel):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         blank=True,
@@ -55,7 +55,7 @@ class Track(UUIDModel):
     audio_file = models.FileField()
 
     playlist = models.ForeignKey(
-        to='player.Audiobook',
+        to='Playlist',
         to_field='id',
         related_name='tracks',
         blank=True, null=True,
