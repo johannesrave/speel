@@ -78,16 +78,6 @@ def save_all_posted_tracks(request, playlist):
     Track.objects.bulk_update(_tracks, ['title', 'duration'])
 
 
-def get_filename(file):
-    filename, _ = os.path.splitext(file.name)
-    return filename
-
-
-def get_file_extension(file):
-    _, file_extension = os.path.splitext(file.name)
-    return file_extension.lower()
-
-
 def pick_random_default_image_path():
     random.seed()
     value = random.randint(1, 10)
