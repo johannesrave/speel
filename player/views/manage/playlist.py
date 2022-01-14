@@ -1,15 +1,13 @@
 import random
 from pprint import pprint
 
-from django.http import HttpRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from tinytag import TinyTag
 
 from audioplayer.settings import MEDIA_ROOT
 from player.forms import UpdatePlaylistForm, CreatePlaylistForm
-from player.models import Playlist
-from player.models import Track
+from player.models import Track, User
 from player.views.views import GuardedView
 
 
@@ -24,7 +22,9 @@ class CreatePlaylist(GuardedView):
 
     @staticmethod
     def post(request):
+        # request.upload_handlers = [TemporaryFileUploadHandler(request)]
         form = CreatePlaylistForm(request.POST, request.FILES)
+
         if not form.is_valid():
             pprint(form.errors)
             context = {
@@ -35,19 +35,46 @@ class CreatePlaylist(GuardedView):
 
         playlist = form.save(commit=False)
 
-        tracks = get_tracks(request)
-        playlist.tracks.set(tracks)
+        save_user(request, playlist)
+        save_posted_image_or_default(request, playlist)
+        save_all_posted_tracks(request, playlist)
 
-        image = request.FILES.get('image', None)
-        print(f'image in request: {image}')
-        if not image:
-            playlist.image.name = pick_random_default_image_path()
-        else:
-            playlist.image = image
         playlist.save()
         print(playlist.image.name)
 
         return redirect('update_playlist', playlist_id=playlist.id)
+
+
+def save_user(request, playlist):
+    user: User = request.user
+    playlist.user = user
+
+
+def save_posted_image_or_default(request, playlist):
+    image = request.FILES.get('image', None)
+    print(f'image in request: {image}')
+    if not image:
+        playlist.image.name = pick_random_default_image_path()
+    else:
+        playlist.image = image
+
+
+def save_all_posted_tracks(request, playlist):
+    playlist.save()
+    files = request.FILES.getlist('new_tracks')
+
+    _tracks = Track.objects.bulk_create(
+        [Track(audio_file=file, playlist=playlist) for file in files])
+
+    for track in _tracks:
+        tag = TinyTag.get(f'{MEDIA_ROOT}/{track.audio_file.name}')
+
+        track.title = tag.title or track.audio_file.name
+        track.duration = tag.duration
+
+        pprint(f'Song {track.title} has been scanned and uploaded!')
+
+    Track.objects.bulk_update(_tracks, ['title', 'duration'])
 
 
 def pick_random_default_image_path():
@@ -57,48 +84,25 @@ def pick_random_default_image_path():
     return image_path
 
 
-def get_tracks(request: HttpRequest):
-    files = request.FILES.getlist('new_tracks')
-    tracks = []
-
-    for file in files:
-        data = get_metadata(file)
-        track = Track.objects.create(**data)
-        track.save()
-        pprint(f'Song {track.title} has been scanned and uploaded!')
-        tracks.append(track)  # TODO: save all tracks in bulk
-    return tracks
-
-
-def get_metadata(audio_file):
-    pprint(audio_file)
-    file_name = str(audio_file.name)
-    tag = TinyTag.get(audio_file.temporary_file_path())
-
-    return {
-        'title': tag.title or file_name,
-        'duration': tag.duration,
-        'audio_file': audio_file,
-    }
-
-
 class UpdatePlaylist(GuardedView):
 
     @staticmethod
     def get(request, playlist_id):
-        playlist = Playlist.objects.get(id=playlist_id)
+        playlist = retrieve_playlist_if_owned(request.user, playlist_id)
+        if not playlist:
+            return redirect('playlists')
         playlist_form = UpdatePlaylistForm(instance=playlist)
 
         context = {
             'form': playlist_form,
             'playlist_id': playlist_id,
-            'image': playlist.image,
+            'playlist': playlist,
         }
         return render(request, 'forms/update-playlist.html', context)
 
     @staticmethod
     def post(request, playlist_id):
-        playlist = Playlist.objects.get(id=playlist_id)
+        playlist = retrieve_playlist_if_owned(request.user, playlist_id)
         form = UpdatePlaylistForm(request.POST, request.FILES, instance=playlist)
         if not form.is_valid():
             pprint(form.errors)
@@ -116,6 +120,9 @@ class DeletePlaylist(GuardedView):
 
     @staticmethod
     def get(request, playlist_id):
+        playlist = retrieve_playlist_if_owned(request.user, playlist_id)
+        if not playlist:
+            return redirect('playlists')
         context = {
             'playlist_id': playlist_id
         }
@@ -123,6 +130,11 @@ class DeletePlaylist(GuardedView):
 
     @staticmethod
     def post(request, playlist_id):
-        playlist = Playlist.objects.get(id=playlist_id)
-        playlist.delete()
+        playlist = retrieve_playlist_if_owned(request.user, playlist_id)
+        if playlist:
+            playlist.delete()
         return redirect('playlists')
+
+
+def retrieve_playlist_if_owned(user, playlist_id):
+    return user.playlist_set.all().get(id=playlist_id)
