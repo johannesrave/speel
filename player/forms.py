@@ -43,10 +43,10 @@ class UpdatePlaylistForm(ModelForm):
 
 
 class CreatePlaylistForm(ModelForm):
-    image = ImageField(required=False, label='Image', widget=FileInput)
+    image = ImageField(required=False, label='Cover', widget=FileInput)
     new_tracks = FileField(
         required=False,
-        label='New Tracks',
+        label='Tracks',
         widget=ClearableFileInput(attrs={'multiple': True}),
         max_length=(1024 * 1024 * 50)
     )
