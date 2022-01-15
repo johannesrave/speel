@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block main %}
-  <form action="{{ action }}" method="POST" enctype="multipart/form-data" class="padded-wrapper">
+  <div id="form-wrapper">
+  <form action="{{ action }}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {% block form %}
       {{ form.as_p }}
@@ -10,6 +11,7 @@
       <button type="submit" class="primary-button">{{ button_label }}</button>
     {% endblock form %}
   </form>
+  </div>
 {% endblock main %}
 {% block footer %}
   {% include 'components/page-link.html' with link_url='playlists' icon='icons/icon_edit.svg' %}

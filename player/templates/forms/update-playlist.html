@@ -15,10 +15,10 @@
       <p>{{ track.title }}</p>
     {% endfor %}
   </div>
-  <p>
-    <label for="id_tracks">Alle Tracks ersetzen</label>
-    <input type="file" name="tracks" multiple="" id="id_tracks">
-  </p>
+
+  <label for="id_tracks">Alle Tracks ersetzen:</label>
+  <input type="file" name="tracks" multiple="" id="id_tracks">
+
 
   <button type="submit" formaction="{% url 'update_playlist' playlist_id %}">
     Hörbuch speichern
