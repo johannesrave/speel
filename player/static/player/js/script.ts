@@ -1,5 +1,5 @@
 import {Ajax} from './ajax.js';
-import type {Howl, HowlOptions} from './howler'
+import type {Howl, HowlOptions} from './howler';
 
 // inspired by https://github.com/goldfire/howler.js/tree/master/examples/player
 
@@ -21,6 +21,10 @@ const pauseEvent = new CustomEvent('pause', eventConfig)
 const skipPrevEvent = new CustomEvent('skipPrev', eventConfig)
 const skipNextEvent = new CustomEvent('skipNext', eventConfig)
 const loadEvent = new CustomEvent('load', eventConfig)
+
+declare const Howler: { html5PoolSize: number; };
+console.dir(Howler)
+
 
 interface TrackModel {
     howl?: Howl;
@@ -63,6 +67,8 @@ class Player {
             throw 'Playlist is empty.'
         }
 
+        Howler.html5PoolSize = playlist.tracks.length;
+
         const indexOfLastPlayedTrack = playlist.tracks
             .findIndex(track => track.id === playlist.last_track_played_id);
         this.currentIndex = indexOfLastPlayedTrack !== -1 ? indexOfLastPlayedTrack : 0;
@@ -85,6 +91,7 @@ class Player {
         this.playing = true;
         this.currentIndex = newIndex ?? this.currentIndex
 
+
         // stop all other tracks playing.
         this.tracks.forEach((track, index) => {
             if (index === this.currentIndex) return;
@@ -92,12 +99,16 @@ class Player {
         })
 
         const track = this.tracks[this.currentIndex]
+        // console.log(`playing title with index ${this.currentIndex}: `)
+        // console.log(`track title: ${track.title}`)
+        // console.dir(Howler)
         // @ts-ignore
         track.howl = track.howl ?? new Howl(this.getOptions(track))
 
 
         this.lastTimestamp = this.lastTimestamp ?? 0;
         if (this.lastTimestamp !== 0){
+            console.log("using lastTimeStamp: " + this.lastTimestamp)
             track.howl.seek(this.lastTimestamp);
             this.lastTimestamp = 0
         }

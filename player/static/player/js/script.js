@@ -14,6 +14,7 @@ const pauseEvent = new CustomEvent('pause', eventConfig);
 const skipPrevEvent = new CustomEvent('skipPrev', eventConfig);
 const skipNextEvent = new CustomEvent('skipNext', eventConfig);
 const loadEvent = new CustomEvent('load', eventConfig);
+console.dir(Howler);
 class Player {
     /**
      * Player class containing the state of our playlist and where we are in it.
@@ -28,6 +29,7 @@ class Player {
         if (this.tracks.length < 1) {
             throw 'Playlist is empty.';
         }
+        Howler.html5PoolSize = playlist.tracks.length;
         const indexOfLastPlayedTrack = playlist.tracks
             .findIndex(track => track.id === playlist.last_track_played_id);
         this.currentIndex = indexOfLastPlayedTrack !== -1 ? indexOfLastPlayedTrack : 0;
@@ -54,10 +56,14 @@ class Player {
             (_a = track.howl) === null || _a === void 0 ? void 0 : _a.stop();
         });
         const track = this.tracks[this.currentIndex];
+        // console.log(`playing title with index ${this.currentIndex}: `)
+        // console.log(`track title: ${track.title}`)
+        // console.dir(Howler)
         // @ts-ignore
         track.howl = (_a = track.howl) !== null && _a !== void 0 ? _a : new Howl(this.getOptions(track));
         this.lastTimestamp = (_b = this.lastTimestamp) !== null && _b !== void 0 ? _b : 0;
         if (this.lastTimestamp !== 0) {
+            console.log("using lastTimeStamp: " + this.lastTimestamp);
             track.howl.seek(this.lastTimestamp);
             this.lastTimestamp = 0;
         }
