@@ -6,9 +6,8 @@
   {{ form.image }}
   {{ form.name.label }}
   {{ form.name }}
-
   {% if not audiobook.tracks.all %}
-    <p>enthält keine Tracks</p>
+    <p>Das Audiobook enthält keine Tracks</p>
   {% else %}
     <p>Das Audiobook besteht aus folgenden Tracks:</p>
   {% endif %}
