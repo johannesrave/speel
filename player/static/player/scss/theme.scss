@@ -109,3 +109,15 @@ h1 {
 #player-home-link a {
   background-color: $color-warning;
 }
+
+
+button {
+  &:hover {
+    filter: brightness(1.2);
+    color: $color-text-bright
+  }
+}
+
+.warning-button {
+  background-color: $color-warning;
+}

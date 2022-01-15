@@ -2,12 +2,14 @@
 @import '_mixins';
 
 main form {
-  width: 32rem;
+  width: 24rem;
+  height: 100%;
 
   margin: auto;
-  padding: 2rem;
+  padding: 1rem;
 
   display: grid;
+  gap: .5rem;
 
   place-items: center;
 
@@ -26,6 +28,49 @@ main form {
 
     background: $color-primary;
     color: $color-text-bright;
-    margin-top: 1rem;
+    font-size: 1.5rem;
+    //margin-top: 1rem;
+  }
+}
+
+
+/* update-playlist-form */
+
+#image-label {
+
+  display: grid;
+  text-align: center;
+
+  color: $color-text-bright;
+  font-weight: 600;
+  font-size: 1.5rem;
+
+  > * {
+    margin: auto;
+    grid-area: 1 / 1;
+  }
+
+
+  #update-playlist-thumbnail {
+    width: $grid-item-diameter;
+    height: $grid-item-diameter;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+
+#id_image {
+  display: none;
+}
+
+#track-list {
+  display: grid;
+  overflow: scroll;
+  height: 100%;
+
+  scrollbar-width: thin;
+
+  > * {
+    margin: 0;
   }
 }
