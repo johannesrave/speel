@@ -62,7 +62,7 @@ def save_posted_image_or_default(request, playlist):
 def save_all_posted_tracks(request, playlist):
     playlist.save()
     files = request.FILES.getlist('new_tracks')
-    valid_tracks = [Track(audio_file=file, playlist=playlist) for file in files if TinyTag.is_supported(file.name)]
+    valid_tracks = [Track(title=file.name, audio_file=file, playlist=playlist) for file in files if TinyTag.is_supported(file.name)]
     if len(valid_tracks) < len(files):
         names_of_valid_tracks = [track.audio_file.name for track in valid_tracks]
         invalid_files = [file for file in files if file.name not in names_of_valid_tracks]
@@ -75,7 +75,8 @@ def save_all_posted_tracks(request, playlist):
     for track in _tracks:
         tag = TinyTag.get(f'{MEDIA_ROOT}/{track.audio_file.name}')
 
-        track.title = tag.title or track.audio_file.name
+        if tag.title:
+            track.title = tag.title
         track.duration = tag.duration
 
         pprint(f'Song {track.title} has been scanned and uploaded!')
