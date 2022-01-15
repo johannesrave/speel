@@ -2,20 +2,36 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, Form, CharField, PasswordInput, ImageField, FileInput, FileField, ClearableFileInput
+from django.forms import ModelForm, Form, CharField, PasswordInput, ImageField, FileInput, FileField, \
+    ClearableFileInput, TextInput, EmailField
 
 from player.models import Audiobook, User
 
 
 class CreateUserForm(UserCreationForm):
-    username = CharField(label='Benutzername')
-    email = CharField(label='Email Addresse')
-    password1 = CharField(label='Passwort', widget=PasswordInput())
-    password2 = CharField(label='Passwort bestätigen', widget=PasswordInput())
+    username = CharField(max_length=100, required=True, label='Benutzername',
+                         widget=TextInput(attrs={'class': 'form-control'}))
+    email = EmailField(required=True, label='Email Addresse',
+                       widget=TextInput(attrs={'class': 'form-control'}))
+    password1 = CharField(max_length=100, required=True, label='Passwort',
+                          widget=PasswordInput())
+    password2 = CharField(max_length=100, required=True, label='Passwort bestätigen',
+                          widget=PasswordInput())
 
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+
+class UpdateUserForm(ModelForm):
+    username = CharField(max_length=100, required=True,
+                         label='Benutzername', widget=TextInput(attrs={'class': 'form-control'}))
+    email = EmailField(required=True, label='Email Addresse',
+                       widget=TextInput(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']
 
 
 class LoginForm(Form):
