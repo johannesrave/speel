@@ -7,8 +7,8 @@ const pauseButton = document.getElementById('pause-button');
 const backButton = document.getElementById('player-ear-left');
 const forwardButton = document.getElementById('player-ear-right');
 const cookies = Ajax.parseCookies();
-const playlist = getObjectByElementId('playlist');
-console.dir(playlist);
+const audiobook = getObjectByElementId('audiobook');
+console.dir(audiobook);
 const eventConfig = { "cancelable": true };
 const pauseEvent = new CustomEvent('pause', eventConfig);
 const skipPrevEvent = new CustomEvent('skipPrev', eventConfig);
@@ -16,29 +16,29 @@ const skipNextEvent = new CustomEvent('skipNext', eventConfig);
 const loadEvent = new CustomEvent('load', eventConfig);
 class Player {
     /**
-     * Player class containing the state of our playlist and where we are in it.
+     * Player class containing the state of our audiobook and where we are in it.
      * Includes all methods for playing, skipping, updating the display, etc.
-     * @param {Array} playlist Array of objects with playlist track details ({title, file, howl}).
+     * @param {Array} audiobook Array of objects with audiobook track details ({title, file, howl}).
      */
-    constructor(playlist) {
+    constructor(audiobook) {
         // private currentTrackId: string;
         this.playing = false;
-        this.playlist = playlist;
-        this.tracks = playlist.tracks;
+        this.audiobook = audiobook;
+        this.tracks = audiobook.tracks;
         if (this.tracks.length < 1) {
-            throw 'Playlist is empty.';
+            throw 'audiobook is empty.';
         }
-        const indexOfLastPlayedTrack = playlist.tracks
-            .findIndex(track => track.id === playlist.last_track_played_id);
+        const indexOfLastPlayedTrack = audiobook.tracks
+            .findIndex(track => track.id === audiobook.last_track_played_id);
         this.currentIndex = indexOfLastPlayedTrack !== -1 ? indexOfLastPlayedTrack : 0;
-        this.lastTimestamp = playlist.last_timestamp_played;
-        // this.currentTrackId = playlist.tracks[this.currentIndex].id;
+        this.lastTimestamp = audiobook.last_timestamp_played;
+        // this.currentTrackId = audiobook.tracks[this.currentIndex].id;
     }
     currentTimeEvent(detail) {
         dispatchEvent(new CustomEvent('updateCurrentTime', { detail: detail }));
     }
     /**
-     * Play a track in the playlist.
+     * Play a track in the audiobook.
      * @param newIndex
      */
     play(newIndex) {
@@ -64,7 +64,7 @@ class Player {
         track.howl.play();
         const detail = {
             trackId: track.id,
-            playlistId: this.playlist.id,
+            audiobookId: this.audiobook.id,
             lastTimestampPlayed: track.howl.seek(),
             track: track,
         };
@@ -125,7 +125,7 @@ class Player {
         this.skipTo(this.currentIndex);
     }
     /**
-     * Skip to a specific track based on its playlist index.
+     * Skip to a specific track based on its audiobook index.
      * @param newIndex
      */
     skipTo(newIndex) {
@@ -150,7 +150,7 @@ function getObjectByElementId(elementId) {
         return JSON.parse(element.textContent);
     }
 }
-const player = new Player(playlist);
+const player = new Player(audiobook);
 // Bind our player controls.
 playPauseButton.addEventListener('click', function () {
     console.log('playPause event fired.');
@@ -162,27 +162,27 @@ backButton.addEventListener('click', function () {
 forwardButton.addEventListener('click', function () {
     player.skip('next');
 });
-const perdiodicallyPatchPlaylist = (playlistId, currentTime) => {
+const perdiodicallyPatchAudiobook = (audiobookId, currentTime) => {
     return setInterval(() => {
-        Ajax.updateLastTimestampPlayed(playlistId, currentTime, cookies)
+        Ajax.updateLastTimestampPlayed(audiobookId, currentTime, cookies)
             .catch((e) => console.error(e));
-    }, 5000, playlistId, currentTime);
+    }, 5000, audiobookId, currentTime);
 };
 addEventListener('play', (e) => {
     const detail = e.detail;
     console.log('play event fired.');
     playButton.style.display = 'none';
     pauseButton.style.display = 'block';
-    Ajax.updateLastSongPlayed(detail.playlistId, detail.trackId, cookies)
+    Ajax.updateLastSongPlayed(detail.audiobookId, detail.trackId, cookies)
         .catch((e) => console.error(e));
-    Ajax.updateLastTimestampPlayed(detail.playlistId, detail.lastTimestampPlayed, cookies)
+    Ajax.updateLastTimestampPlayed(detail.audiobookId, detail.lastTimestampPlayed, cookies)
         .catch((e) => console.error(e));
 });
 addEventListener('updateCurrentTime', (e) => {
     const detail = e.detail;
     console.log('updateCurrentTime event fired.');
     const lastTimestampPlayed = detail.track.howl.seek();
-    Ajax.updateLastTimestampPlayed(detail.playlistId, lastTimestampPlayed, cookies)
+    Ajax.updateLastTimestampPlayed(detail.audiobookId, lastTimestampPlayed, cookies)
         .catch((e) => console.error(e));
 });
 addEventListener('pause', (e) => {

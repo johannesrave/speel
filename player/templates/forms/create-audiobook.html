@@ -1,13 +1,13 @@
 {% extends "forms/base.html" %}
 {% block form %}
   {{ form.as_p }}
-  <button type="submit" formaction="{% url 'create_playlist' %}">
+  <button type="submit" formaction="{% url 'create_audiobook' %}">
     Audiobook erstellen
   </button>
 {% endblock form %}
 
 {% block footer %}
-  {% include 'components/page-link.html' with link_url='playlists' icon='icons/icon_edit.svg' %}
+  {% include 'components/page-link.html' with link_url='audiobooks' icon='icons/icon_edit.svg' %}
   <h1>Audiobook erstellen</h1>
   <div class="empty"></div>
 {% endblock footer %}

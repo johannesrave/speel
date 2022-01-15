@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, Form, CharField, PasswordInput, ImageField, FileInput, FileField, ClearableFileInput
 
-from player.models import Playlist, User
+from player.models import Audiobook, User
 
 
 class CreateUserForm(UserCreationForm):
@@ -33,16 +33,16 @@ class LoginForm(Form):
                 raise ValidationError("Benutzername oder Passwort sind nicht korrekt")
 
 
-class UpdatePlaylistForm(ModelForm):
+class UpdateAudiobookForm(ModelForm):
     image = ImageField(required=False, label='Image', widget=FileInput)
     new_tracks = FileField(required=False)
 
     class Meta:
-        model = Playlist
+        model = Audiobook
         fields = ['name', 'image']
 
 
-class CreatePlaylistForm(ModelForm):
+class CreateAudiobookForm(ModelForm):
     image = ImageField(required=False, label='Cover', widget=FileInput)
     new_tracks = FileField(
         required=False,
@@ -52,5 +52,5 @@ class CreatePlaylistForm(ModelForm):
     )
 
     class Meta:
-        model = Playlist
+        model = Audiobook
         fields = ['name', 'image', 'new_tracks']

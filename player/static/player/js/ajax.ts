@@ -1,6 +1,6 @@
 export class Ajax {
-    static updateLastSongPlayed(playlistId: string, trackId: string, cookies: { csrftoken?: any; }) {
-        const url = `${window.location.origin}/api/playlists/${playlistId}/`
+    static updateLastSongPlayed(audiobookId: string, trackId: string, cookies: { csrftoken?: any; }) {
+        const url = `${window.location.origin}/api/audiobooks/${audiobookId}/`
 
         const init = {
             method: 'PATCH',
@@ -22,8 +22,8 @@ export class Ajax {
         return fetch(url, init)
     }
 
-    static updateLastTimestampPlayed(playlistId: string, lastTimestampPlayed: number, cookies: { csrftoken?: any; }) {
-        const url = `${window.location.origin}/api/playlists/${playlistId}/`
+    static updateLastTimestampPlayed(audiobookId: string, lastTimestampPlayed: number, cookies: { csrftoken?: any; }) {
+        const url = `${window.location.origin}/api/audiobooks/${audiobookId}/`
 
         const init = {
             method: 'PATCH',

@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block body %}
   <body id="player-wrapper">
-    <div id="background-image" style="background-image: url('{{ playlist.image }}')"></div>
+    <div id="background-image" style="background-image: url('{{ audiobook.image }}')"></div>
     {% include 'components/player_complete_web.svg' %}
     <div id="player-home-link">
       {% include 'components/page-link.html' with link_url='library' icon='icons/icon_exit.svg' %}
     </div>
 
-    {{ playlist|json_script:"playlist" }}
+    {{ audiobook|json_script:"audiobook" }}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"
             integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>

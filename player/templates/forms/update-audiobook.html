@@ -1,30 +1,30 @@
 {% extends "forms/base.html" %}
 {% block form %}
-  <img class="circular-thumbnail" src="{{ playlist.image.url }}" alt="">
+  <img class="circular-thumbnail" src="{{ audiobook.image.url }}" alt="">
 
   {{ form.image.label }}
   {{ form.image }}
   {{ form.name.label }}
   {{ form.name }}
 
-  {% if not playlist.tracks.all %}
+  {% if not audiobook.tracks.all %}
     <p>enthält keine Tracks</p>
   {% else %}
     <p>Das Audiobook besteht aus folgenden Tracks:</p>
   {% endif %}
-  {% for track in playlist.tracks.all %}
+  {% for track in audiobook.tracks.all %}
     <p>{{ track.title }}</p>
   {% endfor %}
-  <button type="submit" formaction="{% url 'update_playlist' playlist_id %}">
+  <button type="submit" formaction="{% url 'update_audiobook' audiobook_id %}">
     Änderungen speichern
   </button>
-  <button type="submit" formaction="{% url 'delete_playlist' playlist_id %}">
+  <button type="submit" formaction="{% url 'delete_audiobook' audiobook_id %}">
     Audiobook löschen
   </button>
 {% endblock form %}
 
 {% block footer %}
-  {% include 'components/page-link.html' with link_url='playlists' icon='icons/icon_edit.svg' %}
+  {% include 'components/page-link.html' with link_url='audiobooks' icon='icons/icon_edit.svg' %}
   <h1>Audiobook anpassen</h1>
   <div class="empty"></div>
 {% endblock footer %}

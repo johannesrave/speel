@@ -12,8 +12,8 @@ const forwardButton = document.getElementById('player-ear-right');
 
 const cookies = Ajax.parseCookies();
 
-const playlist = getObjectByElementId('playlist');
-console.dir(playlist)
+const audiobook = getObjectByElementId('audiobook');
+console.dir(audiobook)
 
 const eventConfig = {"cancelable": true};
 
@@ -31,7 +31,7 @@ interface TrackModel {
     audio_file: string
 }
 
-interface PlaylistModel {
+interface audiobookModel {
     pkid: number,
     id: string,
     name: string,
@@ -42,7 +42,7 @@ interface PlaylistModel {
 }
 
 class Player {
-    private readonly playlist: PlaylistModel;
+    private readonly audiobook: AudiobookModel;
     private readonly tracks: TrackModel[];
     private currentIndex: number;
     // private currentTrackId: string;
@@ -51,23 +51,23 @@ class Player {
     private lastTimestamp: number;
 
     /**
-     * Player class containing the state of our playlist and where we are in it.
+     * Player class containing the state of our audiobook and where we are in it.
      * Includes all methods for playing, skipping, updating the display, etc.
-     * @param {Array} playlist Array of objects with playlist track details ({title, file, howl}).
+     * @param {Array} audiobook Array of objects with audiobook track details ({title, file, howl}).
      */
-    constructor(playlist: PlaylistModel) {
+    constructor(audiobook: AudiobookModel) {
 
-        this.playlist = playlist;
-        this.tracks = playlist.tracks;
+        this.audiobook = audiobook;
+        this.tracks = audiobook.tracks;
         if (this.tracks.length < 1) {
-            throw 'Playlist is empty.'
+            throw 'audiobook is empty.'
         }
 
-        const indexOfLastPlayedTrack = playlist.tracks
-            .findIndex(track => track.id === playlist.last_track_played_id);
+        const indexOfLastPlayedTrack = audiobook.tracks
+            .findIndex(track => track.id === audiobook.last_track_played_id);
         this.currentIndex = indexOfLastPlayedTrack !== -1 ? indexOfLastPlayedTrack : 0;
-        this.lastTimestamp = playlist.last_timestamp_played
-        // this.currentTrackId = playlist.tracks[this.currentIndex].id;
+        this.lastTimestamp = audiobook.last_timestamp_played
+        // this.currentTrackId = audiobook.tracks[this.currentIndex].id;
 
     }
 
@@ -76,7 +76,7 @@ class Player {
     }
 
     /**
-     * Play a track in the playlist.
+     * Play a track in the audiobook.
      * @param newIndex
      */
 
@@ -106,7 +106,7 @@ class Player {
 
         const detail = {
             trackId: track.id,
-            playlistId: this.playlist.id,
+            audiobookId: this.audiobook.id,
             lastTimestampPlayed: track.howl.seek(),
             track: track,
         }
@@ -173,7 +173,7 @@ class Player {
     }
 
     /**
-     * Skip to a specific track based on its playlist index.
+     * Skip to a specific track based on its audiobook index.
      * @param newIndex
      */
     skipTo(newIndex: number) {
@@ -202,7 +202,7 @@ function getObjectByElementId(elementId: string) {
     }
 }
 
-const player = new Player(playlist)
+const player = new Player(audiobook)
 
 // Bind our player controls.
 playPauseButton!.addEventListener('click', function () {
@@ -216,11 +216,11 @@ forwardButton!.addEventListener('click', function () {
     player.skip('next');
 });
 
-const perdiodicallyPatchPlaylist = (playlistId: string, currentTime: number) => {
+const perdiodicallyPatchAudiobook = (audiobookId: string, currentTime: number) => {
     return setInterval(() => {
-        Ajax.updateLastTimestampPlayed(playlistId, currentTime, cookies)
+        Ajax.updateLastTimestampPlayed(audiobookId, currentTime, cookies)
             .catch((e: Error) => console.error(e))
-    }, 5000, playlistId, currentTime);
+    }, 5000, audiobookId, currentTime);
 };
 
 addEventListener('play', (e: Event) => {
@@ -229,10 +229,10 @@ addEventListener('play', (e: Event) => {
     playButton!.style.display = 'none';
     pauseButton!.style.display = 'block';
 
-    Ajax.updateLastSongPlayed(detail.playlistId, detail.trackId, cookies)
+    Ajax.updateLastSongPlayed(detail.audiobookId, detail.trackId, cookies)
         .catch((e: Error) => console.error(e));
 
-    Ajax.updateLastTimestampPlayed(detail.playlistId, detail.lastTimestampPlayed, cookies)
+    Ajax.updateLastTimestampPlayed(detail.audiobookId, detail.lastTimestampPlayed, cookies)
         .catch((e: Error) => console.error(e))
 })
 
@@ -242,7 +242,7 @@ addEventListener('updateCurrentTime', (e: Event) => {
 
     const lastTimestampPlayed = detail.track.howl.seek();
 
-    Ajax.updateLastTimestampPlayed(detail.playlistId, lastTimestampPlayed, cookies)
+    Ajax.updateLastTimestampPlayed(detail.audiobookId, lastTimestampPlayed, cookies)
         .catch((e: Error) => console.error(e))
 })
 

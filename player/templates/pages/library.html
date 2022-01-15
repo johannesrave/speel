@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block main %}
-  {% if not playlists %}
+  {% if not audiobooks %}
     <div class="info-text">
       <div>
         <p>Du hast keine Audiobooks in deiner Bibliothek.</p>
@@ -9,13 +9,13 @@
     </div>
   {% else %}
     <ul id="library" class="main-grid">
-      {% for playlist in playlists %}
+      {% for audiobook in audiobooks %}
         {% include 'components/library-item.html' %}
       {% endfor %}
     </ul>
   {% endif %}
 {% endblock main %}
 {% block footer %}
-  {% include 'components/page-link.html' with id='playlists-link' link_url='playlists' icon='icons/icon_edit.svg' %}
+  {% include 'components/page-link.html' with id='audiobooks-link' link_url='audiobooks' icon='icons/icon_edit.svg' %}
   <h1>Willkommen {{ request.user }}!</h1>
 {% endblock footer %}

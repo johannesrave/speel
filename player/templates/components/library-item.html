@@ -1,8 +1,8 @@
-<li class="grid-item" title="{{ playlist.name }}">
-  <div class="circular-thumbnail" style="background-image: url('{{ playlist.image.url }}')"></div>
+<li class="grid-item" title="{{ audiobook.name }}">
+  <div class="circular-thumbnail" style="background-image: url('{{ audiobook.image.url }}')"></div>
   <div class="grid-item-contour">{% include 'icons/contour_circle.svg' %}</div>
 {#    <div class="grid-item-icon">{% include 'icons/icon_listen.svg' %}</div>#}
-  <a class="grid-item-link" href="{% url 'play_playlist' playlist.id %}">
-   {{ playlist.name }}
+  <a class="grid-item-link" href="{% url 'play_audiobook' audiobook.id %}">
+   {{ audiobook.name }}
   </a>
 </li>

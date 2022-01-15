@@ -1,0 +1,11 @@
+<li class="grid-item" title="{{ audiobook.name }}">
+  <div class="filter-blur circular-thumbnail" style="background-image: url('{{ audiobook.image.url }}')"></div>
+  <div class="grid-item-contour">{% include 'icons/contour_circle.svg' %}</div>
+  <div class="grid-item-icon">
+    <div class="grid-item-icon-background"></div>
+    {% include 'icons/icon_edit.svg' %}
+  </div>
+  <a class="grid-item-link" href="{% url 'update_audiobook' audiobook.id %}">
+   {{ audiobook.name }}
+  </a>
+</li>

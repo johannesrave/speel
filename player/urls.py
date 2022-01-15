@@ -2,9 +2,9 @@ from django.urls import path
 from django.views.generic import RedirectView
 from django.contrib.auth import views as auth_views
 
-from player.models import Playlist, Track
+from player.models import Audiobook, Track
 from player.views import player, login, register, api, library, manage
-from player.views.manage import account, playlist
+from player.views.manage import account, audiobook
 
 urlpatterns = [
     # account pages
@@ -26,23 +26,23 @@ urlpatterns = [
 
     # player pages ('kids' pages)
     path('library/', library.ViewLibrary.as_view(), name='library'),
-    path('playlists/', library.EditLibrary.as_view(), name='playlists'),
+    path('audiobooks/', library.EditLibrary.as_view(), name='audiobooks'),
     path('player/', RedirectView.as_view(pattern_name='library', permanent=False)),
-    path('player/<uuid:playlist_id>/', player.Player.as_view(), name='play_playlist'),
+    path('player/<uuid:audiobook_id>/', player.Player.as_view(), name='play_audiobook'),
 
     # content management pages ('parents' pages)
-    path('playlists/new/', manage.playlist.CreatePlaylist.as_view(),
-         name='create_playlist'),
-    path('playlists/<uuid:playlist_id>/edit/', manage.playlist.UpdatePlaylist.as_view(),
-         name='update_playlist'),
-    path('playlists/<uuid:playlist_id>/delete/', manage.playlist.DeletePlaylist.as_view(),
-         name='delete_playlist'),
+    path('audiobooks/new/', manage.audiobook.CreateAudiobook.as_view(),
+         name='create_audiobook'),
+    path('audiobooks/<uuid:audiobook_id>/edit/', manage.audiobook.UpdateAudiobook.as_view(),
+         name='update_audiobook'),
+    path('audiobooks/<uuid:audiobook_id>/delete/', manage.audiobook.DeleteAudiobook.as_view(),
+         name='delete_audiobook'),
 
     # HTTP-api 'endpoints'
-    path('api/playlists/<uuid:model_id>/', api.SingleView.as_view(),
-         {'model': Playlist}, name='playlist_single'),
-    path('api/playlists/', api.ListView.as_view(),
-         {'model': Playlist}, name='playlist_list'),
+    path('api/audiobooks/<uuid:model_id>/', api.SingleView.as_view(),
+         {'model': Audiobook}, name='audiobook_single'),
+    path('api/audiobooks/', api.ListView.as_view(),
+         {'model': Audiobook}, name='audiobook_list'),
     path('api/tracks/<uuid:model_id>/', api.SingleView.as_view(),
          {'model': Track}, name='track_single'),
     path('api/tracks/', api.ListView.as_view(),
