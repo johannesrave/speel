@@ -6,10 +6,15 @@
   {{ form.image }}
   {{ form.name.label }}
   {{ form.name }}
+
+  {% if not playlist.tracks.all %}
+    <p>enthält keine Tracks</p>
+  {% else %}
+    <p>Das Audiobook besteht aus folgenden Tracks:</p>
+  {% endif %}
   {% for track in playlist.tracks.all %}
     <p>{{ track.title }}</p>
   {% endfor %}
-    {% if not playlist.tracks.all %}<p>enthält keine Tracks</p>{% endif %}
   <button type="submit" formaction="{% url 'update_playlist' playlist_id %}">
     Änderungen speichern
   </button>
