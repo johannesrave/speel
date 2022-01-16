@@ -3,11 +3,12 @@
 from pprint import pprint
 
 from django.contrib.auth.models import User
-from django.test import TestCase, Client
-from django.urls import reverse
-from django.utils.http import urlencode
+from django.test import TestCase
 
-from player.models import Audiobook
+
+@staticmethod
+def assert_user_exists(username):
+    User.objects.get(username=username)
 
 
 class PagesTest(TestCase):
@@ -31,8 +32,37 @@ class PagesTest(TestCase):
                                  'Registrieren'
                                  '</button>')
 
-    # TODO fix this test
-    def test_users_can_register(self):
+    def test_register(self):
+        data = {
+            "username": "Peter",
+            "email": "peter.lustig@gmail.com",
+            "password1": "K!nNT9R!QZ0Y",
+            "password2": "K!nNT9R!QZ0Y",
+        }
+        with self.assertRaises(User.DoesNotExist):
+            User.objects.get(username='Peter')
+        self.client.post('/register/', data=data)
+        assert_user_exists('Peter')
+
+    def test_username_cant_be_registered_twice(self):
+        data = {
+            "username": "Peter",
+            "email": "peter.lustig@gmail.com",
+            "password1": "K!nNT9R!QZ0Y",
+            "password2": "K!nNT9R!QZ0Y",
+        }
+        data2 = {
+            "username": "Peter",
+            "email": "anderer.peter@gmail.com",
+            "password1": "K!nNT9R!QZ0Y",
+            "password2": "K!nNT9R!QZ0Y",
+        }
+        self.client.post('/register/', data=data)
+        self.assertEqual(User.objects.get(username='Peter').email, "peter.lustig@gmail.com")
+        self.client.post('/register/', data=data2)
+        self.assertEqual(User.objects.get(username='Peter').email, "peter.lustig@gmail.com")
+
+    def test_successful_register_redirects_to_login(self):
         data = {
             "username": "Peter",
             "email": "peter.lustig@gmail.com",
@@ -40,6 +70,5 @@ class PagesTest(TestCase):
             "password2": "K!nNT9R!QZ0Y",
         }
         response = self.client.post('/register/', data=data)
-        pprint(response)
-        pprint(response.headers)
-        self.assertContains(response.headers["Location"], '/login/')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/login/')
