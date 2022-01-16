@@ -1,5 +1,4 @@
 import random
-import os
 from pprint import pprint
 
 from django.shortcuts import render, redirect
@@ -92,7 +91,7 @@ class UpdatePlaylist(GuardedView):
         playlist = retrieve_playlist_if_owned(request.user, playlist_id)
         if not playlist:
             return redirect('playlists')
-        playlist_form = UpdatePlaylistForm(instance=playlist)
+        playlist_form = CreatePlaylistForm(instance=playlist)
 
         context = {
             'form': playlist_form,
@@ -104,7 +103,7 @@ class UpdatePlaylist(GuardedView):
     @staticmethod
     def post(request, playlist_id):
         playlist = retrieve_playlist_if_owned(request.user, playlist_id)
-        form = UpdatePlaylistForm(request.POST, request.FILES, instance=playlist)
+        form = CreatePlaylistForm(request.POST, request.FILES, instance=playlist)
         if not form.is_valid():
             pprint(form.errors)
             context = {
@@ -113,7 +112,19 @@ class UpdatePlaylist(GuardedView):
             }
             return render(request, 'forms/create-playlist.html', context)
 
-        form.save()
+        playlist = form.save(commit=False)
+
+        playlist.last_track_played = None
+        playlist.last_timestamp_played = None
+        playlist.save()
+        playlist.tracks.all().delete()
+
+        save_all_posted_tracks(request, playlist)
+
+        playlist.save()
+        print(playlist.image.name)
+
+        # form.save()
         return redirect('playlists')
 
 
