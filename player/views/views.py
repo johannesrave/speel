@@ -3,5 +3,5 @@ from django.views import View
 
 
 class GuardedView(LoginRequiredMixin, View):
-    login_url = '/login/'
+    login_url = '/account/login/'
     redirect_field_name = 'redirect_to'
