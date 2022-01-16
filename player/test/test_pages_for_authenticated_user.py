@@ -2,6 +2,7 @@ from pprint import pprint
 
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
+from django.urls import reverse
 
 from player.models import Audiobook
 
@@ -41,10 +42,36 @@ class PagesTest(TestCase):
         pprint(response)
         self.assertEqual(response.status_code, 200)
 
-    # TODO create Audiobook for user, check if he can access it with /player/id
-    # TODO check if another user cant access this audiobook
-    # def test_player_exists_at_desired_location(self):
-    #     audiobook = Audiobook.objects.create(name=)
-    #     response = self.client.get('/player/')
-    #     pprint(response)
-    #     self.assertEqual(response.status_code, 200)
+    def test_audiobook_gets_bound_to_user(self):
+        self.create_audiobook_returns_post_request("audiobook_testname")
+        audiobook = Audiobook.objects.filter(user=self.user)[0]
+        print(audiobook)
+        users_audiobook = Audiobook.objects.filter(user=self.user)[0]
+        self.assertEqual(users_audiobook, audiobook)
+
+    def test_audiobook_cant_be_accessed_just_by_owner(self):
+        self.create_audiobook_returns_post_request("audiobook_with_owner_testuser")
+
+        users_library = self.client.get('/library/')
+        self.assertContains(users_library, text='audiobook_with_owner_testuser', html=True)
+
+        self.client.logout()
+
+        other_user = self.login_and_return_other_user()
+
+        other_users_library = self.client.get('/library/')
+        self.assertNotContains(other_users_library, text='audiobook_with_owner_testuser', html=True)
+
+        other_users_audiobook = Audiobook.objects.filter(user=other_user)
+        self.assertFalse(other_users_audiobook)
+
+    def create_audiobook_returns_post_request(self, name):
+        data = {'name': name}
+        return self.client.post(reverse('create_audiobook'), data=data)
+
+    def login_and_return_other_user(self):
+        other_user = User.objects.create(username='other_user')
+        other_user.set_password('12345')
+        other_user.save()
+        self.client.login(username='other_user', password='12345')
+        return other_user
