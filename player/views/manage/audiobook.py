@@ -18,11 +18,10 @@ class CreateAudiobook(GuardedView):
         context = {
             'form': CreateAudiobookForm(),
         }
-        return render(request, 'forms/create-audiobook.html', context)
+        return render(request, 'forms/audiobook-create.html', context)
 
     @staticmethod
     def post(request):
-        # request.upload_handlers = [TemporaryFileUploadHandler(request)]
         form = CreateAudiobookForm(request.POST, request.FILES)
 
         if not form.is_valid():
@@ -31,7 +30,7 @@ class CreateAudiobook(GuardedView):
                 'action': reverse('create_audiobook'),
                 'form': form,
             }
-            return render(request, 'forms/create-audiobook.html', context)
+            return render(request, 'forms/audiobook-create.html', context)
 
         audiobook = form.save(commit=False)
 
@@ -105,7 +104,7 @@ class UpdateAudiobook(GuardedView):
             'audiobook_id': audiobook_id,
             'audiobook': audiobook,
         }
-        return render(request, 'forms/update-audiobook.html', context)
+        return render(request, 'forms/audiobook-update.html', context)
 
     @staticmethod
     def post(request, audiobook_id):
@@ -117,7 +116,7 @@ class UpdateAudiobook(GuardedView):
                 'form': form,
                 'audiobook_id': audiobook_id,
             }
-            return render(request, 'forms/create-audiobook.html', context)
+            return render(request, 'forms/audiobook-create.html', context)
 
         form.save()
         return redirect('audiobooks')
@@ -133,7 +132,7 @@ class DeleteAudiobook(GuardedView):
         context = {
             'audiobook_id': audiobook_id
         }
-        return render(request, 'forms/delete-audiobook.html', context)
+        return render(request, 'forms/audiobook-delete.html', context)
 
     @staticmethod
     def post(request, audiobook_id):

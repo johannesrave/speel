@@ -1,24 +1,24 @@
+from django.contrib.auth import views as auth_views
 from django.urls import path
 from django.views.generic import RedirectView
-from django.contrib.auth import views as auth_views
 
 from player.models import Audiobook, Track
-from player.views import player, login, register, api, library, manage
+from player.views import player, api, library, manage
 from player.views.manage import account, audiobook
 
 urlpatterns = [
     # account pages
-    path('login/', login.Login.as_view(), name='login'),
-    path('register/', register.Register.as_view(), name='register'),
+    path('login/', manage.account.Login.as_view(), name='login'),
+    path('register/', manage.account.Register.as_view(), name='register'),
     path('account/', account.UpdateAccount.as_view(), name='account'),
     path('reset_password/',
-         auth_views.PasswordResetView.as_view(template_name='forms/password_reset.html'),
+         auth_views.PasswordResetView.as_view(template_name='forms/password-reset.html'),
          name='reset_password'),
     path('reset_password_sent/',
          auth_views.PasswordResetDoneView.as_view(template_name='pages/password_reset_sent.html'),
          name='password_reset_done'),
     path('reset/<uidb64>/<token>',
-         auth_views.PasswordResetConfirmView.as_view(template_name='forms/new_password.html'),
+         auth_views.PasswordResetConfirmView.as_view(template_name='forms/password-update.html'),
          name='password_reset_confirm'),
     path('reset_password_complete/',
          auth_views.PasswordResetCompleteView.as_view(template_name='pages/password_reset_complete.html'),
