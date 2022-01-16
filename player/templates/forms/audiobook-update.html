@@ -1,24 +1,30 @@
 {% extends "forms/base.html" %}
 {% block form %}
-  <img class="circular-thumbnail" src="{{ audiobook.image.url }}" alt="">
+  <label id="image-label" for="id_image" class="custom-file-upload">
+    <img id="update-audiobook-thumbnail" src="{{ audiobook.image.url }}" alt="">
+    <span>Bild ändern</span>
+    <input name="image" type="file" accept="image/*" id="id_image"/>
+  </label>
 
-  {{ form.image.label }}
-  {{ form.image }}
-  {{ form.name.label }}
-  {{ form.name }}
-  {% if not audiobook.tracks.all %}
-    <p>Das Audiobook enthält keine Tracks</p>
-  {% else %}
-    <p>Das Audiobook besteht aus folgenden Tracks:</p>
-  {% endif %}
-  {% for track in audiobook.tracks.all %}
-    <p>{{ track.title }}</p>
-  {% endfor %}
+  <label for="id_name">Name ändern:</label>
+  <input type="text" name="name" value="{{ form.name.value | default_if_none:"" }}"
+         maxlength="30" required="" id="id_name">
+
+  <div id="track-list">
+    {% for track in audiobook.tracks.all %}
+      <p>{{ track.title }}</p>
+    {% endfor %}
+  </div>
+
+  <label for="id_tracks">Alle Tracks ersetzen:</label>
+  <input type="file" name="new_tracks" multiple="" id="id_tracks">
+
+
   <button type="submit" formaction="{% url 'update_audiobook' audiobook_id %}">
-    Änderungen speichern
+    Hörbuch speichern
   </button>
-  <button type="submit" formaction="{% url 'delete_audiobook' audiobook_id %}">
-    Audiobook löschen
+  <button type="submit" class="warning-button" formaction="{% url 'delete_audiobook' audiobook_id %}">
+    Hörbuch löschen
   </button>
 {% endblock form %}
 

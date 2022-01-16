@@ -5,7 +5,13 @@ body {
 
   display: grid;
   grid-template-rows: 1fr max-content;
-  padding: 3rem;
+  padding: 2rem;
+  gap: 1.5rem;
+
+  main {
+    height:100%;
+    overflow-x: hidden;
+  }
 
   & > footer {
     display: grid;

@@ -1,9 +1,7 @@
 <li class="grid-item">
-  <div id="create-audiobook-background" class="circular-thumbnail"></div>
-  <div class="grid-item-contour">{% include 'icons/contour_circle.svg' %}</div>
-{#  <div class="grid-item-icon">{% include 'icons/icon_check.svg' %}</div>#}
-{#  <div class="handdrawn-contour"></div>#}
   <a id="create-audiobook-link" class="grid-item-link" href="{% url 'create_audiobook' %}">
-    Audiobook erstellen
+    <div id="create-audiobook-background" class="grid-item-background circular-thumbnail"></div>
+    <div class="grid-item-contour">{% include 'icons/contour_circle.svg' %}</div>
+    <p>Neues Hörbuch</p>
   </a>
 </li>

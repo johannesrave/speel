@@ -1,31 +1,87 @@
 @import 'variables';
 @import '_mixins';
 
-main form {
-  width: 32rem;
+#form-wrapper {
+  display: flex;
+  height:100%;
+  overflow-x: hidden;
 
-  margin: auto;
-  padding: 2rem;
+  form {
+    //margin: auto;
+    width: 24rem;
+    max-height: 100%;
+    height: 100%;
+
+    margin: auto;
+    padding: 1rem;
+
+    display: grid;
+    gap: .5rem;
+
+    place-items: center;
+
+    //border: $color-primary;
+    background: white;
+
+    text-align: left;
+
+    > * {
+      width: 20rem;
+      margin: 0;
+    }
+
+    button {
+      width: 20rem;
+      height: 3rem;
+
+      background: $color-primary;
+      color: $color-text-bright;
+      font-size: 1.5rem;
+      //margin-top: 1rem;
+    }
+  }
+}
+
+
+/* update-audiobook-form */
+
+#image-label {
 
   display: grid;
+  text-align: center;
 
-  place-items: center;
-
-  border: $color-primary;
-  background: white;
-
-  text-align: left;
+  color: $color-text-bright;
+  font-weight: 600;
+  font-size: 1.5rem;
 
   > * {
-    width: 20rem;
+    margin: auto;
+    grid-area: 1 / 1;
   }
 
-  button {
-    width: 20rem;
-    height: 3rem;
 
-    background: $color-primary;
-    color: $color-text-bright;
-    margin-top: 1rem;
+  #update-audiobook-thumbnail {
+    width: $grid-item-diameter;
+    height: $grid-item-diameter;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+
+#id_image {
+  display: none;
+}
+
+#track-list {
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+  min-height: 0;
+  height: 100%;
+
+  scrollbar-width: thin;
+
+  > * {
+    margin: 0;
   }
 }

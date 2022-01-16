@@ -7,7 +7,7 @@ from django.urls import reverse
 from tinytag import TinyTag
 
 from audioplayer.settings import MEDIA_ROOT
-from player.forms import UpdateAudiobookForm, CreateAudiobookForm
+from player.forms import CreateAudiobookForm
 from player.models import Track
 from player.views.views import GuardedView
 
@@ -98,7 +98,7 @@ class UpdateAudiobook(GuardedView):
         audiobook = retrieve_audiobook_if_owned(request.user, audiobook_id)
         if not audiobook:
             return redirect('audiobooks')
-        audiobook_form = UpdateAudiobookForm(instance=audiobook)
+        audiobook_form = CreateAudiobookForm(instance=audiobook)
 
         context = {
             'form': audiobook_form,
@@ -110,7 +110,7 @@ class UpdateAudiobook(GuardedView):
     @staticmethod
     def post(request, audiobook_id):
         audiobook = retrieve_audiobook_if_owned(request.user, audiobook_id)
-        form = UpdateAudiobookForm(request.POST, request.FILES, instance=audiobook)
+        form = CreateAudiobookForm(request.POST, request.FILES, instance=audiobook)
         if not form.is_valid():
             pprint(form.errors)
             context = {
@@ -119,7 +119,18 @@ class UpdateAudiobook(GuardedView):
             }
             return render(request, 'forms/audiobook-create.html', context)
 
-        form.save()
+        audiobook = form.save(commit=False)
+
+        audiobook.last_track_played = None
+        audiobook.last_timestamp_played = None
+        audiobook.save()
+        audiobook.tracks.all().delete()
+
+        save_all_posted_tracks(request, audiobook)
+
+        audiobook.save()
+        print(audiobook.image.name)
+
         return redirect('audiobooks')
 
 

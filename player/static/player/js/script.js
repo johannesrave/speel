@@ -1,5 +1,5 @@
 import { Ajax } from './ajax.js';
-// inspired by https://github.com/goldfire/howler.js/tree/master/examples/player
+console.dir(Howler);
 // Cache references to DOM elements.
 const playPauseButton = document.getElementById('player-head');
 const playButton = document.getElementById('play-button');

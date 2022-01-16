@@ -1,8 +1,8 @@
-<li class="grid-item" title="{{ audiobook.name }}">
-  <div class="circular-thumbnail" style="background-image: url('{{ audiobook.image.url }}')"></div>
-  <div class="grid-item-contour">{% include 'icons/contour_circle.svg' %}</div>
-{#    <div class="grid-item-icon">{% include 'icons/icon_listen.svg' %}</div>#}
-  <a class="grid-item-link" href="{% url 'play_audiobook' audiobook.id %}">
-   {{ audiobook.name }}
+<li class="grid-item">
+  <a class="grid-item-link" title="{{ audiobook.name }}" href="{% url 'play_audiobook' audiobook.id %}">
+    <div class="grid-item-background circular-thumbnail"
+         style="background-image: url('{{ audiobook.image.url }}')"></div>
+    <div class="grid-item-contour">{% include 'icons/contour_circle.svg' %}</div>
+    <p>{{ audiobook.name }}</p>
   </a>
 </li>

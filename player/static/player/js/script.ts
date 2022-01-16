@@ -1,7 +1,8 @@
 import {Ajax} from './ajax.js';
 import type {Howl, HowlOptions} from './howler'
 
-// inspired by https://github.com/goldfire/howler.js/tree/master/examples/player
+declare const Howler: { html5PoolSize: number; };
+console.dir(Howler);
 
 // Cache references to DOM elements.
 const playPauseButton = document.getElementById('player-head');
@@ -31,7 +32,7 @@ interface TrackModel {
     audio_file: string
 }
 
-interface audiobookModel {
+interface AudiobookModel {
     pkid: number,
     id: string,
     name: string,

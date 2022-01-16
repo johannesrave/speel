@@ -109,3 +109,39 @@ h1 {
 #player-home-link a {
   background-color: $color-warning;
 }
+
+
+button {
+  &:hover {
+    filter: brightness(1.2);
+    color: $color-text-bright
+  }
+
+    border-radius: 0.5rem;
+}
+
+.warning-button {
+  background-color: $color-warning;
+}
+
+main > form {
+  border-radius: 0.5rem;
+}
+
+
+button {
+  &:hover {
+    filter: brightness(1.2);
+    color: $color-text-bright
+  }
+
+    border-radius: 0.5rem;
+}
+
+.warning-button {
+  background-color: $color-warning;
+}
+
+main > form {
+  border-radius: 0.5rem;
+}
