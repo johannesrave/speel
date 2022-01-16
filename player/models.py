@@ -14,10 +14,6 @@ class UUIDModel(models.Model):
         abstract = True
 
 
-class User(django.contrib.auth.models.User):
-    pass
-
-
 class Audiobook(UUIDModel):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,

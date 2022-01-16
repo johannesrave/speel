@@ -1,13 +1,14 @@
 import random
 from pprint import pprint
 
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from tinytag import TinyTag
 
 from audioplayer.settings import MEDIA_ROOT
 from player.forms import UpdateAudiobookForm, CreateAudiobookForm
-from player.models import Track, User
+from player.models import Track
 from player.views.views import GuardedView
 
 

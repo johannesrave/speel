@@ -1,11 +1,12 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, Form, CharField, PasswordInput, ImageField, FileInput, FileField, \
     ClearableFileInput, TextInput, EmailField
 
-from player.models import Audiobook, User
+from player.models import Audiobook
 
 
 class CreateUserForm(UserCreationForm):
