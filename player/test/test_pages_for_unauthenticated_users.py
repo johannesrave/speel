@@ -75,3 +75,26 @@ class PagesTestUnauthenticatedUser(TestCase):
         response = self.client.post('/account/register/', data=data)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/account/login/')
+
+    def test_unauthenticated_user_is_redirected_to_login_if_trying_to_access_account_page(self):
+        response = self.client.get('/account/')
+        pprint(response)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/account/login/?redirect_to=/account/')
+
+    def test_unauthenticated_user_can_access_passwort_reset_page(self):
+        response = self.client.get('/account/password/reset/')
+        pprint(response)
+        self.assertEqual(response.status_code, 200)
+
+    def test_unauthenticated_user_is_redirected_to_login_if_trying_to_access_audiobooks_page(self):
+        response = self.client.get('/audiobooks/')
+        pprint(response)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/account/login/?redirect_to=/audiobooks/')
+
+    def test_unauthenticated_user_is_redirected_to_login_if_trying_to_access_create_audiobooks_page(self):
+        response = self.client.get('/audiobooks/new/')
+        pprint(response)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/account/login/?redirect_to=/audiobooks/new/')

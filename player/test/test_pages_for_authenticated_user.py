@@ -75,3 +75,39 @@ class PagesTestLoggedInUser(TestCase):
         other_user.save()
         self.client.login(username='other_user', password='12345')
         return other_user
+
+    def test_edit_audiobook_page_can_only_be_accessed_with_valid_audiobook_id(self):
+        audiobook_id = self.create_audiobook_returns_post_request("audiobook").url.split('/')[2]
+        audiobook = Audiobook.objects.get(id=audiobook_id)
+        self.assertEqual(audiobook_id, str(audiobook.id))
+        edit_path = f'/audiobooks/{audiobook.id}/edit/'
+        response = self.client.get(edit_path)
+        delete_path = f'/audiobooks/{audiobook.id}/delete/'
+        self.assertContains(response, html=True,
+                            text=f'<button type="submit" formaction="{edit_path}">'
+                                 '  Hörbuch speichern'
+                                 '</button>'
+                                 f'<button type="submit" class="warning-button" formaction="{delete_path}">'
+                                 '  Hörbuch löschen'
+                                 '</button>')
+
+        trying_to_access_with_invalid_id = self.client.get(f'/audiobooks/{audiobook.id}1234/edit/')
+        self.assertEqual(trying_to_access_with_invalid_id.status_code, 404)
+
+    def test_edit_page_cannot_be_accessed_by_other_user(self):
+        audiobook_id = self.create_audiobook_returns_post_request("audiobook").url.split('/')[2]
+        audiobook = Audiobook.objects.get(id=audiobook_id)
+        self.client.logout()
+        other_user = self.login_and_return_other_user()
+        edit_path = f'/audiobooks/{audiobook.id}/edit/'
+        with self.assertRaises(Audiobook.DoesNotExist):
+            self.client.get(edit_path)
+
+    def test_edit_page_can_not_be_accessed_by_unauthenticated_user(self):
+        audiobook_id = self.create_audiobook_returns_post_request("audiobook").url.split('/')[2]
+        audiobook = Audiobook.objects.get(id=audiobook_id)
+        self.client.logout()
+        edit_path = f'/audiobooks/{audiobook.id}/edit/'
+        response = self.client.get(edit_path)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, f'/account/login/?redirect_to=/audiobooks/{audiobook_id}/edit/')
