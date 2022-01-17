@@ -7,7 +7,7 @@ from django.urls import reverse
 from player.models import Audiobook
 
 
-class PagesTest(TestCase):
+class PagesTestLoggedInUser(TestCase):
 
     def setUp(self):
         self.create_and_login_user()
