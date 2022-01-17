@@ -11,7 +11,10 @@ def assert_user_exists(username):
     User.objects.get(username=username)
 
 
-class PagesTest(TestCase):
+class PagesTestUnauthenticatedUser(TestCase):
+
+    def setUp(self):
+        self.client.logout()
 
     def test_login_exists_at_desired_location(self):
         response = self.client.get('/login/')
