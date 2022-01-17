@@ -1,6 +1,7 @@
 from pprint import pprint
 
-from django.test import TestCase
+from django.contrib.auth.models import User
+from django.test import TestCase, Client
 from django.urls import reverse
 from django.utils.http import urlencode
 
@@ -8,6 +9,18 @@ from player.models import Audiobook
 
 
 class AudiobookListViewTest(TestCase):
+
+    def setUp(self):
+        self.create_and_login_user()
+
+    def create_and_login_user(self):
+        self.user = User.objects.create(username='testuser')
+        self.user.set_password('12345')
+        self.user.save()
+
+        self.client = Client()
+        self.client.login(username='testuser', password='12345')
+
     @classmethod
     def setUpTestData(cls):
         # Create 13 audiobooks for pagination tests
