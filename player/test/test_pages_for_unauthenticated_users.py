@@ -17,21 +17,21 @@ class PagesTestUnauthenticatedUser(TestCase):
         self.client.logout()
 
     def test_login_exists_at_desired_location(self):
-        response = self.client.get('/login/')
+        response = self.client.get('/account/login/')
         pprint(response)
         self.assertEqual(response.status_code, 200)
 
     def test_register_exists_at_desired_location(self):
-        response = self.client.get('/register/')
+        response = self.client.get('/account/register/')
         pprint(response)
         self.assertEqual(response.status_code, 200)
 
     def test_register_is_registration_form(self):
-        response = self.client.get('/register/')
+        response = self.client.get('/account/register/')
         pprint(response)
         self.assertContains(response, html=True,
                             text='<button '
-                                 'class="primary-button" type="submit" formaction="/register/">'
+                                 'class="primary-button" type="submit" formaction="/account/register/">'
                                  'Registrieren'
                                  '</button>')
 
@@ -44,7 +44,7 @@ class PagesTestUnauthenticatedUser(TestCase):
         }
         with self.assertRaises(User.DoesNotExist):
             User.objects.get(username='Peter')
-        self.client.post('/register/', data=data)
+        self.client.post('/account/register/', data=data)
         assert_user_exists('Peter')
 
     def test_username_cant_be_registered_twice(self):
@@ -60,9 +60,9 @@ class PagesTestUnauthenticatedUser(TestCase):
             "password1": "K!nNT9R!QZ0Y",
             "password2": "K!nNT9R!QZ0Y",
         }
-        self.client.post('/register/', data=data)
+        self.client.post('/account/register/', data=data)
         self.assertEqual(User.objects.get(username='Peter').email, "peter.lustig@gmail.com")
-        self.client.post('/register/', data=data2)
+        self.client.post('/account/register/', data=data2)
         self.assertEqual(User.objects.get(username='Peter').email, "peter.lustig@gmail.com")
 
     def test_successful_register_redirects_to_login(self):
@@ -72,6 +72,6 @@ class PagesTestUnauthenticatedUser(TestCase):
             "password1": "K!nNT9R!QZ0Y",
             "password2": "K!nNT9R!QZ0Y",
         }
-        response = self.client.post('/register/', data=data)
+        response = self.client.post('/account/register/', data=data)
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, '/login/')
+        self.assertEqual(response.url, '/account/login/')

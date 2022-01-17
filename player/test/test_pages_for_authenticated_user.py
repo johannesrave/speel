@@ -21,13 +21,13 @@ class PagesTestLoggedInUser(TestCase):
         self.client.login(username='testuser', password='12345')
 
     def test_logged_in_user_is_redirected_to_library_if_trying_to_access_login_page(self):
-        response = self.client.get('/login/')
+        response = self.client.get('/account/login/')
         pprint(response)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/library/')
 
     def test_logged_in_user_is_redirected_to_library_if_trying_to_access_register_page(self):
-        response = self.client.get('/register/')
+        response = self.client.get('/account/register/')
         pprint(response)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/library/')
