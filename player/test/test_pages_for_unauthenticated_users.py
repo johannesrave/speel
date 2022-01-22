@@ -5,12 +5,6 @@ from pprint import pprint
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-
-@staticmethod
-def assert_user_exists(username):
-    User.objects.get(username=username)
-
-
 class PagesTestUnauthenticatedUser(TestCase):
 
     def setUp(self):
@@ -98,3 +92,7 @@ class PagesTestUnauthenticatedUser(TestCase):
         pprint(response)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/account/login/?redirect_to=/audiobooks/new/')
+
+def assert_user_exists(username):
+    User.objects.get(username=username)
+

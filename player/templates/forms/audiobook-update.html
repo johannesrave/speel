@@ -1,27 +1,28 @@
 {% extends "forms/base.html" %}
 {% block form %}
+{#  <h2>Hörbuch bearbeiten</h2>#}
   <label id="image-label" for="id_image" class="custom-file-upload">
     <img id="update-audiobook-thumbnail" src="{{ audiobook.image.url }}" alt="">
     <span>Bild ändern</span>
     <input name="image" type="file" accept="image/*" id="id_image"/>
   </label>
 
-  <label for="id_name">Name ändern:</label>
+  <label for="id_name">Hörbuch-Name ändern:</label>
   <input type="text" name="name" value="{{ form.name.value | default_if_none:"" }}"
          maxlength="30" required="" id="id_name">
 
+{#  <label>Tracks in diesem Hörbuch:</label>#}
   <div id="track-list">
     {% for track in audiobook.tracks.all %}
       <p>{{ track.title }}</p>
     {% endfor %}
   </div>
 
-  <label for="id_tracks">Alle Tracks ersetzen:</label>
+  <label for="id_tracks">Alle Hörbuch-Tracks ersetzen:</label>
   <input type="file" name="new_tracks" multiple="" id="id_tracks">
 
-
   <button type="submit" formaction="{% url 'update_audiobook' audiobook_id %}">
-    Hörbuch speichern
+    Änderungen speichern
   </button>
   <button type="submit" class="warning-button" formaction="{% url 'delete_audiobook' audiobook_id %}">
     Hörbuch löschen
@@ -30,6 +31,5 @@
 
 {% block footer %}
   {% include 'components/page-link.html' with link_url='audiobooks' icon='icons/icon_edit.svg' %}
-  <h1>Audiobook anpassen</h1>
-  <div class="empty"></div>
+  <h1>Hörbücher bearbeiten</h1>
 {% endblock footer %}

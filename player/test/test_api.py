@@ -27,9 +27,7 @@ class AudiobookListViewTest(TestCase):
         number_of_audiobooks = 13
 
         for audiobook_id in range(number_of_audiobooks):
-            Audiobook.objects.create(
-                name=f'Christian {audiobook_id}',
-            )
+            Audiobook.objects.create(name=f'Christian {audiobook_id}')
 
     def test_view_url_exists_at_desired_location(self):
         response = self.client.get('/api/audiobook/')

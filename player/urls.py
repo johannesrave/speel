@@ -49,10 +49,10 @@ urlpatterns = [
          {'model': Audiobook}, name='audiobook_single'),
     path('api/audiobooks/', api.ListView.as_view(),
          {'model': Audiobook}, name='audiobook_list'),
-    path('api/tracks/<uuid:model_id>/', api.SingleView.as_view(),
-         {'model': Track}, name='track_single'),
-    path('api/tracks/', api.ListView.as_view(),
-         {'model': Track}, name='track_list'),
+    # path('api/tracks/<uuid:model_id>/', api.SingleView.as_view(),
+    #      {'model': Track}, name='track_single'),
+    # path('api/tracks/', api.ListView.as_view(),
+    #      {'model': Track}, name='track_list'),
 
     # redirect and catch-all
     path('', RedirectView.as_view(pattern_name='library', permanent=False)),

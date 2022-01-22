@@ -65,30 +65,15 @@ class PagesTestLoggedInUser(TestCase):
         other_users_audiobook = Audiobook.objects.filter(user=other_user)
         self.assertFalse(other_users_audiobook)
 
-    def create_audiobook_returns_post_request(self, name):
-        data = {'name': name}
-        return self.client.post(reverse('create_audiobook'), data=data)
-
-    def login_and_return_other_user(self):
-        other_user = User.objects.create(username='other_user')
-        other_user.set_password('12345')
-        other_user.save()
-        self.client.login(username='other_user', password='12345')
-        return other_user
-
     def test_edit_audiobook_page_can_only_be_accessed_with_valid_audiobook_id(self):
         audiobook_id = self.create_audiobook_returns_post_request("audiobook").url.split('/')[2]
         audiobook = Audiobook.objects.get(id=audiobook_id)
         self.assertEqual(audiobook_id, str(audiobook.id))
         edit_path = f'/audiobooks/{audiobook.id}/edit/'
         response = self.client.get(edit_path)
-        delete_path = f'/audiobooks/{audiobook.id}/delete/'
         self.assertContains(response, html=True,
-                            text=f'<button type="submit" formaction="{edit_path}">'
-                                 '  Hörbuch speichern'
-                                 '</button>'
-                                 f'<button type="submit" class="warning-button" formaction="{delete_path}">'
-                                 '  Hörbuch löschen'
+                            text=f'<button type="submit" formaction="/audiobooks/{audiobook.id}/edit/">'
+                                 'Änderungen speichern'
                                  '</button>')
 
         trying_to_access_with_invalid_id = self.client.get(f'/audiobooks/{audiobook.id}1234/edit/')
@@ -111,3 +96,14 @@ class PagesTestLoggedInUser(TestCase):
         response = self.client.get(edit_path)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, f'/account/login/?redirect_to=/audiobooks/{audiobook_id}/edit/')
+
+    def create_audiobook_returns_post_request(self, name):
+        data = {'name': name}
+        return self.client.post(reverse('create_audiobook'), data=data)
+
+    def login_and_return_other_user(self):
+        other_user = User.objects.create(username='other_user')
+        other_user.set_password('12345')
+        other_user.save()
+        self.client.login(username='other_user', password='12345')
+        return other_user

@@ -41,14 +41,14 @@ class Register(View):
         context = {
             'form': CreateUserForm()
         }
-        return render(request, 'forms/account-create.html', context)
+        return render(request, 'forms/account-register.html', context)
 
     @staticmethod
     def post(request):
         form = CreateUserForm(request.POST)
         if not form.is_valid():
             context = {'form': form}
-            return render(request, 'forms/account-create.html', context)
+            return render(request, 'forms/account-register.html', context)
 
         user: User = form.save()
         messages.success(request, f'Account für {user.username} wurde erstellt.')

@@ -1,11 +1,11 @@
 {% extends "forms/base.html" %}
 {% block form %}
   {{ form.username.errors }}
-  {{ form.username.label }}
+  {{ form.username.label_tag }}
   {{ form.username }}
 
   {{ form.email.errors }}
-  {{ form.email.label }}
+  {{ form.email.label_tag }}
   {{ form.email }}
   <button type="submit" formaction="{% url 'account' %}">
     Accountdaten speichern

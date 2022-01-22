@@ -2,27 +2,24 @@
 @import '_mixins';
 
 #form-wrapper {
+  height: 100%;
   display: flex;
-  height:100%;
-  overflow-x: hidden;
+  flex-direction: column;
+  align-content: center;
 
   form {
-    //margin: auto;
     width: 24rem;
     max-height: 100%;
-    height: 100%;
+    overflow: hidden;
 
     margin: auto;
     padding: 1rem;
 
-    display: grid;
-    gap: .5rem;
-
+    display: flex;
+    flex-direction: column;
     place-items: center;
 
-    //border: $color-primary;
     background: white;
-
     text-align: left;
 
     > * {
@@ -30,23 +27,29 @@
       margin: 0;
     }
 
+    label,
+    a {
+      margin-top: 0.5rem;
+    }
+
     button {
       width: 20rem;
       height: 3rem;
+      margin-top: 1rem;
 
       background: $color-primary;
       color: $color-text-bright;
       font-size: 1.5rem;
-      //margin-top: 1rem;
+    }
+
+    a{
+      color: $color-primary;
     }
   }
 }
 
-
 /* update-audiobook-form */
-
 #image-label {
-
   display: grid;
   text-align: center;
 
@@ -58,7 +61,6 @@
     margin: auto;
     grid-area: 1 / 1;
   }
-
 
   #update-audiobook-thumbnail {
     width: $grid-item-diameter;
@@ -73,15 +75,18 @@
 }
 
 #track-list {
+  flex-basis: 3.5em;
+  //flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: scroll;
-  min-height: 0;
-  height: 100%;
+  overflow-y: auto;
+  max-height: 100%;
+  //height: 100%;
 
   scrollbar-width: thin;
 
   > * {
     margin: 0;
+    //min-height: 0;
   }
 }

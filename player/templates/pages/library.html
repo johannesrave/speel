@@ -3,7 +3,7 @@
   {% if not audiobooks %}
     <div class="info-text">
       <div>
-        <p>Du hast keine Audiobooks in deiner Bibliothek.</p>
+        <p>Du hast keine Hörbücher in deiner Bibliothek.</p>
         <p>Klicke auf den Button unten links um welche zu erstellen!</p>
       </div>
     </div>
@@ -17,5 +17,5 @@
 {% endblock main %}
 {% block footer %}
   {% include 'components/page-link.html' with id='audiobooks-link' link_url='audiobooks' icon='icons/icon_edit.svg' %}
-  <h1>Willkommen {{ request.user }}!</h1>
+  <h1>{{ request.user }}'s Hörbücher</h1>
 {% endblock footer %}

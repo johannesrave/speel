@@ -11,23 +11,29 @@ body {
   main {
     height:100%;
     overflow-x: hidden;
+
+    //display: grid;
+    //place-content: center;
   }
 
   & > footer {
     display: grid;
     place-items: center;
     text-align: center;
-    grid-template-columns: 1fr 2fr 1fr;
+    //grid-template-columns: min-content 1fr min-content;
 
     *:nth-child(1) {
+      grid-area: 1 / 1;
       justify-self: start;
     }
 
     *:nth-child(2) {
+      grid-area: 1 / 1;
       justify-self: center;
     }
 
     *:nth-child(3) {
+      grid-area: 1 / 1;
       justify-self: end;
     }
   }

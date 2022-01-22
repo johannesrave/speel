@@ -1,0 +1,27 @@
+{% extends "forms/base.html" %}
+{% block form %}
+  <h2>Registrierung</h2>
+  {{ form.username.label_tag }}
+  {{ form.username }}
+  {{ form.username.errors }}
+
+  {{ form.email.label_tag }}
+  {{ form.email }}
+
+  {{ form.password1.label_tag }}
+  {{ form.password1 }}
+
+  {{ form.password2.label_tag }}
+  {{ form.password2 }}
+
+  {{ form.errors }}
+  <button class="primary-button" type="submit" formaction="{% url 'register' %}">
+    Registrieren
+  </button>
+  <a href="{% url 'login' %}">Schon registriert? Hier anmelden!</a>
+{% endblock form %}
+
+{% block footer %}
+  <div></div>
+  <h1>speel!</h1>
+{% endblock %}

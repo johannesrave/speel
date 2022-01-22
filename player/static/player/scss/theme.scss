@@ -35,7 +35,7 @@ h1 {
 
   .grid-item-icon-background {
     @include circular;
-    background-color: $color-secondary;
+    //background-color: $color-secondary;
   }
 
   .icon-edit {
@@ -124,24 +124,10 @@ button {
   background-color: $color-warning;
 }
 
-main > form {
+#form-wrapper form {
   border-radius: 0.5rem;
 }
 
-
-button {
-  &:hover {
-    filter: brightness(1.2);
-    color: $color-text-bright
-  }
-
-    border-radius: 0.5rem;
-}
-
-.warning-button {
-  background-color: $color-warning;
-}
-
-main > form {
-  border-radius: 0.5rem;
+.grid-item-icon-background {
+  background: $color-accept;
 }

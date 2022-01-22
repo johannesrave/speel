@@ -1,13 +1,28 @@
 {% extends "forms/base.html" %}
 {% block form %}
-  {{ form.as_p }}
+  <h2>Neues Hörbuch anlegen</h2>
+{#  {{ form.as_p }}#}
+
+  <label id="image-label" for="id_image" class="custom-file-upload">
+    <img id="update-audiobook-thumbnail" src="{{ audiobook.image.url }}" alt="">
+    <span>Bild ändern</span>
+    <input name="image" type="file" accept="image/*" id="id_image"/>
+  </label>
+
+  <label for="id_name">Hörbuch-Name:</label>
+  <input type="text" name="name" value="{{ form.name.value | default_if_none:"" }}"
+         maxlength="30" required="" id="id_name">
+
+  <label for="id_tracks">Hörbuch-Tracks:</label>
+  <input type="file" name="new_tracks" multiple="" id="id_tracks">
+
+
   <button type="submit" formaction="{% url 'create_audiobook' %}">
-    Audiobook erstellen
+    Hörbuch speichern
   </button>
 {% endblock form %}
 
 {% block footer %}
   {% include 'components/page-link.html' with link_url='audiobooks' icon='icons/icon_edit.svg' %}
-  <h1>Audiobook erstellen</h1>
-  <div class="empty"></div>
+  <h1>Hörbücher bearbeiten</h1>
 {% endblock footer %}

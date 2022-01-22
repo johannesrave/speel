@@ -1,20 +1,25 @@
 {% extends "forms/base.html" %}
 {% block form %}
+  <h2>Anmeldung</h2>
   <div>
     {% for message in messages %}
       <p id="messages">{{ message }}</p>
     {% endfor %}
   </div>
-  {{ form.as_p }}
+  {{ form.username.label_tag }}
+  {{ form.username }}
+
+  {{ form.password.label_tag }}
+  {{ form.password }}
+  <a href="{% url 'password_reset' %}">Passwort vergessen?</a>
   <button type="submit" formaction="{% url 'login' %}">
     Anmelden
   </button>
-    <div>
-        Du hast noch keinen Account? <a href="{% url 'register' %}">Registrieren</a>
-    </div>
-    <div>
-        Passwort vergessen? <a href="{% url 'password_reset' %}">Passwort zurücksetzen</a>
-    </div>
+  <a href="{% url 'register' %}">Neu hier? Jetzt registrieren!</a>
+
 {% endblock form %}
 
-{% block footer %}{% endblock %}
+{% block footer %}
+  <div></div>
+  <h1>speel!</h1>
+{% endblock %}
