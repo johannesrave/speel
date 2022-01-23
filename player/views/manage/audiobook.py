@@ -16,10 +16,11 @@ class CreateAudiobook(GuardedView):
 
     @staticmethod
     def get(request):
-        form = CreateAudiobookForm(files={'image': pick_random_default_image_path()})
-        form.save(commit=False)
-        form.image.name = pick_random_default_image_path()
-        print(form.initial)
+        # form = CreateAudiobookForm(files={'image': pick_random_default_image_path()})
+        form = CreateAudiobookForm()
+        # form.save(commit=False)
+        # form.image.name = pick_random_default_image_path()
+        # print(form.initial)
         # form.fields["image"].initial = pick_random_default_image_path()
         context = {
             'form': form,
