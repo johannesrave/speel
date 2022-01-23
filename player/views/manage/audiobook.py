@@ -16,8 +16,13 @@ class CreateAudiobook(GuardedView):
 
     @staticmethod
     def get(request):
+        form = CreateAudiobookForm(files={'image': pick_random_default_image_path()})
+        form.save(commit=False)
+        form.image.name = pick_random_default_image_path()
+        print(form.initial)
+        # form.fields["image"].initial = pick_random_default_image_path()
         context = {
-            'form': CreateAudiobookForm(),
+            'form': form,
         }
         return render(request, 'forms/audiobook-create.html', context)
 
@@ -41,55 +46,9 @@ class CreateAudiobook(GuardedView):
 
         audiobook.save()
         print(audiobook.image.name)
+        [print(track.title) for track in audiobook.tracks.all()]
 
         return redirect('update_audiobook', audiobook_id=audiobook.id)
-
-
-def save_user(request, audiobook):
-    user: User = request.user
-    audiobook.user = user
-
-
-def save_posted_image_or_default(request, audiobook):
-    image = request.FILES.get('image', None)
-    print(f'image in request: {image}')
-    if not image:
-        audiobook.image.name = pick_random_default_image_path()
-    else:
-        audiobook.image = image
-
-
-def save_all_posted_tracks(request, audiobook):
-    audiobook.save()
-    files = request.FILES.getlist('new_tracks')
-    valid_tracks = [Track(title=file.name, audio_file=file, audiobook=audiobook) for file in files if TinyTag.is_supported(file.name)]
-    if len(valid_tracks) < len(files):
-        names_of_valid_tracks = [track.audio_file.name for track in valid_tracks]
-        invalid_files = [file for file in files if file.name not in names_of_valid_tracks]
-        [pprint(f'{file.name} ist kein gültiges Audiofile und wurde übersprungen') for file in invalid_files]
-        pprint(f'Es wurden {len(valid_tracks)} Audiodateien hochgeladen und '
-               f'{len(invalid_files)} ungültige Dateien übersprungen')
-
-    _tracks = Track.objects.bulk_create(valid_tracks)
-
-    for track in _tracks:
-        tag = TinyTag.get(f'{MEDIA_ROOT}/{track.audio_file.name}')
-
-        if tag.title:
-            track.title = tag.title
-        track.duration = tag.duration
-
-        pprint(f'Song {track.title} has been scanned and uploaded!')
-
-    Track.objects.bulk_update(_tracks, ['title', 'duration'])
-
-
-def pick_random_default_image_path():
-    random.seed()
-    value = random.randint(1, 10)
-    image_path = f'/default_images/default_img{value}.jpg'
-    return image_path
-
 
 class UpdateAudiobook(GuardedView):
 
@@ -123,10 +82,11 @@ class UpdateAudiobook(GuardedView):
 
         audiobook.last_track_played = None
         audiobook.last_timestamp_played = None
-        audiobook.save()
-        audiobook.tracks.all().delete()
 
+        audiobook.save()
+        # audiobook.tracks.all().delete()
         save_all_posted_tracks(request, audiobook)
+        [print(track.title) for track in audiobook.tracks.all()]
 
         audiobook.save()
         print(audiobook.image.name)
@@ -153,6 +113,53 @@ class DeleteAudiobook(GuardedView):
             audiobook.delete()
         return redirect('audiobooks')
 
+def save_user(request, audiobook):
+    user: User = request.user
+    audiobook.user = user
+
+def pick_random_default_image_path():
+    random.seed()
+    value = random.randint(1, 10)
+    image_path = f'/default_images/default_img{value}.jpg'
+    return image_path
+
+def save_posted_image_or_default(request, audiobook):
+    image = request.FILES.get('image', None)
+    print(f'image in request: {image}')
+    if not image:
+        audiobook.image.name = pick_random_default_image_path()
+    else:
+        audiobook.image = image
+
+def save_all_posted_tracks(request, audiobook):
+    audiobook.save()
+    files = request.FILES.getlist('new_tracks')
+    valid_tracks = [Track(title=file.name, audio_file=file, audiobook=audiobook) for file in files
+                    if TinyTag.is_supported(file.name)]
+    if len(valid_tracks) == 0:
+        return
+
+    audiobook.tracks.all().delete()
+
+    if len(valid_tracks) < len(files):
+        names_of_valid_tracks = [track.audio_file.name for track in valid_tracks]
+        invalid_files = [file for file in files if file.name not in names_of_valid_tracks]
+        [pprint(f'{file.name} ist kein gültiges Audiofile und wurde übersprungen') for file in invalid_files]
+        pprint(f'Es wurden {len(valid_tracks)} Audiodateien hochgeladen und '
+               f'{len(invalid_files)} ungültige Dateien übersprungen')
+
+    _tracks = Track.objects.bulk_create(valid_tracks)
+
+    for track in _tracks:
+        tag = TinyTag.get(f'{MEDIA_ROOT}/{track.audio_file.name}')
+
+        if tag.title:
+            track.title = tag.title
+        track.duration = tag.duration
+
+        pprint(f'Song {track.title} has been scanned and uploaded!')
+
+    Track.objects.bulk_update(_tracks, ['title', 'duration'])
 
 def retrieve_audiobook_if_owned(user, audiobook_id):
     return user.audiobook_set.all().get(id=audiobook_id)
