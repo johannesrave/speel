@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- encoding: utf-8 -*-
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
 

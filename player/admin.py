@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- encoding: utf-8 -*-
 from django.contrib import admin
 from django.apps import apps
 from player.models import Audiobook, Track

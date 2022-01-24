@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
 from django.contrib import messages
 from django.contrib.auth import logout, login

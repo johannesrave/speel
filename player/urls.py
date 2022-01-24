@@ -2,7 +2,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, reverse_lazy
 from django.views.generic import RedirectView
 
-from player.models import Audiobook, Track
+from player.models import Audiobook
 from player.views import player, api, library, manage
 from player.views.manage import account, audiobook
 
