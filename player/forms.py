@@ -1,3 +1,4 @@
+"""This module contains form classes for create, update, login user and create and update audiobooks."""
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User

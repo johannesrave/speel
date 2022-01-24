@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
+"""This module contains the class based views for viewing and editing the audiobook library."""
 from django.shortcuts import render
 
 from player.models import Audiobook

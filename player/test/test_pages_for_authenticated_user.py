@@ -10,6 +10,7 @@ from player.models import Audiobook
 
 
 class PagesTestLoggedInUser(TestCase):
+    """Test for case user is logged in."""
 
     def setUp(self):
         self.create_and_login_user()

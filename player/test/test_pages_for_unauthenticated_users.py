@@ -5,7 +5,9 @@ from pprint import pprint
 from django.contrib.auth.models import User
 from django.test import TestCase
 
+
 class PagesTestUnauthenticatedUser(TestCase):
+    """Test for case user is not logged in."""
 
     def setUp(self):
         self.client.logout()
@@ -93,6 +95,6 @@ class PagesTestUnauthenticatedUser(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/account/login/?redirect_to=/audiobooks/new/')
 
+
 def assert_user_exists(username):
     User.objects.get(username=username)
-

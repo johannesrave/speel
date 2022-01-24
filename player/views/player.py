@@ -8,7 +8,7 @@ from player.views.views import GuardedView
 
 
 class Player(GuardedView):
-
+    """This is the view for the actual audiobook Player."""
     @staticmethod
     def get(request, audiobook_id):
         try:

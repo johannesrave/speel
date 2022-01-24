@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
+"""This module contains class based views for update account, register and login."""
 from django.contrib import messages
 from django.contrib.auth import logout, login
 from django.contrib.auth.models import User

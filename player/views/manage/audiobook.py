@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
+"""This module contains class based views for create, update and delete audiobook."""
 import random
 from pprint import pprint
 
@@ -52,6 +53,7 @@ class CreateAudiobook(GuardedView):
         [print(track.title) for track in audiobook.tracks.all()]
 
         return redirect('update_audiobook', audiobook_id=audiobook.id)
+
 
 class UpdateAudiobook(GuardedView):
 
@@ -116,15 +118,18 @@ class DeleteAudiobook(GuardedView):
             audiobook.delete()
         return redirect('audiobooks')
 
+
 def save_user(request, audiobook):
     user: User = request.user
     audiobook.user = user
+
 
 def pick_random_default_image_path():
     random.seed()
     value = random.randint(1, 10)
     image_path = f'/default_images/default_img{value}.jpg'
     return image_path
+
 
 def save_posted_image_or_default(request, audiobook):
     image = request.FILES.get('image', None)
@@ -133,6 +138,7 @@ def save_posted_image_or_default(request, audiobook):
         audiobook.image.name = pick_random_default_image_path()
     else:
         audiobook.image = image
+
 
 def save_all_posted_tracks(request, audiobook):
     audiobook.save()
@@ -163,6 +169,7 @@ def save_all_posted_tracks(request, audiobook):
         pprint(f'Song {track.title} has been scanned and uploaded!')
 
     Track.objects.bulk_update(_tracks, ['title', 'duration'])
+
 
 def retrieve_audiobook_if_owned(user, audiobook_id):
     return user.audiobook_set.all().get(id=audiobook_id)
