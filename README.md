@@ -35,7 +35,18 @@ Als Teil des Studienprojektes war Django als Technologie gegeben.
 
 Um das Projekt im Container-Verbund mit der Postgres zu starten:
 `docker compose up`
-_speel_ ist lokal erreichbar unter `127.0.0.1:8000`
+
+Falls das Projekt nicht im docker compose sondern nativ auf dem localhost ausgeführt werden soll, muss trotzdem mit `docker compose up postgres` die Datenbank gebootet werden. Danach kann der Django-Server wie gewohnt gestartet werden mit:
+```shell
+pip install -r requirements.txt
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+```
+
+_speel_ ist in jedem Fall nun im Browser erreichbar unter `127.0.0.1:8000`
+
+
 Nun kann mit einer validen Email-Adresse ein eigener Benutzer angelegt werden.
 Außerdem wird als Standard-User angelegt: `mama` mit Passwort `admin`.
 
