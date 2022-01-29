@@ -143,21 +143,17 @@ def save_posted_image_or_default(request, audiobook):
 def save_all_posted_tracks(request, audiobook):
     audiobook.save()
     files = request.FILES.getlist('new_tracks')
-    valid_tracks = [Track(title=file.name, audio_file=file, audiobook=audiobook) for file in files
-                    if TinyTag.is_supported(file.name)]
-    if len(valid_tracks) == 0:
+    valid_files = [file for file in files if TinyTag.is_supported(file.name)]
+
+    if len(valid_files) == 0:
         return
+    tracks = [Track(title=file.name, audio_file=file, audiobook=audiobook) for file in valid_files]
 
     audiobook.tracks.all().delete()
 
-    if len(valid_tracks) < len(files):
-        names_of_valid_tracks = [track.audio_file.name for track in valid_tracks]
-        invalid_files = [file for file in files if file.name not in names_of_valid_tracks]
-        [pprint(f'{file.name} ist kein gültiges Audiofile und wurde übersprungen') for file in invalid_files]
-        pprint(f'Es wurden {len(valid_tracks)} Audiodateien hochgeladen und '
-               f'{len(invalid_files)} ungültige Dateien übersprungen')
+    [pprint(f'{file.name} is not a valid audiofile and was skipped') for file in files if file not in valid_files]
 
-    _tracks = Track.objects.bulk_create(valid_tracks)
+    _tracks = Track.objects.bulk_create(tracks)
 
     for track in _tracks:
         tag = TinyTag.get(f'{MEDIA_ROOT}/{track.audio_file.name}')
