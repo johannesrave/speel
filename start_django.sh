@@ -1,4 +1,5 @@
 #!/bin/sh
+# -*- encoding: utf-8 -*-
 echo "Container booted."
 echo "Waiting for 30 seconds to allow postgres to boot."
 sleep 30

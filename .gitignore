@@ -8,3 +8,6 @@
 /test/testfiles/
 /static/player/scss/
 /assets/
+/static/django-browser-reload/
+/static/admin/
+/static/player/
