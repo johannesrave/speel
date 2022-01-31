@@ -35,19 +35,15 @@ h1 {
 
   .grid-item-icon-background {
     @include circular;
-    //background-color: $color-secondary;
   }
 
   .icon-edit {
-    //@include circular;
-
     * {
       fill: $color-text-bright;
     }
   }
 
   .icon-listen {
-    //@include circular;
     background-color: $color-primary;
 
     * {
@@ -74,6 +70,8 @@ h1 {
 }
 
 .page-link {
+  @include hover;
+
   svg * {
     fill: $color-text-bright;
   }
@@ -89,16 +87,20 @@ h1 {
   background: $color-primary;
 }
 
+#audiobooks-link {
+  background: $color-accept;
+}
+
+#account-link {
+  background: $color-tertiary;
+}
+
 #logout-button {
   background: $color-warning;
 
   svg * {
     fill: $color-text-bright
   }
-}
-
-#audiobooks-link {
-  background: $color-secondary;
 }
 
 #create-audiobook-background {
@@ -117,7 +119,7 @@ button {
     color: $color-text-bright
   }
 
-    border-radius: 0.5rem;
+  border-radius: 0.5rem;
 }
 
 .warning-button {
@@ -130,4 +132,15 @@ button {
 
 .grid-item-icon-background {
   background: $color-accept;
+}
+
+.contrast-color {
+  color: $color-primary;
+}
+
+
+.icon-add {
+  * {
+    fill: $color-text-bright;
+  }
 }
