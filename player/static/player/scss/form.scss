@@ -68,6 +68,13 @@
     object-fit: cover;
     border-radius: 50%;
   }
+
+  #create-audiobook-thumbnail {
+    width: $grid-item-diameter;
+    height: $grid-item-diameter;
+    object-fit: cover;
+    border-radius: 50%;
+  }
 }
 
 #id_image {

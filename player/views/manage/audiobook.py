@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from tinytag import TinyTag
+from pathlib import Path
 
 from audioplayer.settings import MEDIA_ROOT
 from player.forms import CreateAudiobookForm
@@ -19,14 +20,18 @@ class CreateAudiobook(GuardedView):
 
     @staticmethod
     def get(request):
-        # form = CreateAudiobookForm(files={'image': pick_random_default_image_path()})
         form = CreateAudiobookForm()
         # form.save(commit=False)
         # form.image.name = pick_random_default_image_path()
         # print(form.initial)
         # form.fields["image"].initial = pick_random_default_image_path()
+
+        random.seed()
+        image_id = random.randint(1, 10)
+
         context = {
             'form': form,
+            'image_id': image_id
         }
         return render(request, 'forms/audiobook-create.html', context)
 
@@ -135,7 +140,8 @@ def save_posted_image_or_default(request, audiobook):
     image = request.FILES.get('image', None)
     print(f'image in request: {image}')
     if not image:
-        audiobook.image.name = pick_random_default_image_path()
+        default_image_id = request.POST["image_id"]
+        audiobook.image.name = f'/default_images/formatted/default_img{ default_image_id }.jpg'
     else:
         audiobook.image = image
 
