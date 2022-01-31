@@ -140,7 +140,7 @@ def save_posted_image_or_default(request, audiobook):
     image = request.FILES.get('image', None)
     print(f'image in request: {image}')
     if not image:
-        default_image_id = request.POST["image_id"]
+        default_image_id = request.POST.get("image_id", random.randint(1, 10))
         audiobook.image.name = f'/default_images/formatted/default_img{ default_image_id }.jpg'
     else:
         audiobook.image = image
