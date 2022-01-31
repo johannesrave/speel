@@ -98,7 +98,7 @@ class Player {
 
 
         this.lastTimestamp = this.lastTimestamp ?? 0;
-        if (this.lastTimestamp !== 0){
+        if (this.lastTimestamp !== 0) {
             track.howl.seek(this.lastTimestamp);
             this.lastTimestamp = 0
         }
@@ -174,6 +174,35 @@ class Player {
     }
 
     /**
+     * Skip some seconds head or backwards.
+     * @param {number} amount Number of seconds to skip, can be negative.
+     */
+    seek(amount: number) {
+        console.log(`seeking ${amount} seconds`)
+
+        const currentHowl = this.tracks[this.currentIndex]?.howl
+        if (!currentHowl) { return; }
+
+        // currentHowl?.pause()
+
+        const currentPosition = currentHowl.seek();
+        console.log("currentPosition", currentPosition)
+        const newPosition = currentPosition + amount;
+        console.log("newPosition", newPosition)
+
+        // if seeking beyond current track, skip to next.
+        if (newPosition > currentHowl.duration() - currentHowl.seek()) {
+            this.skip('next')
+            // this.seek(newPosition - currentHowl.duration() - currentHowl.seek())
+        } else if (false) {} else {
+            console.log(`seeking to ${newPosition}`)
+            currentHowl.pause()
+            currentHowl.seek(newPosition)
+            currentHowl.play()
+        }
+    }
+
+    /**
      * Skip to a specific track based on its audiobook index.
      * @param newIndex
      */
@@ -211,10 +240,15 @@ playPauseButton!.addEventListener('click', function () {
     player.togglePlayPause();
 });
 backButton!.addEventListener('click', function () {
-    player.skip('prev');
+    // console.log("skipping to last track")
+        console.log("rewind event fired")
+        player.seek(-15);
+    // player.skip('prev');
 });
 forwardButton!.addEventListener('click', function () {
-    player.skip('next');
+    // player.skip('next');
+    console.log("seek event fired")
+    player.seek(15);
 });
 
 const perdiodicallyPatchAudiobook = (audiobookId: string, currentTime: number) => {
