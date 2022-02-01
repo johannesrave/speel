@@ -2,9 +2,8 @@ import re
 from pprint import pprint
 
 from django.conf import settings
-from django.conf.urls.static import static, serve
+from django.conf.urls.static import serve
 from django.contrib import admin
-# from django.contrib.staticfiles.views import serve
 from django.urls import path, include, re_path
 
 urlpatterns = [
