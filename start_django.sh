@@ -11,6 +11,8 @@ echo "Running Django migrations."
 python manage.py migrate
 echo "Adding default users from fixture."
 python manage.py loaddata seed.json
+echo "Compiling SCSS."
+python manage.py compilescss
 echo "Collecting static files."
 python manage.py collectstatic
 echo "Starting Django server."
